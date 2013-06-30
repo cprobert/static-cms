@@ -1,0 +1,30 @@
+template: templates/skin.erb.html
+
+pages:
+- index: 
+    generate: index.html 
+    views : 
+        intro: views/home-intro.html
+        main: views/home-main.html
+- about: 
+    generate: about.html
+    views : 
+        intro: views/about-intro.html
+        main: views/about-main.html
+
+scripts:
+- script:
+    version: 1.0
+    bundle:
+     - scripts/bootstrap.js
+
+stylesheets:
+- style:
+    version: 1.0
+    bundle:
+      - stylesheets/bootstrap.css
+      - stylesheets/bootstrap-responsive.css
+      - stylesheets/style.css
+      
+#options:
+#    build_dir: <%= ENV['TEMP'] %>\my-scms-website

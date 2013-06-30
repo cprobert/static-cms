@@ -1,0 +1,10 @@
+bucket: yours3.bucket
+AWS_ACCESS_KEY_ID: yourkeyhjere
+AWS_SECRET_ACCESS_KEY: yoursecretpassword
+
+cache:
+  - scripts
+  - stylesheets
+  - images
+  
+#uri: http://www.yourwebsite.com
