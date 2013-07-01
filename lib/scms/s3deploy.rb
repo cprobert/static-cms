@@ -6,16 +6,12 @@ module S3Deploy
         @pub = pub
         ENV["S3CONF"] = config
         ENV["AWS_CALLING_FORMAT"] = "SUBDOMAIN"
-        ENV["SSL_CERT_DIR"] = File.join($website, "s3certs")
+        #ENV["SSL_CERT_DIR"] = File.join($website, "s3certs")
         ENV["S3SYNC_MIME_TYPES_FILE"] = File.join(Folders[:root], "assets", "mime.types")
 
-        puts "S3SYNC_MIME_TYPES_FILE: #{ENV["S3SYNC_MIME_TYPES_FILE"]}"
-        puts "AWS_CALLING_FORMAT: #{ENV["AWS_CALLING_FORMAT"]}"
-        puts "SSL_CERT_DIR: #{ENV["SSL_CERT_DIR"]}"
-        puts "S3CONF: #{ENV["S3CONF"]}"
-
-        #ScmsUtils.log( "Getting s3sync settings: \n#{config}\n\n")
-        $settings = YAML.load_file(config)
+        yamlpath=File.join(config, "s3config.yml")
+        #ScmsUtils.log( "Getting s3sync settings: \n#{yamlpath}\n\n")
+        $settings = YAML.load_file(yamlpath)
         
         ScmsUtils.log( "Syncing with Amazon S3: **#{$settings['bucket']}**" )
 		
@@ -27,17 +23,18 @@ module S3Deploy
 		end
 		
         cmd = "s3sync"
+        cache = "--cache-control='max-age=31449600'"
+        params = "--exclude='.svn' --progress --make-dirs --recursive --public-read #{removeold} #{cache} \"#{@pub}/\" #{$settings['bucket']}:/"
 		if $settings['cache'] != nil
 			$settings['cache'].each do |folder| 
-				script_params = "--exclude='.svn' --progress --make-dirs --recursive --public-read #{removeold} --cache-control='max-age=31449600' \"#{@pub}/#{folder}/\" #{$settings['bucket']}:#{folder}/"
 				ScmsUtils.log( "Syncing **#{folder}** caching: 1 year" )
-				ScmsUtils.run(cmd, script_params)
+				ScmsUtils.run(cmd, params)
 			end
 		end
 
-		nocache_params = "--progress --make-dirs --recursive --public-read #{removeold} \"#{@pub}/\" #{$settings['bucket']}:/"
+		cache = ""
 		ScmsUtils.log( "Syncing **root** no caching" )
-		ScmsUtils.run(cmd, nocache_params)
+		ScmsUtils.run(cmd, params)
         
         ScmsUtils.successLog("**Deployed :)**")
         

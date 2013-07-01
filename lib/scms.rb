@@ -417,7 +417,7 @@ module StaticCMS
     def StaticCMS.deploy(pub, config)
         yamlpath=File.join(config, "s3config.yml")
         if File.exists?(yamlpath) 
-            S3Deploy.sync(pub, yamlpath)
+            S3Deploy.sync(pub, config)
         else
             raise "The following file doesn't exist #{yamlpath}"
         end
