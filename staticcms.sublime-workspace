@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"ex",
+				"exit"
+			],
+			[
 				"margin",
 				"margin-bottom"
 			],
@@ -46,10 +50,6 @@
 			[
 				"web",
 				"Websites"
-			],
-			[
-				"ex",
-				"exists"
 			],
 			[
 				"is",
@@ -111,6 +111,22 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "lib/scms.rb",
+			"settings":
+			{
+				"buffer_size": 18002,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "lib/scms/version.rb",
+			"settings":
+			{
+				"buffer_size": 41,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -136,6 +152,15 @@
 	},
 	"file_history":
 	[
+		"/I/Code/GitHub/Static-CMS/lib/scms.rb",
+		"/I/Code/GitHub/Static-CMS/bin/scms",
+		"/I/Code/GitHub/Static-CMS/lib/scms/s3deploy.rb",
+		"/I/Code/GitHub/Static-CMS/lib/scms/version.rb",
+		"/I/Code/GitHub/Static-CMS/scms.gemspec",
+		"/I/Code/GitHub/Static-CMS/lib/staticcms/ScmsUtils.rb",
+		"/I/Code/GitHub/Static-CMS/lib/staticcms/ScmsDeploy.rb",
+		"/I/Code/GitHub/Static-CMS/staticcms.gemspec",
+		"/I/Code/GitHub/Static-CMS/lib/staticcms.rb",
 		"/I/Code/cs-scripts/QSonic/orderdate.csx",
 		"/C/Code/static_cms/air-monkey/update-config.xml",
 		"/C/Code/static_cms/air-monkey/package.bat",
@@ -191,6 +216,7 @@
 		"height": 0.0,
 		"where_history":
 		[
+			"I:\\Code\\GitHub\\Static-CMS",
 			"C:\\Code\\static_cms\\air-monkey",
 			"C:\\Code\\static_cms\\air-monkey\\assets\\scripts",
 			"C:\\Code\\static_cms\\air-monkey"
@@ -201,6 +227,23 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Loading config",
+			"Loading config:",
+			"@configdir",
+			"yamlpath",
+			"S3Deploy.s3sync",
+			"StaticCMS.yuiCompress",
+			"StaticCMS.CleanPubDir",
+			"StaticCMS.getSettings",
+			"StaticCMS.BundleStylesheets",
+			"StaticCMS.BundleScripts",
+			"StaticCMS.ParseTemplates",
+			"StaticCMS.render",
+			"$html",
+			"StaticCMS.render",
+			"ScmsDeploy",
+			"ScmsBuild",
+			"tools",
 			"Syncing everything else",
 			"silksvn",
 			"Do not close this window",
@@ -318,6 +361,15 @@
 		"regex": false,
 		"replace_history":
 		[
+			"S3Deploy.sync",
+			"StaticCMS.yuicompress",
+			"StaticCMS.cleanpubdir",
+			"StaticCMS.getsettings",
+			"StaticCMS.bundlestylesheets",
+			"StaticCMS.bundlescripts",
+			"StaticCMS.parsetemplates",
+			"S3Deploy",
+			"StaticCMS",
 			"bootstrap.min.css",
 			"air.trace",
 			"getEditWebsitePubFolder",
@@ -345,6 +397,58 @@
 		{
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "lib/scms.rb",
+					"settings":
+					{
+						"buffer_size": 18002,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14902,
+								14902
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 479.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "lib/scms/version.rb",
+					"settings":
+					{
+						"buffer_size": 41,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								35,
+								35
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],

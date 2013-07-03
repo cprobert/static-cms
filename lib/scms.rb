@@ -84,6 +84,7 @@ module StaticCMS
                   File.file?(oldfile) ? FileUtils.copy(oldfile, newfile) : FileUtils.mkdir(newfile) unless File.exist? newfile
                 end
             end
+            StaticCMS.sassall(@pub)
         else
             ScmsUtils.log("**No 'public' folder in #{$webroot} - skiping  merge**")
         end
@@ -346,12 +347,9 @@ module StaticCMS
     
     def StaticCMS.crunch(crunchDir)
         ScmsUtils.log( "Starting crunching CSS and JavaScript in:\n#{crunchDir}\n\n" )
-
+        #StaticCMS.sassall(crunchDir)
         Dir.chdir(crunchDir) do
-            Dir.glob("**/*.{css,scss}").reject{|f| /-min/.match(f) != nil || /\.min/.match(f) != nil }.each do |asset|
-                StaticCMS.sass(asset)
-            end
-            Dir.glob("**/*.js").reject{|f| /-min/.match(f) != nil || /\.min/.match(f) != nil }.each do |asset|
+            Dir.glob("**/*.js").reject{|f| /-min/.match(f) != nil || /\.min/.match(f) != nil || /\.pack/.match(f) != nil }.each do |asset|
                 StaticCMS.packr(asset)
             end
             #Dir.glob("**/*.{css, js}").each do |asset|
@@ -362,7 +360,15 @@ module StaticCMS
             #end
         end
     end
-     
+
+    def StaticCMS.sassall(crunchDir)
+        Dir.chdir(crunchDir) do
+            Dir.glob("**/*.{scss}").each do |asset|
+                StaticCMS.sass(asset)
+            end
+        end
+    end
+
     def StaticCMS.sass(asset)
         if File.exists?(asset)
             begin
