@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Static-CMS what you need to install first</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+	<link href='stylesheets/base-v1.1.css' type='text/css' rel='stylesheet'/>
+
+	<script src="scripts/jquery-1.8.2.min.js"></script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="scripts/html5.js"></script>
+    <![endif]-->
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-8933957-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+
+  <body onload="prettyPrint()">
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Static-CMS</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+			
+				<li><a href='install.html' class=' '>
+					Install
+				</a></li>	
+			
+				<li><a href='structure.html' class=' '>
+					Structure
+				</a></li>	
+			
+				<li><a href='deploy.html' class=' '>
+					Deploy
+				</a></li>	
+			
+				<li><a href='air-monkey.html' class=' '>
+					Air-Monkey
+				</a></li>	
+			
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+	  <header id="overview" class="jumbotron subhead">
+			<div class="hero-unit">
+	<h1>
+		Before you start your going to need to install the following</h1>
+</div>
+<p>
+	&nbsp;</p>
+
+	  </header>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <h2>Ruby 1.9.2</h2>
+<p>Static-CMS depends on Ruby 1.92.</p>
+<p>To check if your system already has ruby installed, type the following on the command prompt:</p>
+
+<div class="code">
+	<pre class="prettyprint"><code class="language-bsh">
+    	ruby -v
+	</code></pre>
+</div>
+
+<p>If all went well, ruby will output the version to the console. If ruby is not installed you will receive the error &quot;ruby is not recognized as an internal or external command&quot;. So go ahead and install ruby.</p>
+
+<p>Windows users can get it from <a href="http://rubyinstaller.org/" target="_blank">http://rubyinstaller.org/</a> (check options to add ruby to your path and associate .rb files)</p>
+
+<h2>Abobe Air</h2>
+
+<p>If your using the <a href="air-monkey.html">Air-Monkey GUI</a>, your&#39;re going to need to <a href="http://get.adobe.com/air/" target="_blank">install Adobe Air</a>.</p>
+
+<p><a href="air-monkey.html">View Air-Monkey help</a> file.</p>
+
+      </div>
+
+      <hr>
+
+      <footer>
+		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
+		<div style="diplay: none;" id="theme-vars">
+			<p>Page: prerequisites.html</p>
+			<p>Sitedir: C:\Users\cprobert\Dropbox\Companies\iTutor Tech\Websites\static-cms.ipassexam.com</p>
+			
+			<p>Scripts: {"base"=>"scripts/base-v1.0.js", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
+			<p>Stylesheets: {"base"=>"stylesheets/base-v1.1.css"}</p>
+			<p>Config: {"generate"=>"prerequisites.html", "resource"=>"resources/prerequisites.yml", "views"=>{"intro"=>"views/prerequisites-intro.html", "main"=>"views/prerequisites-main.erb"}}</p>
+			
+			
+			<p>Resource: {"title"=>"Static-CMS what you need to install first"}</p>
+			<p>Views: (access like this: data.views["viewname"])</p>
+		</div>
+		<script>
+			$(function(){
+				$("#theme-vars").hide();
+				$("#view-theme-vars").click(function(){
+						$("#theme-vars").toggle();
+				});
+			});
+		</script>
+		
+			
+        <p>&copy; Courtenay Probert 2013</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+	<script src='scripts/libraries-min-v1.1.js'></script>
+	<script src='scripts/base-v1.0.js'></script>
+    
+  </body>
+</html>

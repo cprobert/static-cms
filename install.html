@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>How to install Static-CMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+	<link href='stylesheets/base-v1.1.css' type='text/css' rel='stylesheet'/>
+
+	<script src="scripts/jquery-1.8.2.min.js"></script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="scripts/html5.js"></script>
+    <![endif]-->
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-8933957-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+
+  <body onload="prettyPrint()">
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Static-CMS</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+			
+				<li><a href='install.html' class='active '>
+					Install
+				</a></li>	
+			
+				<li><a href='structure.html' class=' '>
+					Structure
+				</a></li>	
+			
+				<li><a href='deploy.html' class=' '>
+					Deploy
+				</a></li>	
+			
+				<li><a href='air-monkey.html' class=' '>
+					Air-Monkey
+				</a></li>	
+			
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+	  <header id="overview" class="jumbotron subhead">
+			<div class="hero-unit">
+<h1>How to Install Static-CMS</h1>
+<div>
+  <p>check the <a href="prerequisites.html">prerequisites</a></p>
+  <pre class="prettyprint" style="margin-top: 30px;"><code class="language-ruby">
+	gem install scms
+  </code></pre>
+</div>
+</div>
+
+	  </header>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <section id="gridSystem">
+	<div class="span12">
+		
+        <h2>Creating a new site</h2>
+		<p>Run &quot;menu.cmd&quot; to open the command menu. To compile the website:</p>
+		<div class="code">
+            <pre class="prettyprint"><code class="language-ruby">
+	scms&nbsp;-a&nbsp;create&nbsp;-w&nbsp;pathto\www.mynewsite.com
+            </code></pre>
+		</div>
+        
+		<p>The new html files will be found in the &quot;websites&quot; folder.</p>
+		
+        <h3>Compile</h3>
+		<p>
+			To compile the templates into a html website , type the following in to the command menu:</p>
+		<div class="code">
+            <pre class="prettyprint"><code class="language-ruby">
+	scms&nbsp;-a&nbsp;build&nbsp;-w&nbsp;pathto\www.mynewsite.com
+            </code></pre>
+		</div>
+      
+		<h3>Publish</h3>
+		<p>
+			To your website, type the following in to the command menu:</p>
+		<div class="code">
+            <pre class="prettyprint"><code class="language-ruby">
+	scms&nbsp;-a&nbsp;deploy&nbsp;-w&nbsp;pathto\www.mynewsite.com
+            </code></pre>
+		</div>
+	</div>
+</section>
+      </div>
+
+      <hr>
+
+      <footer>
+		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
+		<div style="diplay: none;" id="theme-vars">
+			<p>Page: install.html</p>
+			<p>Sitedir: C:\Users\cprobert\Dropbox\Companies\iTutor Tech\Websites\static-cms.ipassexam.com</p>
+			
+			<p>Scripts: {"base"=>"scripts/base-v1.0.js", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
+			<p>Stylesheets: {"base"=>"stylesheets/base-v1.1.css"}</p>
+			<p>Config: {"generate"=>"install.html", "resource"=>"resources/install.yml", "views"=>{"intro"=>"views/install-intro.erb", "main"=>"views/install-main.erb"}}</p>
+			
+			
+			<p>Resource: {"title"=>"How to install Static-CMS"}</p>
+			<p>Views: (access like this: data.views["viewname"])</p>
+		</div>
+		<script>
+			$(function(){
+				$("#theme-vars").hide();
+				$("#view-theme-vars").click(function(){
+						$("#theme-vars").toggle();
+				});
+			});
+		</script>
+		
+			
+        <p>&copy; Courtenay Probert 2013</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+	<script src='scripts/libraries-min-v1.1.js'></script>
+	<script src='scripts/base-v1.0.js'></script>
+    
+  </body>
+</html>

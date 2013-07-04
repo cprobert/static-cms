@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Publish a Static-CMS website to Amazon S3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+	<link href='stylesheets/base-v1.1.css' type='text/css' rel='stylesheet'/>
+
+	<script src="scripts/jquery-1.8.2.min.js"></script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="scripts/html5.js"></script>
+    <![endif]-->
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-8933957-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+
+  <body onload="prettyPrint()">
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Static-CMS</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+			
+				<li><a href='install.html' class=' '>
+					Install
+				</a></li>	
+			
+				<li><a href='structure.html' class=' '>
+					Structure
+				</a></li>	
+			
+				<li><a href='deploy.html' class='active '>
+					Deploy
+				</a></li>	
+			
+				<li><a href='air-monkey.html' class=' '>
+					Air-Monkey
+				</a></li>	
+			
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+	  <header id="overview" class="jumbotron subhead">
+			<div class="hero-unit">
+<h1>How to Publish your Website</h1>
+<p>Static-CSM can publish to Amazon S3. Perfect for extremely inexpensive hosting.</p>
+<ol>
+<li>Create s3config.yml</li>
+<li>Add S3 certificates</li>
+<li>Run deployment script</li>
+</ol>
+<p>If you are unfamiliar with Amazon S3, checkout <a href="http://www.labnol.org/internet/web-hosting-with-amazon-s3/18742/" target="_blank">this tutorial</a> on creating an S3 bucket for hosting a website.</p>
+</div>
+
+	  </header>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <section id="gridSystem">
+	<div class="span12">
+		<h2>
+			Editing your s3config.yml</h2>
+		<p>
+			Open s3config.yml in your text editor and edit the following:</p>
+		<div class="code">
+			<pre class="prettyprint">
+                <code class="language-yaml">
+	bucket: www.mywebsite.com
+	aws_access_key_id: addyourkeyhere
+	aws_secret_access_key: addyoursecrethere
+	ssl_cert_dir: s3certs
+	clean: true
+
+	cache:
+	  - scripts
+	  - stylesheets
+	  - images
+
+	uri: http://www.mywebsite.com
+			</code></pre>
+		</div>
+		<p>
+			You can get your key and secret from your Amazon AWS console. You will need to create a bucket with your S3 management console. Best practise is to use your full domain name for the bucket (including the www), e.g. www.mywebsite.com. You will also need to set the default document on your bucket to index.html</p>
+		<p>
+			Take note of the cache configuration option. The s3config allows you to specify what folders you would like the browser to cache. Any files that reside in these folders will be uploaded with the cache-control header set for 1 year. Note: This has some side effects. The benefits are that the cached assets will only be downloaded once. This greatly speeds up the load time of pages that share these assets. It also reduces your S3 bill (because you only pay for what you use). The downside is that you will need to version your resources to force a fresh download if you update these resources (note the bundler automatically versions).</p>
+		<h2>
+			Add your S3 certs</h2>
+		<p>
+			Create a folder called &quot;s3certs&quot; and download your downloaded S3 certs to this folder.</p>
+		<h2>
+			Publishing</h2>
+		<p>From a terminal:</p>
+		<div class="code">
+			<pre class="prettyprint"><code class="language-bsh">
+	scms -a deploy -w pathto/www.mywebsite.com
+		</code></pre>
+		</div>
+		<p>
+			The compiled html files will be synced with S3 (only changed files will be uploaded).</p>
+		<p>
+			Open the URL of website and check the deployment was successful.</p>
+		<p>
+			Tip: If you decide to publish your images with caching (recomended) add a version number to edited images, e.g. myimage-v1.1.png.</p>
+	</div>
+</section>
+<p>
+	&nbsp;</p>
+
+      </div>
+
+      <hr>
+
+      <footer>
+		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
+		<div style="diplay: none;" id="theme-vars">
+			<p>Page: deploy.html</p>
+			<p>Sitedir: C:\Users\cprobert\Dropbox\Companies\iTutor Tech\Websites\static-cms.ipassexam.com</p>
+			
+			<p>Scripts: {"base"=>"scripts/base-v1.0.js", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
+			<p>Stylesheets: {"base"=>"stylesheets/base-v1.1.css"}</p>
+			<p>Config: {"generate"=>"deploy.html", "resource"=>"resources/deploy.yml", "views"=>{"intro"=>"views/deploy-intro.html", "main"=>"views/deploy-main.erb"}}</p>
+			
+			
+			<p>Resource: {"title"=>"Publish a Static-CMS website to Amazon S3"}</p>
+			<p>Views: (access like this: data.views["viewname"])</p>
+		</div>
+		<script>
+			$(function(){
+				$("#theme-vars").hide();
+				$("#view-theme-vars").click(function(){
+						$("#theme-vars").toggle();
+				});
+			});
+		</script>
+		
+			
+        <p>&copy; Courtenay Probert 2013</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+	<script src='scripts/libraries-min-v1.1.js'></script>
+	<script src='scripts/base-v1.0.js'></script>
+    
+  </body>
+</html>
