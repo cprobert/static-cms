@@ -1,8 +1,10 @@
 A static website CMS
 ====================
 
-StaticCMS is website builder that creates html files from an eruby template.  
-This facilitates the management of the skin/theme from a single file.
+If you need to build a quick html website but don't want to maintain each page independantly Static-CMS could be for you.
+StaticCMS is a static website builder that creates html files from an eruby template.  This facilitates the management of the skin/theme from a single file.
+It also has a few nifty features such as JavaScript and CSS bundeling and minimisation
+When your happy with your website StaticCMS will also deploy to AmazonS3 setting approperate caching settings.
 
 ### Installing 
 
@@ -21,10 +23,8 @@ This facilitates the management of the skin/theme from a single file.
     scms -a deploy -w /path/to/folder
 
 
-Editing a Static-CMS website
-----------------------------
+Further Reading
+---------------
 
-http://static-cms.ipassexam.com/
-
-Further reading for the template language
-http://www.stuartellis.eu/articles/erb/
+ * Homepage: http://static-cms.ipassexam.com/
+ * ERB template language: http://www.stuartellis.eu/articles/erb/
