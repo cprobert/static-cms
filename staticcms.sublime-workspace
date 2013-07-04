@@ -1,0 +1,591 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"ex",
+				"exit"
+			],
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"re",
+				"resolvePath"
+			],
+			[
+				"local",
+				"local"
+			],
+			[
+				"we",
+				"websiteService"
+			],
+			[
+				"t",
+				"temp"
+			],
+			[
+				"has",
+				"hasBuildDirSetting"
+			],
+			[
+				"website",
+				"websites"
+			],
+			[
+				"fa",
+				"false"
+			],
+			[
+				"air",
+				"air-monkey"
+			],
+			[
+				"web",
+				"Websites"
+			],
+			[
+				"is",
+				"isApp"
+			],
+			[
+				"par",
+				"param"
+			],
+			[
+				"he",
+				"height"
+			],
+			[
+				"h",
+				"height"
+			],
+			[
+				"w",
+				"width"
+			],
+			[
+				"native",
+				"nativeWindow"
+			],
+			[
+				"pre",
+				"preventDefault"
+			],
+			[
+				"nat",
+				"nativePath"
+			],
+			[
+				"webs",
+				"websiteFolder"
+			],
+			[
+				"s",
+				"saveWebsites"
+			],
+			[
+				"get",
+				"getWebsites"
+			],
+			[
+				"view",
+				"viewObj"
+			],
+			[
+				"hea",
+				"header"
+			],
+			[
+				"c",
+				"currentVersion"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "lib/scms.rb",
+			"settings":
+			{
+				"buffer_size": 18118,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "lib/scms/s3deploy.rb",
+			"settings":
+			{
+				"buffer_size": 2067,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bin/scms",
+			"settings":
+			{
+				"buffer_size": 3946,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 909,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 58.0,
+		"selected_items":
+		[
+		],
+		"width": 416.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/I/Code/GitHub/Static-CMS/lib/scms/version.rb",
+		"/I/Code/GitHub/Static-CMS/README.md",
+		"/I/Code/GitHub/Static-CMS/lib/scms.rb",
+		"/I/Code/GitHub/Static-CMS/bin/scms",
+		"/I/Code/GitHub/Static-CMS/lib/scms/s3deploy.rb",
+		"/I/Code/GitHub/Static-CMS/scms.gemspec",
+		"/I/Code/GitHub/Static-CMS/lib/staticcms/ScmsUtils.rb",
+		"/I/Code/GitHub/Static-CMS/lib/staticcms/ScmsDeploy.rb",
+		"/I/Code/GitHub/Static-CMS/staticcms.gemspec",
+		"/I/Code/GitHub/Static-CMS/lib/staticcms.rb",
+		"/I/Code/cs-scripts/QSonic/orderdate.csx",
+		"/C/Code/static_cms/air-monkey/update-config.xml",
+		"/C/Code/static_cms/air-monkey/package.bat",
+		"/C/Code/static_cms/air-monkey/commands/air-monkey-deploy.cmd",
+		"/C/Code/static_cms/air-monkey/commands/air-monkey-build.cmd",
+		"/C/Code/static_cms/air-monkey/assets/scripts/modules/website-service.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/modules/app.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/handlers/cms-handler.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/handlers/index-handler.js",
+		"/C/Code/static_cms/air-monkey/index.html",
+		"/C/Code/static_cms/air-monkey/cms.html",
+		"/C/Code/static_cms/air-monkey/assets/scripts/ckeditor-config.js",
+		"/C/Code/static_cms/air-monkey/assets/stylesheets/bootstrap.buttons.min.css",
+		"/C/Code/static_cms/air-monkey/assets/scripts/libs/yepnope.1.5.4-min.js",
+		"/C/Code/static_cms/air-monkey/web-loader.html",
+		"/C/Code/static_cms/air-monkey/assets/ckeditor/contents.css",
+		"/C/Code/static_cms/air-monkey/assets/scripts/modules/native-updater.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/modules/systray.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/modules/netmon.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/handlers/global.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/utils.js",
+		"/C/Users/cprobert/Dropbox/Code/Shout-On-Air/scripts/netmon.js",
+		"/C/Code/static_cms/air-monkey/assets/ckeditor/config.js",
+		"/C/Code/static_cms/air-monkey/assets/ckeditor/ckeditor.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/models/index.model.js",
+		"/C/Code/static_cms/air-monkey/assets/air/AIRAliases.js",
+		"/C/Users/cprobert/Dropbox/Websites/shout-on-air.probert.me.uk/compiled/index.html",
+		"/C/Users/cprobert/Dropbox/Companies/iTutor Tech/Websites/static-cms.ipassexam.com/views/deploy-intro.html",
+		"/C/Users/cprobert/Dropbox/Companies/iTutor Tech/Websites/static-cms.ipassexam.com/build/index.html",
+		"/C/Code/static_cms/air-monkey/assets/scripts/handlers/web-loader-handler.js",
+		"/C/Users/cprobert/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/C/Users/cprobert/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/Code/static_cms/air-monkey/assets/scripts/prefs.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/libs/knockout-2.1.0-min.js",
+		"/C/Users/cprobert/Dropbox/Code/Flamingo/flamingo.rb",
+		"/C/Code/static_cms/air-monkey/assets/scripts/modules/ruby-check.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/global.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/libs/jquery.pubsub-1.0.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/modules/data-persistance.js",
+		"/C/Code/static_cms/air-monkey/assets/air/AIRIntrospector.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/index.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/air-monkey.model.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/native-updater.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/air-libs.js",
+		"/C/Code/static_cms/air-monkey/assets/scripts/ruby-check.js"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"I:\\Code\\GitHub\\Static-CMS",
+			"C:\\Code\\static_cms\\air-monkey",
+			"C:\\Code\\static_cms\\air-monkey\\assets\\scripts",
+			"C:\\Code\\static_cms\\air-monkey"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Loading config",
+			"Loading config:",
+			"@configdir",
+			"yamlpath",
+			"S3Deploy.s3sync",
+			"StaticCMS.yuiCompress",
+			"StaticCMS.CleanPubDir",
+			"StaticCMS.getSettings",
+			"StaticCMS.BundleStylesheets",
+			"StaticCMS.BundleScripts",
+			"StaticCMS.ParseTemplates",
+			"StaticCMS.render",
+			"$html",
+			"StaticCMS.render",
+			"ScmsDeploy",
+			"ScmsBuild",
+			"tools",
+			"Syncing everything else",
+			"silksvn",
+			"Do not close this window",
+			"update-descriptor.xsl",
+			"static-cms.rb",
+			"air-monkey-build.cmd",
+			"config-peek",
+			"get-config-setting",
+			"config-peek",
+			"CodeMirror",
+			">return<",
+			"return",
+			"z-index",
+			"modal-backdrop",
+			"<script type=\"text/javascript\" src=",
+			"></script>",
+			"bootstrap.css",
+			"view",
+			"../",
+			"app-version",
+			"message-head",
+			"modal-header",
+			"File does not exist:",
+			"<script type=\"text/javascript\" src=\"assets/scripts/handlers/global.js\"></script>",
+			"netmon",
+			"left",
+			"$(this).log",
+			"Opening pub: ",
+			"No index",
+			"engageBridge",
+			"Edit should build to temp dir",
+			"data.local",
+			"customBuildDirProcessor",
+			"getEditWebsitePubFolder",
+			"tempEditDir",
+			"air-monkey-build.cmd",
+			"customBuildDirProcessor",
+			"app.website.build",
+			"customBuildDirProcessor",
+			"getEditWebsitePubFolder",
+			"getDefaultWebsitePubFolder",
+			"console.log",
+			"engageBridge",
+			"console.log",
+			"html",
+			"console",
+			"Deploy",
+			"deployScript",
+			"getWebsitePubFolder",
+			"data",
+			"peek",
+			"getWebsitePubFolder",
+			"pub.createDirectory",
+			"Websites",
+			"websites",
+			"web",
+			"folders",
+			"Websites",
+			"websites",
+			"self",
+			"getWebsitePubFolder",
+			"compiled",
+			"wsGridVM.websites",
+			"stdOutVM.lines.push",
+			"stdOutVM.lines",
+			"push",
+			".lines",
+			"stdOutVM",
+			"knockout-2.1.0-min.js",
+			"air.File.",
+			"folders",
+			"firstRun",
+			"prefs.isLaunch",
+			"app.folder.website",
+			"app.folder.websites",
+			"startNativeProcess",
+			"websiteService.getWebsitePubFolder(",
+			"app.folder.pub(",
+			"app.folder",
+			"app.data(",
+			"app.data",
+			"app.folder.pub",
+			"prefs.isLaunch",
+			"app.data",
+			"prefs.",
+			"prefs.winy",
+			"prefs.winx",
+			"popMsg",
+			"console.log",
+			"popMsg",
+			"setMessage",
+			"message",
+			"app.website.build",
+			"app.website.buiul",
+			"app.website.build",
+			"air-libs.js",
+			"showGrid",
+			"stdOutVM",
+			"$guiConsole",
+			"airMonkeyViewModel",
+			"publishing",
+			"Process Error:",
+			"app.data(\"firstRun\"",
+			"updateGems",
+			"app.data(\"firstRun\"",
+			"app.updateGems",
+			"prefs.firstRun",
+			"installUpdate",
+			"onUpdateInstall",
+			"$.publish"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"S3Deploy.sync",
+			"StaticCMS.yuicompress",
+			"StaticCMS.cleanpubdir",
+			"StaticCMS.getsettings",
+			"StaticCMS.bundlestylesheets",
+			"StaticCMS.bundlescripts",
+			"StaticCMS.parsetemplates",
+			"S3Deploy",
+			"StaticCMS",
+			"bootstrap.min.css",
+			"air.trace",
+			"getEditWebsitePubFolder",
+			"stdOutVM.print",
+			"websiteService.folders.website",
+			"websiteService.folders.websites",
+			"websiteService.getWebsitePubFolder(",
+			"data.local(",
+			"prefs.window.y",
+			"prefs.window.x",
+			"popMsg",
+			"utils.js",
+			"show",
+			"stdOutVM",
+			"wsGridVM"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "lib/scms.rb",
+					"settings":
+					{
+						"buffer_size": 18118,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								18118,
+								18118
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 4457.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "lib/scms/s3deploy.rb",
+					"settings":
+					{
+						"buffer_size": 2067,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1084,
+								1084
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "bin/scms",
+					"settings":
+					{
+						"buffer_size": 3946,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3897,
+								3897
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1620.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "README.md",
+					"settings":
+					{
+						"buffer_size": 909,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								842,
+								842
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"in",
+				"assets/scripts/models/index.model.js"
+			],
+			[
+				"indexmodel",
+				"assets/scripts/models/index.model.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 211.0,
+	"status_bar_visible": true
+}
