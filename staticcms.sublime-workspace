@@ -123,7 +123,7 @@
 			"file": "README.md",
 			"settings":
 			{
-				"buffer_size": 601,
+				"buffer_size": 590,
 				"line_ending": "Windows"
 			}
 		}
@@ -429,15 +429,15 @@
 					"file": "README.md",
 					"settings":
 					{
-						"buffer_size": 601,
+						"buffer_size": 590,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								377,
-								377
+								506,
+								506
 							]
 						],
 						"settings":

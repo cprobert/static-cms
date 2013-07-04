@@ -24,7 +24,7 @@ scms -a deploy -w /path/to/folder
 Editing a Static-CMS website
 ----------------------------
 
-http://static-cms.ipassexam.com/create.html
+http://static-cms.ipassexam.com/
 
 Further reading for the template language
 http://www.stuartellis.eu/articles/erb/
