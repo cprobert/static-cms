@@ -4,19 +4,19 @@ A static website CMS
 StaticCMS is website builder that creates html files from an eruby template.  
 This facilitates the management of the skin/theme from a single file.
 
-### Installing ### 
+### Installing 
 
 gem install scms
 
-### Creating a website ### 
+### Creating a website 
 
 scms -a create -w /path/to/folder
 
-### Building your website ### 
+### Building your website 
 
 scms - build -w /path/to/folder
 
-### Publishing your website ### 
+### Publishing your website 
 
 scms -a deploy -w /path/to/folder
 
