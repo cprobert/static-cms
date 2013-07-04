@@ -6,19 +6,19 @@ This facilitates the management of the skin/theme from a single file.
 
 ### Installing 
 
-gem install scms
+    gem install scms
 
 ### Creating a website 
 
-scms -a create -w /path/to/folder
+    scms -a create -w /path/to/folder
 
 ### Building your website 
 
-scms - build -w /path/to/folder
+    scms - build -w /path/to/folder
 
 ### Publishing your website 
 
-scms -a deploy -w /path/to/folder
+    scms -a deploy -w /path/to/folder
 
 
 Editing a Static-CMS website
