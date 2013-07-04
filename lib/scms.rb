@@ -17,8 +17,11 @@ module StaticCMS
         @configdir = config
         @mode = mode
         @webroot = "public"
+        @source = File.join($website, @webroot)
         
         ScmsUtils.log("_Mode: #{mode}_")
+
+        StaticCMS.sassall(@source)
         
         yamlpath=File.join(@configdir, "config.yml")
         ScmsUtils.log("**[Getting Config](#{ScmsUtils.uriEncode("file:///#{yamlpath}")})**")
@@ -65,8 +68,7 @@ module StaticCMS
             ScmsUtils.errLog("Config is empty")
         end
         
-        webroot = File.join($website, @webroot)
-        if File.exists?(webroot)
+        if File.exists?(@source)
             ScmsUtils.log("_Merging 'public' folder_")
             
             if @cleanpub
@@ -74,19 +76,18 @@ module StaticCMS
             end
             
             FileUtils.mkdir @pub unless Dir.exists? @pub
-            Dir.chdir(webroot) do
+            Dir.chdir(@source) do
                 #files = Dir.glob('*')
                 #FileUtils.cp_r files, @pub            
                 
                 Dir.glob("**/*").reject{|f| f['.svn']}.each do |oldfile|
-                  newfile = File.join(@pub, oldfile.sub(webroot, ''))
+                  newfile = File.join(@pub, oldfile.sub(@source, ''))
                   #puts newfile
                   File.file?(oldfile) ? FileUtils.copy(oldfile, newfile) : FileUtils.mkdir(newfile) unless File.exist? newfile
                 end
             end
-            StaticCMS.sassall(@pub)
         else
-            ScmsUtils.log("**No 'public' folder in #{$webroot} - skiping  merge**")
+            ScmsUtils.log("**No 'public' folder in #{@source} - skiping  merge**")
         end
         
         ScmsUtils.successLog("**Compiled :)**")
@@ -239,7 +240,7 @@ module StaticCMS
                     bundle = option[1]["bundle"]
                     bundle.each do |asset|
                         assetList += "\t#{asset}\n" 
-                        assetname = File.join($website, @webroot, asset)
+                        assetname = File.join(@source, asset)
                         if File::exists?(assetname)
                             content = content + "\n" + File.read(assetname)
                         else
@@ -281,7 +282,7 @@ module StaticCMS
                     assetList = ""
                     bundle.each do |asset|
                         assetList += "\t #{asset}\n" 
-                        assetname = File.join($website, @webroot, asset)
+                        assetname = File.join(@source, asset)
                         if File::exists?(assetname)
                             content = content + "\n" + File.read(assetname)
                         else
@@ -362,6 +363,7 @@ module StaticCMS
     end
 
     def StaticCMS.sassall(crunchDir)
+        ScmsUtils.log( "**Minimising Sass Files (.scss) **" )
         Dir.chdir(crunchDir) do
             Dir.glob("**/*.{scss}").each do |asset|
                 StaticCMS.sass(asset)
@@ -379,8 +381,9 @@ module StaticCMS
                                                           :syntax => :scss
                                                          }.freeze)
                 output = sass_engine.to_css
-                File.open(asset, 'w') { |file| file.write(output) }
-                ScmsUtils.log( "_Sassed #{File.basename(asset)}_" )
+                css_file = "#{File.dirname(asset)}/#{File.basename(asset,'.*')}.css"
+                File.open(css_file, 'w') { |file| file.write(output) }
+                ScmsUtils.log( "_Sassed: #{css_file}_" )
             rescue Exception => e  
                 ScmsUtils.errLog( "Error processing: #{asset}" )
                 ScmsUtils.errLog( e.message )

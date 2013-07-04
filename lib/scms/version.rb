@@ -1,3 +1,3 @@
 module StaticCMS
-  VERSION = '1.7.9'
+  VERSION = '1.8.5'
 end

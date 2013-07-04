@@ -115,16 +115,8 @@
 			"file": "lib/scms.rb",
 			"settings":
 			{
-				"buffer_size": 18002,
+				"buffer_size": 18118,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "lib/scms/version.rb",
-			"settings":
-			{
-				"buffer_size": 41,
-				"line_ending": "Unix"
 			}
 		}
 	],
@@ -152,10 +144,10 @@
 	},
 	"file_history":
 	[
+		"/I/Code/GitHub/Static-CMS/lib/scms/version.rb",
 		"/I/Code/GitHub/Static-CMS/lib/scms.rb",
 		"/I/Code/GitHub/Static-CMS/bin/scms",
 		"/I/Code/GitHub/Static-CMS/lib/scms/s3deploy.rb",
-		"/I/Code/GitHub/Static-CMS/lib/scms/version.rb",
 		"/I/Code/GitHub/Static-CMS/scms.gemspec",
 		"/I/Code/GitHub/Static-CMS/lib/staticcms/ScmsUtils.rb",
 		"/I/Code/GitHub/Static-CMS/lib/staticcms/ScmsDeploy.rb",
@@ -395,6 +387,7 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -402,15 +395,15 @@
 					"file": "lib/scms.rb",
 					"settings":
 					{
-						"buffer_size": 18002,
+						"buffer_size": 18118,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								14902,
-								14902
+								18118,
+								18118
 							]
 						],
 						"settings":
@@ -418,33 +411,7 @@
 							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 479.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "lib/scms/version.rb",
-					"settings":
-					{
-						"buffer_size": 41,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								35,
-								35
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 6887.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
