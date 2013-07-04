@@ -40,7 +40,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/">Static-CMS</a>
+          <a class="brand" href="/Static-CMS/">Static-CMS</a>
           <div class="nav-collapse">
             <ul class="nav">
 			
@@ -131,8 +131,9 @@
 		<script>
 			$(function(){
 				$("#theme-vars").hide();
-				$("#view-theme-vars").click(function(){
-						$("#theme-vars").toggle();
+				$("#view-theme-vars").click(function(e){
+                    e.preventDefault();
+					$("#theme-vars").toggle();
 				});
 			});
 		</script>
