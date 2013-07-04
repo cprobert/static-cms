@@ -112,34 +112,10 @@
 	"buffers":
 	[
 		{
-			"file": "lib/scms.rb",
+			"file": "bin/scms.rb",
 			"settings":
 			{
-				"buffer_size": 18118,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "lib/scms/s3deploy.rb",
-			"settings":
-			{
-				"buffer_size": 2067,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "bin/scms",
-			"settings":
-			{
-				"buffer_size": 0,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "README.md",
-			"settings":
-			{
-				"buffer_size": 909,
+				"buffer_size": 3811,
 				"line_ending": "Windows"
 			}
 		}
@@ -168,12 +144,12 @@
 	},
 	"file_history":
 	[
-		"/I/Code/GitHub/Static-CMS/lib/scms/version.rb",
-		"/I/Code/GitHub/Static-CMS/README.md",
+		"/I/Code/GitHub/Static-CMS/lib/scms/s3deploy.rb",
 		"/I/Code/GitHub/Static-CMS/lib/scms.rb",
 		"/I/Code/GitHub/Static-CMS/bin/scms",
-		"/I/Code/GitHub/Static-CMS/lib/scms/s3deploy.rb",
+		"/I/Code/GitHub/Static-CMS/README.md",
 		"/I/Code/GitHub/Static-CMS/scms.gemspec",
+		"/I/Code/GitHub/Static-CMS/lib/scms/version.rb",
 		"/I/Code/GitHub/Static-CMS/lib/staticcms/ScmsUtils.rb",
 		"/I/Code/GitHub/Static-CMS/lib/staticcms/ScmsDeploy.rb",
 		"/I/Code/GitHub/Static-CMS/staticcms.gemspec",
@@ -230,7 +206,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
 			"I:\\Code\\GitHub\\Static-CMS",
@@ -412,23 +388,23 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "lib/scms.rb",
+					"file": "bin/scms.rb",
 					"settings":
 					{
-						"buffer_size": 18118,
+						"buffer_size": 3811,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								18118,
-								18118
+								3811,
+								3811
 							]
 						],
 						"settings":
@@ -436,85 +412,7 @@
 							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 4457.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "lib/scms/s3deploy.rb",
-					"settings":
-					{
-						"buffer_size": 2067,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1084,
-								1084
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "bin/scms",
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1620.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "README.md",
-					"settings":
-					{
-						"buffer_size": 909,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								842,
-								842
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1343.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
