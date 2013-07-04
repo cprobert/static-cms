@@ -26,5 +26,5 @@ When your happy with your website StaticCMS will also deploy to AmazonS3 setting
 Further Reading
 ---------------
 
- * Homepage: http://static-cms.ipassexam.com/
+ * Homepage: http://cprobert.github.io/Static-CMS/
  * ERB template language: http://www.stuartellis.eu/articles/erb/

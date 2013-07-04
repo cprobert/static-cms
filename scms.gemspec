@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name        = 'scms'
   s.version     = StaticCMS::VERSION
   s.date        = '2013-06-29'
-  s.homepage    = 'https://github.com/cprobert/Static-CMS'
+  s.homepage    = 'http://cprobert.github.io/Static-CMS/'
   s.summary     = "Create simple static websites, in a jiffy"
   s.description = "A gem for creating static html websites"
   s.authors     = ["Courtenay Probert"]

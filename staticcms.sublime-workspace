@@ -120,10 +120,26 @@
 			}
 		},
 		{
+			"file": "lib/scms/s3deploy.rb",
+			"settings":
+			{
+				"buffer_size": 2067,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bin/scms",
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "README.md",
 			"settings":
 			{
-				"buffer_size": 590,
+				"buffer_size": 909,
 				"line_ending": "Windows"
 			}
 		}
@@ -153,6 +169,7 @@
 	"file_history":
 	[
 		"/I/Code/GitHub/Static-CMS/lib/scms/version.rb",
+		"/I/Code/GitHub/Static-CMS/README.md",
 		"/I/Code/GitHub/Static-CMS/lib/scms.rb",
 		"/I/Code/GitHub/Static-CMS/bin/scms",
 		"/I/Code/GitHub/Static-CMS/lib/scms/s3deploy.rb",
@@ -395,7 +412,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -419,25 +436,77 @@
 							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 6887.0,
+						"translation.y": 4457.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "README.md",
+					"file": "lib/scms/s3deploy.rb",
 					"settings":
 					{
-						"buffer_size": 590,
+						"buffer_size": 2067,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								506,
-								506
+								1084,
+								1084
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "bin/scms",
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1620.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "README.md",
+					"settings":
+					{
+						"buffer_size": 909,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								842,
+								842
 							]
 						],
 						"settings":
