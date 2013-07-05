@@ -44,10 +44,6 @@
           <div class="nav-collapse">
             <ul class="nav">
 			
-				<li><a href='install.html' class=' '>
-					Install
-				</a></li>	
-			
 				<li><a href='structure.html' class=' '>
 					Structure
 				</a></li>	
@@ -71,43 +67,54 @@
       <!-- Main hero unit for a primary marketing message or call to action -->
 	  <header id="overview" class="jumbotron subhead">
 			<div class="hero-unit">
-<h1>Easy Build Super-Fast Static Websites!</h1>
-<h2>Want to build a static website, but don&#39;t want to manage each page individually?</h2>
-<ol>
-<li>Create a template</li>
-<li>Create content views</li>
-<li>Edit config.yml to map content to pages</li>
-</ol>
-<p>Run scms ruby gem and your static website will be created.</p>
-<a class="btn btn-large btn-success" href="install.html">Install</a></div>
-<p>&nbsp;</p>
-
+    <h1>Easyily Build Super-Fast Static Websites!</h1>
+    
+    <pre class="prettyprint" style="margin-top: 30px;"><code class="language-ruby">
+  $ gem install scms
+    </code></pre>
+    
+    <p>check the <a href="prerequisites.html">prerequisites</a></p>
+</div>
 	  </header>
 
       <!-- Example row of columns -->
       <div class="row">
         <div class="span4">
-  <h2>Simple :)</h2>
-  <p>Static-CMS is easy to use.  I originally wrote this system to enable my children (9 & 10 years old) to build their websites.</p>
-  <p>Because Static-CMS uses templating, you can quickly develop a website with reusable templates and dynamic views (eruby/erb).</p>
-  <p><a class="btn" href="install.html">Get Started &raquo;</a></p>
-  
+    <h2>Creating a new site</h2>
+    <p>To create new website:</p>
+    <div class="code">
+        <pre class="prettyprint"><code class="language-ruby">
+  $ scms&nbsp;-a&nbsp;create&nbsp;-w&nbsp;pathto\www.mynewsite.com
+        </code></pre>
+    </div>
+    
+    <p>The new html files will be found in the &quot;websites&quot; folder.</p>
 </div>
 
 <div class="span4">
-  <h2>Fast :)</h2>
-  <p>Many of the features of Static-CMS are focused on speed.</p>
-  <p>Including: The ability to merge all your javascripts and stylesheets files, <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimising download requests</a>.</p>
-  <p>On deployment all javascript and stylesheets are <a href="http://code.google.com/speed/page-speed/docs/payload.html#MinifyJS" target="_blank">minimised</a> (using YUI Compressor).</p>
-  <p>These measures dramatically speed up download time.</p>
-  <p><a class="btn" href="create.html">Create &raquo;</a></p>
+    <h2>Compile</h2>
+    <p>To compile the templates into a html website:</p>
+    <div class="code">
+        <pre class="prettyprint"><code class="language-ruby">
+  $ scms&nbsp;-a&nbsp;build&nbsp;-w&nbsp;pathto\www.mynewsite.com
+        </code></pre>
+    </div>
 </div>
 
 <div class="span4">
-  <h2>Money Saving :)</h2>
-  <p>Static-CMS has Amazon S3 deployment built in. S3 is fantastic for fast inexpensive hosting of static websites.</p>
-  <p>Run the deploy script to publish your static website to an Amazon S3 bucket.</p>
-  <p><a class="btn" href="deploy.html">Deploy &raquo;</a></p>
+    <h3>Publish</h3>
+    <p>To publish your website:</p>
+    <div class="code">
+        <pre class="prettyprint"><code class="language-ruby">
+  $ scms&nbsp;-a&nbsp;deploy&nbsp;-w&nbsp;pathto\www.mynewsite.com
+        </code></pre>
+    </div>
+</div>
+
+<div class="span12">
+    <hr />
+    <p><strong>Next:</strong> Learn about folder structure:</p>
+    <p><a href="structure.html" class="btn btn-success btn-large">Learn more</a></p>
 </div>
       </div>
 
@@ -121,7 +128,7 @@
 			
 			<p>Scripts: {"base"=>"scripts/base-v1.0.js", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
 			<p>Stylesheets: {"base"=>"stylesheets/base-v1.1.css"}</p>
-			<p>Config: {"generate"=>"index.html", "resource"=>"resources/index.yml", "views"=>{"intro"=>"views/home-intro.html", "main"=>"views/home-main.erb"}}</p>
+			<p>Config: {"generate"=>"index.html", "resource"=>"resources/index.yml", "views"=>{"intro"=>"views/home-intro.erb", "main"=>"views/home-main.erb"}}</p>
 			
 			
 			<p>Resource: {"title"=>"Static-CMS a simple CMS for Amazon S3"}</p>

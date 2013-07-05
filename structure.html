@@ -44,10 +44,6 @@
           <div class="nav-collapse">
             <ul class="nav">
 			
-				<li><a href='install.html' class=' '>
-					Install
-				</a></li>	
-			
 				<li><a href='structure.html' class='active '>
 					Structure
 				</a></li>	
@@ -105,17 +101,13 @@
 	  &lt;/head&gt;
 	  &lt;body&gt;
 		&lt;div class=&quot;container&quot;&gt;
-
 			&lt;header&gt;
-				  &lt;%= data.views[&quot;intro&quot;] %&gt;
+			  &lt;%= data.views[&quot;intro&quot;] %&gt;
 			&lt;/header&gt;
-
 		  &lt;div&gt;
-			&lt;%= data.views[&quot;main&quot;] %&gt;
+		    &lt;%= data.views[&quot;main&quot;] %&gt;
 		  &lt;/div&gt;
-
 		  &lt;footer&gt;&lt;/footer&gt;
-
 		&lt;/div&gt; 
 	  &lt;/body&gt;
 	&lt;/html&gt;
@@ -128,8 +120,8 @@
 		<p>Open the views (home-intro.html and home-main.html) in your favourite text editor and add some html, e.g</p>
 		<div class="code">
           <pre class="prettyprint"><code class="language-html">
-              &lt;p&gt;Hello World&lt;/p&gt;
-              &lt;p&gt;This is an example view&lt;/p&gt;
+    &lt;p&gt;Hello World&lt;/p&gt;
+    &lt;p&gt;This is an example view&lt;/p&gt;
           </code></pre>
 
 		</div>
@@ -138,14 +130,14 @@
 		<div class="code">
         
         <pre class="prettyprint"><code class="language-yaml">
-            template: templates/skin.html
-        
-            pages:
-            - index: 
-                generate: index.html 
-                views : 
-                    intro: views/home-intro.html
-                    main: views/home-main.html
+    template: templates/skin.html
+
+    pages:
+    - index: 
+        generate: index.html 
+        views : 
+            intro: views/home-intro.html
+            main: views/home-main.html
         </code></pre>
 
 		</div>
@@ -154,19 +146,11 @@
 		<p>The view defined as intro: will be injected into template here: &lt;%= data.views[&quot;intro&quot;] %&gt;<br />
 			The view defined as main: will be injected into template here: &lt;%= data.views[&quot;main&quot;] %&gt;<br />
 			<em>Note: Yaml doesn&#39;t like it if you use [tab] key - use spaces insted.</em></p>
-		<h3>Build</h3>
-		<p>To compile the website type the following in to the command menu:</p>
-		<div class="code">
-			<pre class="prettyprint"><code class="language-bsh">
-  scms.cmd&nbsp;build www.mywebsite.com
-			</code></pre>
-		</div>
-		<p>
-			If all goes well you should be looking at your index page where the html from the views is merged with the html from the template. View the source of the compiled document to verify.</p>
+		
 		<h2>Asset Bundling</h2>
 		<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. Static-CMS has a system that allows you to &#39;bundle&#39; your css and javascript files. In your config.yaml (replace references with the names of your assets):</p>
 		<div class="code">
-			<pre class="prettyprint"><code class="language-yaml">
+		<pre class="prettyprint"><code class="language-yaml">
 	scripts:
 	- base:
 		version: 1.1
@@ -186,16 +170,16 @@
 		  - stylesheets/demo.css
 		  - stylesheets/bootstrap-responsive.css
 		  - google-code-prettify/sons-of-obsidian.css
-			</code></pre>
+		</code></pre>
 		</div>
 		<p>Whats going on here?</p>
 		<p>Like the &quot;pages&quot; configuration option you can specify lists for your scripts and stylesheets.</p>
 		<p>You then replace your script and css references in your skin file like this:</p>
 		<div class="code">
-			<pre class="prettyprint"><code class="language-rb">
-	&lt;link href=&#39;&lt;%= data.stylesheets[&quot;base&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
-	&lt;script src=&#39;&lt;%= data.scripts[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
-			</code></pre>
+		<pre class="prettyprint"><code class="language-rb">
+    &lt;link href=&#39;&lt;%= data.stylesheets[&quot;base&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
+    &lt;script src=&#39;&lt;%= data.scripts[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
+		</code></pre>
 		</div>
 		<p>Note the version is automatically built into the name of the bundled asset.</p>
 	</div>
@@ -214,7 +198,7 @@
 			
 			<p>Scripts: {"base"=>"scripts/base-v1.0.js", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
 			<p>Stylesheets: {"base"=>"stylesheets/base-v1.1.css"}</p>
-			<p>Config: {"generate"=>"structure.html", "resource"=>"resources/structure.yml", "views"=>{"intro"=>"views/structure-intro.html", "main"=>"views/structure-main.erb"}}</p>
+			<p>Config: {"generate"=>"structure.html", "resource"=>"resources/structure.yml", "views"=>{"intro"=>"views/structure-intro.erb", "main"=>"views/structure-main.erb"}}</p>
 			
 			
 			<p>Resource: {"title"=>"Static-CMS folder structure"}</p>

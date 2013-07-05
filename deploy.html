@@ -44,10 +44,6 @@
           <div class="nav-collapse">
             <ul class="nav">
 			
-				<li><a href='install.html' class=' '>
-					Install
-				</a></li>	
-			
 				<li><a href='structure.html' class=' '>
 					Structure
 				</a></li>	
@@ -92,8 +88,7 @@
 		<p>
 			Open s3config.yml in your text editor and edit the following:</p>
 		<div class="code">
-			<pre class="prettyprint">
-                <code class="language-yaml">
+		<pre class="prettyprint"><code class="language-yaml">
 	bucket: www.mywebsite.com
 	aws_access_key_id: addyourkeyhere
 	aws_secret_access_key: addyoursecrethere
@@ -106,7 +101,7 @@
 	  - images
 
 	uri: http://www.mywebsite.com
-			</code></pre>
+		</code></pre>
 		</div>
 		<p>
 			You can get your key and secret from your Amazon AWS console. You will need to create a bucket with your S3 management console. Best practise is to use your full domain name for the bucket (including the www), e.g. www.mywebsite.com. You will also need to set the default document on your bucket to index.html</p>
@@ -120,20 +115,16 @@
 			Publishing</h2>
 		<p>From a terminal:</p>
 		<div class="code">
-			<pre class="prettyprint"><code class="language-bsh">
-	scms -a deploy -w pathto/www.mywebsite.com
+		<pre class="prettyprint"><code class="language-bsh">
+  $  scms -a deploy -w pathto/www.mywebsite.com
 		</code></pre>
 		</div>
-		<p>
-			The compiled html files will be synced with S3 (only changed files will be uploaded).</p>
-		<p>
-			Open the URL of website and check the deployment was successful.</p>
-		<p>
-			Tip: If you decide to publish your images with caching (recomended) add a version number to edited images, e.g. myimage-v1.1.png.</p>
+		<p>The compiled html files will be synced with S3 (only changed files will be uploaded).</p>
+		<p>Open the URL of website and check the deployment was successful.</p>
+		<p>Tip: If you decide to publish your images with caching (recomended) add a version number to edited images, e.g. myimage-v1.1.png.</p>
 	</div>
 </section>
-<p>
-	&nbsp;</p>
+
 
       </div>
 
@@ -147,7 +138,7 @@
 			
 			<p>Scripts: {"base"=>"scripts/base-v1.0.js", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
 			<p>Stylesheets: {"base"=>"stylesheets/base-v1.1.css"}</p>
-			<p>Config: {"generate"=>"deploy.html", "resource"=>"resources/deploy.yml", "views"=>{"intro"=>"views/deploy-intro.html", "main"=>"views/deploy-main.erb"}}</p>
+			<p>Config: {"generate"=>"deploy.html", "resource"=>"resources/deploy.yml", "views"=>{"intro"=>"views/deploy-intro.erb", "main"=>"views/deploy-main.erb"}}</p>
 			
 			
 			<p>Resource: {"title"=>"Publish a Static-CMS website to Amazon S3"}</p>
