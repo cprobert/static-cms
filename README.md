@@ -14,9 +14,13 @@ When your happy with your website StaticCMS will also deploy to AmazonS3 setting
 
     scms -a create -w /path/to/folder
 
+(if the -w flag is excluded it assumes current directory)
+
 ### Building your website 
 
-    scms - build -w /path/to/folder
+    scms -a build -w /path/to/folder
+    
+(if the -a flag is excluded defult action is 'build')
 
 ### Publishing your website 
 
