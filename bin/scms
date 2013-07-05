@@ -65,7 +65,7 @@ $html = (ENV["SCMS_HTML_OUT"] or "false")
 
 $stdout.sync = true
 root_folder = File.expand_path("../", File.dirname(__FILE__))
-@pub = File.join("#{$website}/_site")
+@pub = File.join("#{$website}/-site")
 unless options[:pub].nil?
     @pub = options[:pub]
 end
