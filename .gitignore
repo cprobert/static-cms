@@ -1,6 +1,6 @@
 *.gem
-staticcms.sublime-project
-staticcms.sublime-workspace
+*.sublime-project
+*.sublime-workspace
 
 # DocProject is a documentation generator add-in
 DocProject/buildhelp/
