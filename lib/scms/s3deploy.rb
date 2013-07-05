@@ -1,8 +1,8 @@
 module S3Deploy
-	VERSION = '1.0.0'
+    VERSION = '1.0.0'
     require "scms/scms_utils.rb"
 
-	def S3Deploy.sync(pub, config)
+    def S3Deploy.sync(pub, config)
         @pub = pub
         ENV["S3CONF"] = config
         ENV["AWS_CALLING_FORMAT"] = "SUBDOMAIN"
@@ -12,33 +12,34 @@ module S3Deploy
         $settings = YAML.load_file(yamlpath)
         
         ScmsUtils.log( "Syncing with Amazon S3: **#{$settings['bucket']}**" )
-		
-		removeold = "--delete"
-		if $settings['clean'] != nil
-			unless $settings['clean']
-				removeold = ""
-			end
-		end
-		
+        
+        removeold = "--delete"
+        if $settings['clean'] != nil
+            unless $settings['clean']
+                removeold = ""
+            end
+        end
+        
         cmd = "s3sync"
-        cache = "--cache-control='max-age=31449600'"
-        params = "--exclude='.svn' --progress --make-dirs --recursive --public-read #{removeold} #{cache} \"#{@pub}/\" #{$settings['bucket']}:/"
-		if $settings['cache'] != nil
-			$settings['cache'].each do |folder| 
-				ScmsUtils.log( "Syncing **#{folder}** caching: 1 year" )
-				ScmsUtils.run(cmd, params)
-			end
-		end
+        params = "--exclude='.svn' --progress --make-dirs --recursive --public-read #{removeold}"
+        
+        if $settings['cache'] != nil
+            $settings['cache'].each do |folder| 
+                ScmsUtils.log( "Syncing **#{folder}** caching: 1 year" )
+                cacheparams = "#{params} --cache-control='max-age=31449600' \"#{@pub}/#{folder}/\" #{$settings['bucket']}:#{folder}/"
+                ScmsUtils.run(cmd, cacheparams)
+            end
+        end
 
-		cache = ""
-		ScmsUtils.log( "Syncing **root** no caching" )
-		ScmsUtils.run(cmd, params)
+        ScmsUtils.log( "Syncing **root** no caching" )
+        roorparams = "#{params} \"#{@pub}/\" #{$settings['bucket']}:/"
+        ScmsUtils.run(cmd, roorparams)
         ScmsUtils.successLog("**Deployed :)**")
         
         if $settings['uri'] != nil
-			ScmsUtils.log("[_#{$settings['uri']}_](#{$settings['uri']})")
-		end
-	end	
+            ScmsUtils.log("[_#{$settings['uri']}_](#{$settings['uri']})")
+        end
+    end 
 
     def S3Deploy.backup(privatedir, config)
         ENV["S3CONF"] = config
@@ -56,8 +57,8 @@ module S3Deploy
                 removeold = ""
             end
         end
-        params = "--exclude='.svn' --progress --make-dirs --recursive #{removeold} \"#{privatedir}/\" #{$settings['bucket']}:/private"
+        params = "--exclude='.svn' --progress --make-dirs --recursive #{removeold} \"#{privatedir}/\" #{$settings['bucket']}:private/"
         ScmsUtils.run(cmd, params)
-        ScmsUtils.successLog("**Done :)**")
+        ScmsUtils.successLog("** Done :) **")
     end 
 end

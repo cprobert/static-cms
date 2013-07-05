@@ -53,26 +53,29 @@ optparse = OptionParser.new do|opts|
    end
 end
 optparse.parse!
-#Now raise an exception if we have not found a website option
-if options[:website].nil?
-    puts "Please specify a website directory, e.g."
-    puts "staticcms -w ~/websites/mystaticwebsite"
-    raise OptionParser::MissingArgument 
+
+$website = Dir.pwd
+unless options[:website].nil?
+    $website = options[:website]
 end
+puts "Compiling #{$website}"
+
+##Set globals
+$html = (ENV["SCMS_HTML_OUT"] or "false")
 
 $stdout.sync = true
 root_folder = File.expand_path("../", File.dirname(__FILE__))
-@pub = File.join("#{options[:website]}/compiled")
+@pub = File.join("#{$website}/_site")
 unless options[:pub].nil?
     @pub = options[:pub]
 end
 
 Folders = {
   :root => root_folder,
-  :website => File.join(options[:website]),
+  :website => File.join($website),
   :pub => (ENV["SCMS_PUBLISH_FOLDER"] or @pub),
   :assets => (ENV["SCMS_STATICCMS_FOLDER"] or File.join(root_folder, "assets")),
-  :config => (ENV["SCMS_CONFIG_FOLDER"] or File.join(options[:website]))
+  :config => (ENV["SCMS_CONFIG_FOLDER"] or File.join($website))
 }
 
 if options[:action] == "create"
@@ -111,10 +114,6 @@ raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:
 #puts "Config dir = #{Folders[:config]}"
 #puts "Mode = #{options[:mode]}"
 
-##Set globals
-$website = Folders[:website]
-$html = (ENV["SCMS_HTML_OUT"] or "false")
-
 deployDir = StaticCMS.build(Folders[:pub], Folders[:config], options[:mode])
 
 if options[:action] == "crunch"
@@ -124,4 +123,6 @@ end
 if options[:action] == "deploy"
     StaticCMS.crunch(deployDir)
     StaticCMS.deploy(deployDir, Folders[:config])
+    backupdir = File.join(Folders[:website], "private")
+    S3Deploy.backup(backupdir, Folders[:config]) if File.directory? backupdir
 end

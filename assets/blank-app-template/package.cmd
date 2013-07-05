@@ -11,6 +11,6 @@ del .\tools\v
 echo "v = %v%"
 
 echo Packaging MyAirApp_%v%.air 
-adt -package -storetype pkcs12 -keystore cert.p12 -storepass LetItAllOut MyAirApp_%v%.air application.xml compiled 
+adt -package -storetype pkcs12 -keystore cert.p12 -storepass LetItAllOut MyAirApp_%v%.air application.xml _site 
 endlocal
 pause
