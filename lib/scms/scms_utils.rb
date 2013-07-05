@@ -15,8 +15,12 @@ module ScmsUtils
     def ScmsUtils.errLog(msg)
         if !msg.nil?
             if $html == "true"
-                doc = Maruku.new(msg)
-                puts "<span style='color: red;'>#{doc.to_html}</span>"
+                begin
+                    doc = Maruku.new(msg)
+                    puts "<span style='color: red;'>#{doc.to_html}</span>"
+                rescue Exception=>e
+                    puts msg
+                end
             else
                 puts msg
             end
@@ -26,8 +30,12 @@ module ScmsUtils
     def ScmsUtils.successLog(msg)
         if !msg.nil?
             if $html == "true"
-                doc = Maruku.new(msg)
-                puts "<span style='color: green;'>#{doc.to_html}</span>"
+                begin
+                    doc = Maruku.new(msg)
+                    puts "<span style='color: green;'>#{doc.to_html}</span>"
+                rescue Exception=>e
+                    puts msg
+                end
             else
                 puts msg
             end
@@ -37,8 +45,12 @@ module ScmsUtils
     def ScmsUtils.log(msg)
         if !msg.nil?
             if $html == "true"
-                doc = Maruku.new(msg)
-                puts doc.to_html
+                begin
+                    doc = Maruku.new(msg)
+                    puts doc.to_html
+                rescue Exception=>e
+                    puts msg
+                end
             else
                 puts msg
             end

@@ -19,9 +19,14 @@ module S3Deploy
                 removeold = ""
             end
         end
+
+        exclude = "--exclude='.svn'"
+        if $settings['ignore'] != nil
+            exclude = "--exclude=#{$settings["ignore"]}"
+        end
         
         cmd = "s3sync"
-        params = "--exclude='.svn' --progress --make-dirs --recursive --public-read #{removeold}"
+        params = "#{removeold} #{exclude} --progress --make-dirs --recursive --public-read "
         
         if $settings['cache'] != nil
             $settings['cache'].each do |folder| 
@@ -57,7 +62,13 @@ module S3Deploy
                 removeold = ""
             end
         end
-        params = "--exclude='.svn' --progress --make-dirs --recursive #{removeold} \"#{privatedir}/\" #{$settings['bucket']}:private/"
+        
+        exclude = "--exclude='.svn'"
+        if $settings['ignore'] != nil
+            exclude = "--exclude=#{$settings["ignore"]}"
+        end
+        
+        params = "#{exclude} --progress --make-dirs --recursive #{removeold} \"#{privatedir}/\" #{$settings['bucket']}:private/"
         ScmsUtils.run(cmd, params)
         ScmsUtils.successLog("** Done :) **")
     end 

@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = "A gem for creating static html websites"
   s.authors     = ["Courtenay Probert"]
   s.email       = 'courtenay@probert.me.uk'
-  s.files       = Dir.glob("**/*")
+  s.files       = `git ls-files`.split("\n")
   
   s.add_dependency "aproxacs-s3sync"
   s.add_dependency "nokogiri"
