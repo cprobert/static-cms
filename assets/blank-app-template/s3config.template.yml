@@ -1,9 +1,0 @@
-bucket: yours3.bucket
-aws_access_key_id: yourkeyhjere
-aws_secret_access_key: yoursecretpassword
-ssl_cert_dir: s3certs
-
-cache:
-  - scripts
-  - stylesheets
-  - images

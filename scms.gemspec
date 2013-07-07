@@ -1,24 +1,31 @@
-# -*- encoding: utf-8 -*-
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'Scms/version'
 
-$:.push File.expand_path("../lib", __FILE__)
-require 'scms/version'
+Gem::Specification.new do |spec|
+  spec.name          = "Scms"
+  spec.version       = Scms::VERSION
+  spec.authors       = ["Courtenay Probert"]
+  spec.email         = ["courtenay@probert.me.uk"]
+  spec.description   = "A static website CMS for Amazon's S3"
+  spec.summary       = "Create simple static websites, in a jiffy"
+  spec.homepage      = "http://ipassexam.github.io/Scms/"
+  spec.license       = "MIT"
 
-Gem::Specification.new do |s|
-  s.name        = 'scms'
-  s.version     = StaticCMS::VERSION
-  s.date        = '2013-06-29'
-  s.homepage    = 'http://cprobert.github.io/Static-CMS/'
-  s.summary     = "Create simple static websites, in a jiffy"
-  s.description = "A gem for creating static html websites"
-  s.authors     = ["Courtenay Probert"]
-  s.email       = 'courtenay@probert.me.uk'
-  s.files       = `git ls-files`.split("\n")
+  spec.files         = `git ls-files`.split($/)
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = ["lib"]
+
+  spec.executables << 'Scms'
+
+  spec.add_dependency "cprobert-s3sync"
+  spec.add_dependency "nokogiri"
+  spec.add_dependency "maruku"
+  spec.add_dependency "sass"
+  spec.add_dependency "packr"
   
-  s.add_dependency "aproxacs-s3sync"
-  s.add_dependency "nokogiri"
-  s.add_dependency "maruku"
-  s.add_dependency "sass"
-  s.add_dependency "packr"
-  
-  s.executables << 'scms'
+  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "rake"
 end

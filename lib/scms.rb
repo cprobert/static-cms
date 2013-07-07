@@ -1,7 +1,8 @@
-module StaticCMS
-    VERSION = '1.1.0'
-    require 'scms/scms_utils.rb'
-    require 'scms/s3deploy.rb'
+require "Scms/version"
+
+module Scms
+    require 'Scms/ScmsUtils.rb'
+    require 'Scms/s3deploy.rb'
 
     require 'erb'
     require 'ostruct' 
@@ -11,34 +12,46 @@ module StaticCMS
     
     include YAML
     
-    def StaticCMS.build(pub, config, mode)
-        @pub = pub
-        @cleanpub = true
+    def Scms.build(pub, config, mode)
+        @pub = $website
+        @cleanpub = false
+        if pub != nil
+            @pub = pub 
+            @cleanpub = true
+        end
+
         @configdir = config
         @mode = mode
-        @webroot = "public"
-        @source = File.join($website, @webroot)
-        
         ScmsUtils.log("_Mode: #{mode}_")
-
-        StaticCMS.sassall(@source)
         
-        yamlpath=File.join(@configdir, "config.yml")
-        ScmsUtils.log("**[Getting Config](#{ScmsUtils.uriEncode("file:///#{yamlpath}")})**")
-        $settings = StaticCMS.getsettings(yamlpath)
+        @source = File.join($website)
+        # Support for legacy publick folders
+        if (Dir.exists? File.join($website, "public"))
+            @source =  File.join($website, "public")
+            @pub = File.join($website, "_site")
+        end
+        
+        puts "Source #{@source}" 
+        Scms.sassall(@source)
+        
+        yamlpath=File.join(@configdir, "_config.yml")
+        ScmsUtils.log("Loading Config: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
+        $settings = Scms.getsettings(yamlpath)
         if $settings
             if $settings["options"] != nil
+                # Don't overwrite environment settings
                 if ENV["SCMS_PUBLISH_FOLDER"] == nil && $settings["options"]["build_dir"] != nil
-                    ScmsUtils.log("_Setting pub dir from config.yml_")
+                    ScmsUtils.log("_Getting pub dir from _config.yml_")
                     @pub = $settings["options"]["build_dir"]
                 end
-                if $settings["options"]["clean_build_dir"] == false
-                    @cleanpub = false
+                if $settings["options"]["clean_build_dir"] == true
+                    puts "Cleaning build dir"
+                    @cleanpub = true
                 end
             end
             
             if @cleanpub
-                StaticCMS.cleanpubdir(@pub)
+                Scms.cleanpubdir(@pub)
                 @cleanpub = false
             else
                 ScmsUtils.log("Skipping cleaning \n#{@pub}")
@@ -60,19 +73,19 @@ module StaticCMS
             end 
             
             #Bundle resources
-            scripts = StaticCMS.bundlescripts($settings["scripts"])
-            stylesheets = StaticCMS.bundlestylesheets($settings["stylesheets"])
+            scripts = Scms.bundlescripts($settings["scripts"])
+            stylesheets = Scms.bundlestylesheets($settings["stylesheets"])
             #Generate pages
-            StaticCMS.parsetemplates(scripts, stylesheets)
+            Scms.parsetemplates(scripts, stylesheets)
         else
             ScmsUtils.errLog("Config is empty")
         end
         
-        if File.exists?(@source)
+        if @source != $website
             ScmsUtils.log("_Merging 'public' folder_")
             
             if @cleanpub
-                StaticCMS.cleanpubdir(@pub)
+                Scms.cleanpubdir(@pub)
             end
             
             FileUtils.mkdir @pub unless Dir.exists? @pub
@@ -87,16 +100,16 @@ module StaticCMS
                 end
             end
         else
-            ScmsUtils.log("**No 'public' folder in #{@source} - skiping  merge**")
+            ScmsUtils.log("**Skiping  merge**")
         end
         
         ScmsUtils.successLog("**Compiled :)**")
-        ScmsUtils.log("[_#{@pub}_](#{ScmsUtils.uriEncode("file:///#{@pub}")})")
+        ScmsUtils.log("#{@pub}: #{ScmsUtils.uriEncode("file:///#{@pub}")}")
         
         return @pub
     end
     
-    def StaticCMS.parsetemplates(scripts, stylesheets)
+    def Scms.parsetemplates(scripts, stylesheets)
         # build views from templates
         @template = $settings["template"] 
         if $settings["pages"] != nil
@@ -162,9 +175,9 @@ module StaticCMS
                                     end
                                     
                                     if @mode == "cms"
-                                        views[view[0]] = "<div class='cms' data-view='#{view[1]}' data-page='#{page}'>#{StaticCMS.parsetemplate(viewSnippet, model)}</div>"
+                                        views[view[0]] = "<div class='cms' data-view='#{view[1]}' data-page='#{page}'>#{Scms.parsetemplate(viewSnippet, model)}</div>"
                                     else
-                                        views[view[0]] = StaticCMS.parsetemplate(viewSnippet, model)
+                                        views[view[0]] = Scms.parsetemplate(viewSnippet, model)
                                     end
                                 else
                                     ScmsUtils.writelog(@pub, "Empty file: #{viewpath}")
@@ -198,7 +211,7 @@ module StaticCMS
                         if File.exists?(erb)
                             pubsubdir = File.dirname(out)
                             Dir.mkdir(pubsubdir, 755) unless File::directory?(pubsubdir)
-                            html = StaticCMS.parsetemplate(File.read(erb), hash)
+                            html = Scms.parsetemplate(File.read(erb), hash)
                             File.open(out, 'w') {|f| f.write(html) }
                         else
                             ScmsUtils.errLog("Template doesn't exist: #{erb}")
@@ -212,7 +225,7 @@ module StaticCMS
         end
     end
 
-    def StaticCMS.bundlescripts(scriptsConfig)
+    def Scms.bundlescripts(scriptsConfig)
         scripts = Hash.new
         if scriptsConfig != nil
             ScmsUtils.log("**Bundeling Scripts:**")
@@ -251,13 +264,14 @@ module StaticCMS
                     
                     scripts[name] = "scripts/#{scriptname}"
                     File.open(out, 'w') {|f| f.write(content) }
+                    Scms.packr(out) if /-min$/.match(out)
                 end
             end
         end
         return scripts
     end
     
-    def StaticCMS.bundlestylesheets(styleConfig)
+    def Scms.bundlestylesheets(styleConfig)
         stylesheets = Hash.new
         if styleConfig != nil
             ScmsUtils.log("**Bundeling Stylesheets:**")
@@ -299,7 +313,7 @@ module StaticCMS
         return stylesheets
     end
     
-    def StaticCMS.parsetemplate(template, hash)
+    def Scms.parsetemplate(template, hash)
         data = OpenStruct.new(hash)
         result = ""
         
@@ -314,7 +328,7 @@ module StaticCMS
         return result
     end
 
-    def StaticCMS.getsettings(yamlpath)
+    def Scms.getsettings(yamlpath)
         config = nil
         
         if File.exist?(yamlpath)
@@ -325,7 +339,7 @@ module StaticCMS
                 config = YAML.load(myconfig)
                 #config = YAML.load_file(yamlpath)
             rescue Exception => e  
-                ScmsUtils.errLog("Error Loading config.yml (check there are no tabs in the file)")
+                ScmsUtils.errLog("Error Loading _config.yml (check there are no tabs in the file)")
                 ScmsUtils.log( "_[Verify your config](http://yaml-online-parser.appspot.com/)_")
                 ScmsUtils.errLog( e.message )
                 ScmsUtils.errLog( e.backtrace.inspect )
@@ -337,7 +351,7 @@ module StaticCMS
         return config
     end
     
-    def StaticCMS.cleanpubdir(pub)
+    def Scms.cleanpubdir(pub)
         ScmsUtils.log("_Cleaning pub folder #{pub}_")
         FileUtils.rm_rf pub
         #FileUtils.remove_dir(pub, force = true)
@@ -346,32 +360,32 @@ module StaticCMS
         FileUtils.chmod 0755, pub
     end
     
-    def StaticCMS.crunch(crunchDir)
+    def Scms.crunch(crunchDir)
         ScmsUtils.log( "Starting crunching CSS and JavaScript in:\n#{crunchDir}\n\n" )
-        #StaticCMS.sassall(crunchDir)
+        #Scms.sassall(crunchDir)
         Dir.chdir(crunchDir) do
             Dir.glob("**/*.js").reject{|f| /-min/.match(f) != nil || /\.min/.match(f) != nil || /\.pack/.match(f) != nil }.each do |asset|
-                StaticCMS.packr(asset)
+                Scms.packr(asset)
             end
             #Dir.glob("**/*.{css, js}").each do |asset|
             #    #fullFileName = File.basename(asset)
             #    #ScmsUtils.log( "Crunching #{fullFileName}" )
             #    ext = File.extname(asset)
-            #    StaticCMS.yuicompress(asset, ext)
+            #    Scms.yuicompress(asset, ext)
             #end
         end
     end
 
-    def StaticCMS.sassall(crunchDir)
+    def Scms.sassall(crunchDir)
         ScmsUtils.log( "**Minimising Sass Files (.scss) **" )
         Dir.chdir(crunchDir) do
             Dir.glob("**/*.{scss}").each do |asset|
-                StaticCMS.sass(asset)
+                Scms.sass(asset)
             end
         end
     end
 
-    def StaticCMS.sass(asset)
+    def Scms.sass(asset)
         if File.exists?(asset)
             begin
                 template = File.read(asset)
@@ -391,7 +405,7 @@ module StaticCMS
         end
     end
     
-    def StaticCMS.packr(asset)
+    def Scms.packr(asset)
         if File.exists?(asset)
             begin
                 code = File.read(asset)
@@ -405,7 +419,7 @@ module StaticCMS
         end
     end
         
-    def StaticCMS.yuicompress(asset, ext)
+    def Scms.yuicompress(asset, ext)
         if File.exists?(asset)
             #ScmsUtils.log( " Encoding: #{asset.encoding}" )
             enc = "--charset utf-8"
@@ -423,13 +437,17 @@ module StaticCMS
         end
     end
 
-    def StaticCMS.deploy(pub, config)
-        yamlpath=File.join(config, "s3config.yml")
+    def Scms.deploy(pub, config)
+        yamlpath=File.join(config, "_s3config.yml")
         if File.exists?(yamlpath) 
             S3Deploy.sync(pub, config)
         else
             raise "The following file doesn't exist #{yamlpath}"
         end
-        
+    end
+
+    def Scms.Upgrade()
+        File.rename("config.yml", "_config.yml") if File.exists? File.join($website, "config.yml")
+        File.rename("s3config.yml", "_s3config.yml") if File.exists? File.join($website, "s3config.yml")
     end
 end

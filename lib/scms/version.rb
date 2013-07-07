@@ -1,3 +1,3 @@
-module StaticCMS
-  VERSION = '1.8.8'
+module Scms
+  VERSION = "0.0.1"
 end

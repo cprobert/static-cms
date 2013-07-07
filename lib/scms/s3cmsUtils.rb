@@ -1,7 +1,6 @@
 module ScmsUtils
     require 'find'
     require 'fileutils'
-    require 'maruku'
     require 'open-uri'
 
     def ScmsUtils.run(cmd, params)
@@ -15,12 +14,7 @@ module ScmsUtils
     def ScmsUtils.errLog(msg)
         if !msg.nil?
             if $html == "true"
-                begin
-                    doc = Maruku.new(msg)
-                    puts "<span style='color: red;'>#{doc.to_html}</span>"
-                rescue Exception=>e
-                    puts msg
-                end
+                puts "<span style='color: red;'>#{msg}</span>"
             else
                 puts msg
             end
@@ -30,12 +24,7 @@ module ScmsUtils
     def ScmsUtils.successLog(msg)
         if !msg.nil?
             if $html == "true"
-                begin
-                    doc = Maruku.new(msg)
-                    puts "<span style='color: green;'>#{doc.to_html}</span>"
-                rescue Exception=>e
-                    puts msg
-                end
+                puts "<span style='color: green;'>#{msg}</span>"
             else
                 puts msg
             end
@@ -45,12 +34,7 @@ module ScmsUtils
     def ScmsUtils.log(msg)
         if !msg.nil?
             if $html == "true"
-                begin
-                    doc = Maruku.new(msg)
-                    puts doc.to_html
-                rescue Exception=>e
-                    puts msg
-                end
+                puts msg
             else
                 puts msg
             end

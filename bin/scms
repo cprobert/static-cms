@@ -9,13 +9,13 @@
 
 require 'optparse'
 require 'fileutils'
-require 'scms'
+require 'Scms'
 
 options = {}
 optparse = OptionParser.new do|opts|
   # Set a banner, displayed at the top
   # of the help screen.
-  opts.banner = "Usage: scms [options]"
+  opts.banner = "Usage: Scms [options]"
  
   # Define the options, and what they do
   opts.on('-w', '--website WEBSITE', "Website directory (full path)") do |w|
@@ -54,10 +54,7 @@ optparse = OptionParser.new do|opts|
 end
 optparse.parse!
 
-$website = Dir.pwd
-unless options[:website].nil?
-    $website = options[:website]
-end
+$website = (options[:website].nil?) ? Dir.pwd : options[:website] 
 puts "Compiling #{$website}"
 
 ##Set globals
@@ -65,15 +62,10 @@ $html = (ENV["SCMS_HTML_OUT"] or "false")
 
 $stdout.sync = true
 root_folder = File.expand_path("../", File.dirname(__FILE__))
-@pub = File.join("#{$website}/-site")
-unless options[:pub].nil?
-    @pub = options[:pub]
-end
-
 Folders = {
   :root => root_folder,
   :website => File.join($website),
-  :pub => (ENV["SCMS_PUBLISH_FOLDER"] or @pub),
+  :pub => (ENV["SCMS_PUBLISH_FOLDER"] or options[:pub]),
   :assets => (ENV["SCMS_STATICCMS_FOLDER"] or File.join(root_folder, "assets")),
   :config => (ENV["SCMS_CONFIG_FOLDER"] or File.join($website))
 }
@@ -92,37 +84,14 @@ if options[:action] == "create"
     exit
 end
 
-if options[:action] == "createapp"
-    if Dir.exists? Folders[:website]
-        throw "App already exists!!!"
-    else
-        puts "Making Air app: #{Folders[:website]}"
-        FileUtils.mkdir_p Folders[:website]
-        Dir.chdir(File.join(Folders[:assets], "blank-app-template")) do
-            files = Dir.glob('*')
-            FileUtils.cp_r files, Folders[:website]
-        end
-    end
-    exit
-end
-
-raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:website])
-
 #puts "System root folder = #{Folders[:root]}"
 #puts "Website folder = #{Folders[:website]}"
 #puts "Pub dir = #{Folders[:pub]}"
 #puts "Config dir = #{Folders[:config]}"
 #puts "Mode = #{options[:mode]}"
 
-deployDir = StaticCMS.build(Folders[:pub], Folders[:config], options[:mode])
-
-if options[:action] == "crunch"
-    StaticCMS.crunch(deployDir)
-end
+raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:website])
+Scms.Upgrade()
+deployDir = Scms.build(Folders[:pub], Folders[:config], options[:mode])
 #puts "deployDir = #{deployDir}"
-if options[:action] == "deploy"
-    StaticCMS.crunch(deployDir)
-    StaticCMS.deploy(deployDir, Folders[:config])
-    backupdir = File.join(Folders[:website], "private")
-    S3Deploy.backup(backupdir, Folders[:config]) if File.directory? backupdir
-end
+Scms.deploy(deployDir, Folders[:config]) if options[:action] == "deploy"

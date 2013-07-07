@@ -47,7 +47,7 @@
 					end
 
 					require 'nokogiri'
-					xml_doc  = Nokogiri::XML(File.read(File.join(data.sitedir, "templates", "menu.xml")))
+					xml_doc  = Nokogiri::XML(File.read(File.join(data.sitedir, "_templates", "menu.xml")))
 					xml_doc.xpath('/menu/page').each do |link|
 				%>
 					<li><a href='<%= link.attr("href") %>' class='<%=isActive(link.attr("href"))%> <%= link.attr("class") %>'>
