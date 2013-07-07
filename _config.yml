@@ -1,0 +1,50 @@
+template: _templates/hero.html
+
+pages:
+- index: 
+    generate: index.html 
+    resource: _resources/index.yml
+    views : 
+        intro: _views/home-intro.erb
+        main: _views/home-main.erb
+- prerequisites:
+    generate: prerequisites.html
+    resource: _resources/prerequisites.yml
+    views : 
+        intro: _views/prerequisites-intro.erb
+        main: _views/prerequisites-main.erb
+- structure : 
+    generate: structure.html
+    resource: _resources/structure.yml
+    views : 
+        intro: _views/structure-intro.erb
+        main: _views/structure-main.erb
+- deploy: 
+    generate: deploy.html
+    resource: _resources/deploy.yml
+    views : 
+        intro: _views/deploy-intro.erb
+        main: _views/deploy-main.erb
+
+scripts:
+- base:
+    version: 1.0
+    bundle:
+     - scripts/demo.js
+- libraries-min:
+    version: 1.1
+    bundle:
+     - google-code-prettify/prettify.js
+     - google-code-prettify/lang-yaml.js
+     - scripts/bootstrap.js
+
+stylesheets:
+- base:
+    version: 1.1
+    bundle:
+      - stylesheets/bootstrap.css
+      - stylesheets/demo.css
+      - stylesheets/bootstrap-responsive.css
+      - google-code-prettify/sons-of-obsidian.css
+
+

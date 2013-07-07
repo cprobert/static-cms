@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Publish a Static-CMS website to Amazon S3</title>
+    <title>Publish a s3cms website to Amazon S3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -40,7 +40,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/Static-CMS/">Static-CMS</a>
+          <a class="brand" href="/s3cms/">s3cms</a>
           <div class="nav-collapse">
             <ul class="nav">
 			
@@ -116,7 +116,7 @@
 		<p>From a terminal:</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-bsh">
-  $  scms -a deploy -w pathto/www.mywebsite.com
+  $  s3cms -a deploy -w pathto/www.mywebsite.com
 		</code></pre>
 		</div>
 		<p>The compiled html files will be synced with S3 (only changed files will be uploaded).</p>
@@ -134,14 +134,14 @@
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
 			<p>Page: deploy.html</p>
-			<p>Sitedir: C:\Users\cprobert\Dropbox\Companies\iTutor Tech\Websites\static-cms.ipassexam.com</p>
+			<p>Sitedir: C:/Users/cprobert/Documents/websites/s3cms</p>
 			
 			<p>Scripts: {"base"=>"scripts/base-v1.0.js", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
 			<p>Stylesheets: {"base"=>"stylesheets/base-v1.1.css"}</p>
-			<p>Config: {"generate"=>"deploy.html", "resource"=>"resources/deploy.yml", "views"=>{"intro"=>"views/deploy-intro.erb", "main"=>"views/deploy-main.erb"}}</p>
+			<p>Config: {"generate"=>"deploy.html", "resource"=>"_resources/deploy.yml", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}</p>
 			
 			
-			<p>Resource: {"title"=>"Publish a Static-CMS website to Amazon S3"}</p>
+			<p>Resource: {"title"=>"Publish a s3cms website to Amazon S3"}</p>
 			<p>Views: (access like this: data.views["viewname"])</p>
 		</div>
 		<script>

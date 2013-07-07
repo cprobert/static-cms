@@ -1,0 +1,44 @@
+<section id="gridSystem">
+	<div class="span12">
+		<h2>
+			Editing your s3config.yml</h2>
+		<p>
+			Open s3config.yml in your text editor and edit the following:</p>
+		<div class="code">
+		<pre class="prettyprint"><code class="language-yaml">
+	bucket: www.mywebsite.com
+	aws_access_key_id: addyourkeyhere
+	aws_secret_access_key: addyoursecrethere
+	ssl_cert_dir: s3certs
+	clean: true
+
+	cache:
+	  - scripts
+	  - stylesheets
+	  - images
+
+	uri: http://www.mywebsite.com
+		</code></pre>
+		</div>
+		<p>
+			You can get your key and secret from your Amazon AWS console. You will need to create a bucket with your S3 management console. Best practise is to use your full domain name for the bucket (including the www), e.g. www.mywebsite.com. You will also need to set the default document on your bucket to index.html</p>
+		<p>
+			Take note of the cache configuration option. The s3config allows you to specify what folders you would like the browser to cache. Any files that reside in these folders will be uploaded with the cache-control header set for 1 year. Note: This has some side effects. The benefits are that the cached assets will only be downloaded once. This greatly speeds up the load time of pages that share these assets. It also reduces your S3 bill (because you only pay for what you use). The downside is that you will need to version your resources to force a fresh download if you update these resources (note the bundler automatically versions).</p>
+		<h2>
+			Add your S3 certs</h2>
+		<p>
+			Create a folder called &quot;s3certs&quot; and download your downloaded S3 certs to this folder.</p>
+		<h2>
+			Publishing</h2>
+		<p>From a terminal:</p>
+		<div class="code">
+		<pre class="prettyprint"><code class="language-bsh">
+  $  s3cms -a deploy -w pathto/www.mywebsite.com
+		</code></pre>
+		</div>
+		<p>The compiled html files will be synced with S3 (only changed files will be uploaded).</p>
+		<p>Open the URL of website and check the deployment was successful.</p>
+		<p>Tip: If you decide to publish your images with caching (recomended) add a version number to edited images, e.g. myimage-v1.1.png.</p>
+	</div>
+</section>
+
