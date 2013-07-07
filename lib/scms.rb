@@ -1,8 +1,8 @@
-require "Scms/version"
+require "scms/version"
 
 module Scms
-    require 'Scms/ScmsUtils.rb'
-    require 'Scms/s3deploy.rb'
+    require 'scms/scms-utils.rb'
+    require 'scms/s3deploy.rb'
 
     require 'erb'
     require 'ostruct' 

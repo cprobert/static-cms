@@ -1,6 +1,6 @@
 module S3Deploy
     VERSION = '1.0.0'
-    require "Scms/ScmsUtils.rb"
+    require "scms/scms-utils.rb"
 
     def S3Deploy.sync(pub, config)
         ScmsUtils.log( "Syncing with Amazon S3: **#{$settings['bucket']}**" )
