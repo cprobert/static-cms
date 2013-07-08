@@ -9,6 +9,7 @@ module Scms
     require 'yaml'
     require 'sass'
     require 'packr'
+    require 'maruku'
     
     include YAML
     
@@ -53,8 +54,6 @@ module Scms
             if @cleanpub
                 Scms.cleanpubdir(@pub)
                 @cleanpub = false
-            else
-                ScmsUtils.log("Skipping cleaning \n#{@pub}")
             end
             
             #Bootstrap here
@@ -76,18 +75,15 @@ module Scms
             scripts = Scms.bundlescripts($settings["scripts"])
             stylesheets = Scms.bundlestylesheets($settings["stylesheets"])
             #Generate pages
-            Scms.parsetemplates(scripts, stylesheets)
+            Scms.parsepages(scripts, stylesheets)
         else
             ScmsUtils.errLog("Config is empty")
         end
         
-        if @source != $website
+        if @pub != $website
             ScmsUtils.log("_Merging 'public' folder_")
             
-            if @cleanpub
-                Scms.cleanpubdir(@pub)
-            end
-            
+            Scms.cleanpubdir(@pub) if @cleanpub
             FileUtils.mkdir @pub unless Dir.exists? @pub
             Dir.chdir(@source) do
                 #files = Dir.glob('*')
@@ -109,7 +105,7 @@ module Scms
         return @pub
     end
     
-    def Scms.parsetemplates(scripts, stylesheets)
+    def Scms.parsepages(scripts, stylesheets)
         # build views from templates
         @template = $settings["template"] 
         if $settings["pages"] != nil
@@ -141,7 +137,7 @@ module Scms
                             end
                         end
                         
-                        hasHandler = nil
+                        hasHandler = "no"
                         if pageconfig["handler"] != nil
                             handlerpath = File.join($website, pageconfig["handler"])
                             if File.exists?(handlerpath)
@@ -171,7 +167,20 @@ module Scms
                                         ScmsUtils.log("_Rendering with handler_")
                                         viewSnippet = Handler.render(viewpath)
                                     else
-                                        viewSnippet = File.read(viewpath)
+                                        snnipetCode = File.read(viewpath)
+                                        case File.extname(view[1])
+                                        when ".md"
+                                            begin  
+                                                doc = Maruku.new(snnipetCode)
+                                                viewSnippet = doc.to_html
+                                            rescue Exception => e  
+                                                viewSnippet = snnipetCode
+                                                puts e.message  
+                                                puts e.backtrace.inspect  
+                                            end
+                                        else
+                                          viewSnippet = snnipetCode
+                                        end
                                     end
                                     
                                     if @mode == "cms"
@@ -216,8 +225,6 @@ module Scms
                         else
                             ScmsUtils.errLog("Template doesn't exist: #{erb}")
                         end
-                        
-
                     end
                 end
                 #ScmsUtils.log( out )
@@ -264,7 +271,10 @@ module Scms
                     
                     scripts[name] = "scripts/#{scriptname}"
                     File.open(out, 'w') {|f| f.write(content) }
-                    Scms.packr(out) if /-min$/.match(out)
+                    unless /(-min)|(\.min)/.match(name)
+                        puts "Minifying: #{scriptname}"
+                        Scms.packr(out) 
+                    end
                 end
             end
         end
