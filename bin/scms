@@ -54,12 +54,9 @@ optparse = OptionParser.new do|opts|
 end
 optparse.parse!
 
+#Set globals
 $website = (options[:website].nil?) ? Dir.pwd : options[:website] 
-puts "Compiling #{$website}"
-
-##Set globals
 $html = (ENV["SCMS_HTML_OUT"] or "false")
-
 $stdout.sync = true
 root_folder = File.expand_path("../", File.dirname(__FILE__))
 Folders = {

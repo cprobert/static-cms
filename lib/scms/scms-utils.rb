@@ -5,7 +5,7 @@ module ScmsUtils
 
     def ScmsUtils.run(cmd, params)
         if system("#{cmd} #{params}")
-            ScmsUtils.successLog( "**#{cmd} ran successfully**" )
+            ScmsUtils.successLog( "#{cmd} ran successfully" )
         else
             raise "Error running #{cmd}"
         end
@@ -14,7 +14,7 @@ module ScmsUtils
     def ScmsUtils.errLog(msg)
         if !msg.nil?
             if $html == "true"
-                puts "<span style='color: red;'>#{msg}</span>"
+                puts "<div style='color: red;'>#{ScmsUtils.txt_2_html(msg)}</div>"
             else
                 puts msg
             end
@@ -24,7 +24,7 @@ module ScmsUtils
     def ScmsUtils.successLog(msg)
         if !msg.nil?
             if $html == "true"
-                puts "<span style='color: green;'>#{msg}</span>"
+                puts "<div style='color: green;'>#{ScmsUtils.txt_2_html(msg)}</div>"
             else
                 puts msg
             end
@@ -34,7 +34,7 @@ module ScmsUtils
     def ScmsUtils.log(msg)
         if !msg.nil?
             if $html == "true"
-                puts msg
+                puts "<div>#{ScmsUtils.txt_2_html(msg)}</div>"
             else
                 puts msg
             end
@@ -52,6 +52,7 @@ module ScmsUtils
 	def ScmsUtils.txt_2_html(rawsnippet)
 		if rawsnippet != nil
 			rawsnippet.gsub!(/(http:\/\/\S+)/, '<a href="\1" target="_blank" ref="external">\1</a>')
+            rawsnippet.gsub!(/(file:\/\/\/\S+)/, '<a href="\1" target="_blank" ref="external">\1</a>')
 			rawsnippet.gsub!(/\n/, "<br />")
 		end
 		

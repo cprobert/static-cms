@@ -23,16 +23,16 @@ module Scms
 
         @configdir = config
         @mode = mode
-        ScmsUtils.log("_Mode: #{mode}_")
+        #ScmsUtils.log("Mode: #{mode}")
         
         @source = File.join($website)
         # Support for legacy publick folders
         if (Dir.exists? File.join($website, "public"))
             @source =  File.join($website, "public")
-            @pub = File.join($website, "_site")
+            @pub = File.join($website, "_site") if pub == nil
         end
         
-        puts "Source #{@source}" 
+        ScmsUtils.log("Source #{@source}")
         Scms.sassall(@source)
         
         yamlpath=File.join(@configdir, "_config.yml")
@@ -46,7 +46,7 @@ module Scms
                     @pub = $settings["options"]["build_dir"]
                 end
                 if $settings["options"]["clean_build_dir"] == true
-                    puts "Cleaning build dir"
+                    ScmsUtils.log("Cleaning build dir")
                     @cleanpub = true
                 end
             end
@@ -81,7 +81,7 @@ module Scms
         end
         
         if @pub != $website
-            ScmsUtils.log("_Merging 'public' folder_")
+            ScmsUtils.log("Merging 'public' folder")
             
             Scms.cleanpubdir(@pub) if @cleanpub
             FileUtils.mkdir @pub unless Dir.exists? @pub
@@ -95,13 +95,9 @@ module Scms
                   File.file?(oldfile) ? FileUtils.copy(oldfile, newfile) : FileUtils.mkdir(newfile) unless File.exist? newfile
                 end
             end
-        else
-            ScmsUtils.log("**Skiping  merge**")
         end
         
-        ScmsUtils.successLog("**Compiled :)**")
-        ScmsUtils.log("#{@pub}: #{ScmsUtils.uriEncode("file:///#{@pub}")}")
-        
+        ScmsUtils.log(ScmsUtils.uriEncode("file:///#{@pub}"))
         return @pub
     end
     
@@ -109,7 +105,7 @@ module Scms
         # build views from templates
         @template = $settings["template"] 
         if $settings["pages"] != nil
-            ScmsUtils.log("**Compiling Pages:**")
+            ScmsUtils.log("Compiling Pages:")
             $settings["pages"].each do |page|
                 if page != nil
                     page.each do |option|
@@ -235,7 +231,7 @@ module Scms
     def Scms.bundlescripts(scriptsConfig)
         scripts = Hash.new
         if scriptsConfig != nil
-            ScmsUtils.log("**Bundeling Scripts:**")
+            ScmsUtils.log("Bundeling Scripts:")
             scriptsConfig.each do |script|
                 #ScmsUtils.log( "script (#{script.class}) = #{script}" )
                 script.each do |option|
@@ -248,7 +244,7 @@ module Scms
                     scriptname = "#{name}-v#{scriptversion}.js"
                     scriptsdir = File.join(@pub, "scripts")
                     
-                    puts scriptsdir
+                    #puts scriptsdir
                     FileUtils.mkdir_p(scriptsdir) unless File::directory?(scriptsdir)
                     #Dir.mkdir_p(scriptsdir, 755 ) if !File::directory?(scriptsdir)
                     out = File.join(scriptsdir, scriptname)
@@ -271,10 +267,7 @@ module Scms
                     
                     scripts[name] = "scripts/#{scriptname}"
                     File.open(out, 'w') {|f| f.write(content) }
-                    unless /(-min)|(\.min)/.match(name)
-                        puts "Minifying: #{scriptname}"
-                        Scms.packr(out) 
-                    end
+                    Scms.packr(out) unless /(-min)|(\.min)/.match(name)
                 end
             end
         end
@@ -284,7 +277,7 @@ module Scms
     def Scms.bundlestylesheets(styleConfig)
         stylesheets = Hash.new
         if styleConfig != nil
-            ScmsUtils.log("**Bundeling Stylesheets:**")
+            ScmsUtils.log("Bundeling Stylesheets:")
             styleConfig.each do |stylesheet|
                 #ScmsUtils.log( "stylesheet (#{stylesheet.class}) = #{stylesheet}" )
                 stylesheet.each do |option|
@@ -387,7 +380,7 @@ module Scms
     end
 
     def Scms.sassall(crunchDir)
-        ScmsUtils.log( "**Minimising Sass Files (.scss) **" )
+        ScmsUtils.log( "Minimising Sass Files (.scss)" )
         Dir.chdir(crunchDir) do
             Dir.glob("**/*.{scss}").each do |asset|
                 Scms.sass(asset)
@@ -421,7 +414,7 @@ module Scms
                 code = File.read(asset)
                 compressed = Packr.pack(code)
                 File.open(asset, 'w') { |f| f.write(compressed) }
-                ScmsUtils.log( "_Packed #{File.basename(asset)}_" )
+                ScmsUtils.log( "Minified #{File.basename(asset)}" )
             rescue Exception => e  
                 ScmsUtils.errLog( "Error processing: #{asset}" )
                 ScmsUtils.errLog( e.message )

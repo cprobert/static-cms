@@ -3,7 +3,7 @@ module S3Deploy
     require "scms/scms-utils.rb"
 
     def S3Deploy.sync(pub, config)
-        ScmsUtils.log( "Syncing with Amazon S3: **#{$settings['bucket']}**" )
+        ScmsUtils.log( "Syncing with Amazon S3: #{$settings['bucket']}" )
         @pub = pub
         ENV["S3CONF"] = config
         ENV["AWS_CALLING_FORMAT"] = "SUBDOMAIN"
@@ -48,10 +48,10 @@ module S3Deploy
         roorparams = "#{params}  --public-read \"#{@pub}/\" #{$settings['bucket']}:/"
         #Finnaly deploy all remaining files (except excludes)
         ScmsUtils.run(cmd, roorparams)
-        ScmsUtils.successLog("**Deployed :)**")
+        ScmsUtils.successLog("Deployed :)")
         
         if $settings['uri'] != nil
-            ScmsUtils.log("#{$settings['uri']}")
+            ScmsUtils.log($settings['uri'])
         end
     end 
 end
