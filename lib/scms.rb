@@ -160,7 +160,7 @@ module Scms
                                     model = Hash.new
                                     model = { :page => page, :sitedir => $website, :resource => resource }
                                     if hasHandler == "yes"
-                                        ScmsUtils.log("_Rendering with handler_")
+                                        ScmsUtils.log("Rendering with handler")
                                         viewSnippet = Handler.render(viewpath)
                                     else
                                         snnipetCode = File.read(viewpath)
@@ -241,14 +241,11 @@ module Scms
                     else
                         scriptversion = 1
                     end
-                    scriptname = "#{name}-v#{scriptversion}.js"
-                    scriptsdir = File.join(@pub, "scripts")
-                    
-                    #puts scriptsdir
-                    FileUtils.mkdir_p(scriptsdir) unless File::directory?(scriptsdir)
-                    #Dir.mkdir_p(scriptsdir, 755 ) if !File::directory?(scriptsdir)
-                    out = File.join(scriptsdir, scriptname)
-                    
+                    scriptname = File.join("scripts", "#{name}-v#{scriptversion}.js") #Legasy name filename from root and version
+                    scriptname = File.join(option[1]["generate"]) if option[1]["generate"] != nil #just use the generate
+                    scriptsdir = File.dirname(scriptname)
+                    Dir.mkdir(scriptsdir, 755) unless File::directory?(scriptsdir)
+
                     ScmsUtils.successLog("#{scriptname}")
                     content = ""
                     
@@ -265,9 +262,9 @@ module Scms
                     end
                     ScmsUtils.log("#{assetList}")
                     
-                    scripts[name] = "scripts/#{scriptname}"
-                    File.open(out, 'w') {|f| f.write(content) }
-                    Scms.packr(out) unless /(-min)|(\.min)/.match(name)
+                    scripts[name] = scriptname
+                    File.open(scriptname, 'w') {|f| f.write(content) }
+                    Scms.packr(scriptname) unless /(-min)|(\.min)/.match(scriptname)
                 end
             end
         end
@@ -287,10 +284,10 @@ module Scms
                     else
                         stylesheetversion = 1
                     end
-                    stylesheetname = "#{name}-v#{stylesheetversion}.css"
-                    
-                    Dir.mkdir(File.join(@pub, "stylesheets"), 755 ) if !    File::directory?(File.join(@pub, "stylesheets"))
-                    out = File.join(@pub, "stylesheets", stylesheetname)
+                    stylesheetname = File.join("stylesheets", "#{name}-v#{stylesheetversion}.css") #Legasy name filename from root and version
+                    stylesheetname = File.join(option[1]["generate"]) if option[1]["generate"] != nil #just use the generate
+                    stylesheetdir = File.dirname(stylesheetname)
+                    Dir.mkdir(stylesheetdir, 755) unless File::directory?(stylesheetdir)
                     
                     ScmsUtils.successLog("#{stylesheetname}")
                     content = ""
@@ -308,8 +305,8 @@ module Scms
                     end
                     ScmsUtils.log( "#{assetList}" )
                     
-                    stylesheets[name] = "stylesheets/#{stylesheetname}"
-                    File.open(out, 'w') {|f| f.write(content) }
+                    stylesheets[name] = stylesheetname
+                    File.open(stylesheetname, 'w') {|f| f.write(content) }
                 end
             end
         end 
@@ -380,7 +377,7 @@ module Scms
     end
 
     def Scms.sassall(crunchDir)
-        ScmsUtils.log( "Minimising Sass Files (.scss)" )
+        ScmsUtils.log("Minimising Sass Files (.scss)")
         Dir.chdir(crunchDir) do
             Dir.glob("**/*.{scss}").each do |asset|
                 Scms.sass(asset)

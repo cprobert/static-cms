@@ -14,17 +14,14 @@ pages:
 
 scripts:
 - script:
-    version: 1.0
+    generate: scripts/bootstrap.min-v2.1.1.js
     bundle:
      - scripts/bootstrap.js
 
 stylesheets:
 - style:
-    version: 1.0
+    generate: stylesheets/style-1.0.css
     bundle:
       - stylesheets/bootstrap.css
       - stylesheets/bootstrap-responsive.css
       - stylesheets/style.css
-      
-#options:
-#    build_dir: <%= ENV['TEMP'] %>\my-Scms-website
