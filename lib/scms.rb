@@ -243,12 +243,10 @@ module Scms
                     end
                     scriptname = File.join("scripts", "#{name}-v#{scriptversion}.js") #Legasy name filename from root and version
                     scriptname = File.join(option[1]["generate"]) if option[1]["generate"] != nil #just use the generate
-                    scriptsdir = File.dirname(scriptname)
-                    Dir.mkdir(scriptsdir, 755) unless File::directory?(scriptsdir)
-
+                    scripts[name] = scriptname
                     ScmsUtils.successLog("#{scriptname}")
+
                     content = ""
-                    
                     assetList = ""
                     bundle = option[1]["bundle"]
                     bundle.each do |asset|
@@ -262,7 +260,8 @@ module Scms
                     end
                     ScmsUtils.log("#{assetList}")
                     
-                    scripts[name] = scriptname
+                    scriptsdir = File.dirname(scriptname)
+                    Dir.mkdir(scriptsdir, 755) unless File::directory?(scriptsdir)
                     File.open(scriptname, 'w') {|f| f.write(content) }
                     Scms.packr(scriptname) unless /(-min)|(\.min)/.match(scriptname)
                 end
@@ -286,12 +285,10 @@ module Scms
                     end
                     stylesheetname = File.join("stylesheets", "#{name}-v#{stylesheetversion}.css") #Legasy name filename from root and version
                     stylesheetname = File.join(option[1]["generate"]) if option[1]["generate"] != nil #just use the generate
-                    stylesheetdir = File.dirname(stylesheetname)
-                    Dir.mkdir(stylesheetdir, 755) unless File::directory?(stylesheetdir)
-                    
+                    stylesheets[name] = stylesheetname
                     ScmsUtils.successLog("#{stylesheetname}")
+
                     content = ""
-                    
                     bundle = option[1]["bundle"]
                     assetList = ""
                     bundle.each do |asset|
@@ -304,8 +301,9 @@ module Scms
                         end
                     end
                     ScmsUtils.log( "#{assetList}" )
-                    
-                    stylesheets[name] = stylesheetname
+
+                    stylesheetdir = File.dirname(stylesheetname)
+                    Dir.mkdir(stylesheetdir, 755) unless File::directory?(stylesheetdir)
                     File.open(stylesheetname, 'w') {|f| f.write(content) }
                 end
             end
