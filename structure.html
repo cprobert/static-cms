@@ -83,14 +83,13 @@
 		<h2>Folder Structure</h2>
 		<p>Take a look in the new folder, it should look something like:</p>
 		<ul>
-            <li>\public</li>
-			<li>\templates\skin.erb.html</li>
-			<li>\views\home-intro.html</li>
-			<li>\views\home-main.html</li>
-			<li>\config.yml</li>
+			<li>_templates\skin.erb.html</li>
+			<li>_views\home-intro.html</li>
+			<li>_views\home-main.html</li>
+			<li>_config.yml</li>
 		</ul>
 		<h2>Creating a Template</h2>
-		<p>Open the template &quot;templates/skin.html&quot;, and look at the code:</p>
+		<p>Open the template &quot;_templates/skin.html&quot;, and look at the code:</p>
 		<div class="code">
           <pre class="prettyprint"><code class="language-html">
 	&lt;!DOCTYPE html&gt;
@@ -153,11 +152,11 @@
 		<pre class="prettyprint"><code class="language-yaml">
 	scripts:
 	- base:
-		version: 1.1
+		generate: scripts/mybundle-v1.0.js
 		bundle:
 		 - scripts/demo.js
 	- libraries:
-		version: 1.1
+		generate: scripts/libs-v1.0.js
 		bundle:
 		 - google-code-prettify/prettify.js
 		 - google-code-prettify/lang-yaml.js
@@ -165,6 +164,7 @@
 
 	stylesheets:
 	- base:
+		generate: stylesheets/styles-v1.0.js
 		bundle:
 		  - stylesheets/bootstrap.css
 		  - stylesheets/demo.css
