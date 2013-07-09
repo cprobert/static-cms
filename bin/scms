@@ -64,7 +64,7 @@ Folders = {
   :root => root_folder,
   :website => File.join($website),
   :pub => (ENV["SCMS_PUBLISH_FOLDER"] or options[:pub]),
-  :assets => (ENV["SCMS_STATICCMS_FOLDER"] or File.join(root_folder, "assets")),
+  :assets => File.join(root_folder, "assets"),
   :config => (ENV["SCMS_CONFIG_FOLDER"] or File.join($website))
 }
 
@@ -74,10 +74,7 @@ if options[:action] == "create"
     else
         puts "Making website: #{Folders[:website]}"
         FileUtils.mkdir_p Folders[:website]
-        Dir.chdir(File.join(Folders[:assets], "blank-template")) do
-            files = Dir.glob('*')
-            FileUtils.cp_r files, Folders[:website]
-        end
+        FileUtils.cp_r(Dir["#{File.join(Folders[:assets], "blank-template")}/*"], Folders[:website])
     end
     exit
 end
