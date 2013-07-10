@@ -265,7 +265,9 @@ module Scms
                     bundleDir = File.dirname(bundleName)
                     Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
                     File.open(bundleName, 'w') {|f| f.write(content) }
-                    Scms.packr(bundleName) unless /(-min)|(\.min)/.match(bundleName)
+                    if File.extname(bundleName) == ".js"
+                        Scms.packr(bundleName) unless /(-min)|(\.min)/.match(bundleName)
+                    end
                 end
             end
         end
