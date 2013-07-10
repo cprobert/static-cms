@@ -21,7 +21,6 @@ Gem::Specification.new do |spec|
   spec.executables << 'scms'
 
   spec.add_dependency "cprobert-s3sync"
-  spec.add_dependency "nokogiri"
   spec.add_dependency "maruku"
   spec.add_dependency "sass"
   spec.add_dependency "packr"
