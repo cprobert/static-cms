@@ -72,10 +72,11 @@ module Scms
             end 
             
             #Bundle resources
-            scripts = Scms.bundlescripts($settings["scripts"])
-            stylesheets = Scms.bundlestylesheets($settings["stylesheets"])
+            scripts = Scms.bundle($settings["scripts"])
+            stylesheets = Scms.bundle($settings["stylesheets"])
+            bundles = Scms.bundle($settings["bundles"])
             #Generate pages
-            Scms.parsepages(scripts, stylesheets)
+            Scms.parsepages(scripts, stylesheets, bundles)
         else
             ScmsUtils.errLog("Config is empty")
         end
@@ -101,7 +102,7 @@ module Scms
         return @pub
     end
     
-    def Scms.parsepages(scripts, stylesheets)
+    def Scms.parsepages(scripts, stylesheets, bundles)
         # build views from templates
         @template = $settings["template"] 
         if $settings["pages"] != nil
@@ -206,6 +207,7 @@ module Scms
                             :config => pageconfig, 
                             :scripts => scripts, 
                             :stylesheets => stylesheets, 
+                            :bundles => bundles,
                             :sitedir => $website, 
                             :monkeyhook => monkeyhook 
                         }
@@ -228,23 +230,23 @@ module Scms
         end
     end
 
-    def Scms.bundlescripts(scriptsConfig)
+    def Scms.bundle(bundleConfig)
         scripts = Hash.new
-        if scriptsConfig != nil
-            ScmsUtils.log("Bundeling Scripts:")
-            scriptsConfig.each do |script|
-                #ScmsUtils.log( "script (#{script.class}) = #{script}" )
-                script.each do |option|
+        if bundleConfig != nil
+            ScmsUtils.log("Bundeling:")
+            bundleConfig.each do |bundle|
+                #ScmsUtils.log( "bundle (#{bundle.class}) = #{bundle}" )
+                bundle.each do |option|
                     name = option[0]
                     if option[1]["version"] != nil
-                        scriptversion = option[1]["version"]
+                        bundleVersion = option[1]["version"]
                     else
-                        scriptversion = 1
+                        bundleVersion = 1
                     end
-                    scriptname = File.join("scripts", "#{name}-v#{scriptversion}.js") #Legasy name filename from root and version
-                    scriptname = File.join(option[1]["generate"]) if option[1]["generate"] != nil #just use the generate
-                    scripts[name] = scriptname
-                    ScmsUtils.successLog("#{scriptname}")
+                    bundleName = File.join("scripts", "#{name}-v#{bundleVersion}.js") #Legasy name filename from root and version
+                    bundleName = File.join(option[1]["generate"]) if option[1]["generate"] != nil #just use the generate
+                    scripts[name] = bundleName
+                    ScmsUtils.successLog("#{bundleName}")
 
                     content = ""
                     assetList = ""
@@ -260,55 +262,14 @@ module Scms
                     end
                     ScmsUtils.log("#{assetList}")
                     
-                    scriptsdir = File.dirname(scriptname)
-                    Dir.mkdir(scriptsdir, 755) unless File::directory?(scriptsdir)
-                    File.open(scriptname, 'w') {|f| f.write(content) }
-                    Scms.packr(scriptname) unless /(-min)|(\.min)/.match(scriptname)
+                    bundleDir = File.dirname(bundleName)
+                    Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
+                    File.open(bundleName, 'w') {|f| f.write(content) }
+                    Scms.packr(bundleName) unless /(-min)|(\.min)/.match(bundleName)
                 end
             end
         end
         return scripts
-    end
-    
-    def Scms.bundlestylesheets(styleConfig)
-        stylesheets = Hash.new
-        if styleConfig != nil
-            ScmsUtils.log("Bundeling Stylesheets:")
-            styleConfig.each do |stylesheet|
-                #ScmsUtils.log( "stylesheet (#{stylesheet.class}) = #{stylesheet}" )
-                stylesheet.each do |option|
-                    name = option[0]
-                    if option[1]["version"] != nil
-                        stylesheetversion = option[1]["version"]
-                    else
-                        stylesheetversion = 1
-                    end
-                    stylesheetname = File.join("stylesheets", "#{name}-v#{stylesheetversion}.css") #Legasy name filename from root and version
-                    stylesheetname = File.join(option[1]["generate"]) if option[1]["generate"] != nil #just use the generate
-                    stylesheets[name] = stylesheetname
-                    ScmsUtils.successLog("#{stylesheetname}")
-
-                    content = ""
-                    bundle = option[1]["bundle"]
-                    assetList = ""
-                    bundle.each do |asset|
-                        assetList += "\t #{asset}\n" 
-                        assetname = File.join(@source, asset)
-                        if File::exists?(assetname)
-                            content = content + "\n" + File.read(assetname)
-                        else
-                            ScmsUtils.errLog( "Error: No such file #{assetname}" )
-                        end
-                    end
-                    ScmsUtils.log( "#{assetList}" )
-
-                    stylesheetdir = File.dirname(stylesheetname)
-                    Dir.mkdir(stylesheetdir, 755) unless File::directory?(stylesheetdir)
-                    File.open(stylesheetname, 'w') {|f| f.write(content) }
-                end
-            end
-        end 
-        return stylesheets
     end
     
     def Scms.parsetemplate(template, hash)
@@ -357,22 +318,6 @@ module Scms
         FileUtils.mkdir_p(pub) unless File.exist? pub
         FileUtils.chmod 0755, pub
     end
-    
-    def Scms.crunch(crunchDir)
-        ScmsUtils.log( "Starting crunching CSS and JavaScript in:\n#{crunchDir}\n\n" )
-        #Scms.sassall(crunchDir)
-        Dir.chdir(crunchDir) do
-            Dir.glob("**/*.js").reject{|f| /-min/.match(f) != nil || /\.min/.match(f) != nil || /\.pack/.match(f) != nil }.each do |asset|
-                Scms.packr(asset)
-            end
-            #Dir.glob("**/*.{css, js}").each do |asset|
-            #    #fullFileName = File.basename(asset)
-            #    #ScmsUtils.log( "Crunching #{fullFileName}" )
-            #    ext = File.extname(asset)
-            #    Scms.yuicompress(asset, ext)
-            #end
-        end
-    end
 
     def Scms.sassall(crunchDir)
         ScmsUtils.log("Minimising Sass Files (.scss)")
@@ -416,7 +361,33 @@ module Scms
             end
         end
     end
-        
+
+    def Scms.deploy(pub, config)
+        yamlpath=File.join(config, "_s3config.yml")
+        if File.exists?(yamlpath) 
+            S3Deploy.sync(pub, config)
+        else
+            raise "The following file doesn't exist #{yamlpath}"
+        end
+    end
+
+    def Scms.Upgrade()
+        File.rename("config.yml", "_config.yml") if File.exists? File.join($website, "config.yml")
+        File.rename("s3config.yml", "_s3config.yml") if File.exists? File.join($website, "s3config.yml")
+    end
+
+    def Scms.crunch(crunchDir)
+        ScmsUtils.log( "Starting crunching CSS and JavaScript in:\n#{crunchDir}\n\n" )
+        Dir.chdir(crunchDir) do
+            Dir.glob("**/*.{css, js}").each do |asset|
+                #fullFileName = File.basename(asset)
+                #ScmsUtils.log( "Crunching #{fullFileName}" )
+                ext = File.extname(asset)
+                Scms.yuicompress(asset, ext)
+            end
+        end
+    end 
+
     def Scms.yuicompress(asset, ext)
         if File.exists?(asset)
             #ScmsUtils.log( " Encoding: #{asset.encoding}" )
@@ -433,19 +404,5 @@ module Scms
         else
             ScmsUtils.errLog( "#{asset} does not exist" )
         end
-    end
-
-    def Scms.deploy(pub, config)
-        yamlpath=File.join(config, "_s3config.yml")
-        if File.exists?(yamlpath) 
-            S3Deploy.sync(pub, config)
-        else
-            raise "The following file doesn't exist #{yamlpath}"
-        end
-    end
-
-    def Scms.Upgrade()
-        File.rename("config.yml", "_config.yml") if File.exists? File.join($website, "config.yml")
-        File.rename("s3config.yml", "_s3config.yml") if File.exists? File.join($website, "s3config.yml")
     end
 end

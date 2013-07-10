@@ -12,13 +12,11 @@ pages:
         intro: _views/about-intro.html
         main: _views/about-main.html
 
-scripts:
+bundles:
 - script:
     generate: scripts/bootstrap.min-v2.1.1.js
     bundle:
      - scripts/bootstrap.js
-
-stylesheets:
 - style:
     generate: stylesheets/style-1.0.css
     bundle:
