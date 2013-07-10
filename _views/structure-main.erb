@@ -70,9 +70,9 @@
 		<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. s3cms has a system that allows you to &#39;bundle&#39; your css and javascript files. In your config.yaml (replace references with the names of your assets):</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-yaml">
-	scripts:
-	- base:
-		generate: scripts/mybundle-v1.0.js
+	bundles:
+	- script:
+		generate: scripts/script-v1.0.js
 		bundle:
 		 - scripts/demo.js
 	- libraries:
@@ -81,9 +81,7 @@
 		 - google-code-prettify/prettify.js
 		 - google-code-prettify/lang-yaml.js
 		 - scripts/bootstrap-button.js
-
-	stylesheets:
-	- base:
+	- styles:
 		generate: stylesheets/styles-v1.0.js
 		bundle:
 		  - stylesheets/bootstrap.css
@@ -97,7 +95,7 @@
 		<p>You then replace your script and css references in your skin file like this:</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-rb">
-    &lt;link href=&#39;&lt;%= data.stylesheets[&quot;base&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
+    &lt;link href=&#39;&lt;%= data.stylesheets[&quot;styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
     &lt;script src=&#39;&lt;%= data.scripts[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
 		</code></pre>
 		</div>
