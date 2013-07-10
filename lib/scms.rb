@@ -72,8 +72,8 @@ module Scms
             end 
             
             #Bundle resources
-            scripts = Scms.bundle($settings["scripts"])
-            stylesheets = Scms.bundle($settings["stylesheets"])
+            scripts = Scms.bundle($settings["scripts"], ".js")
+            stylesheets = Scms.bundle($settings["stylesheets"], ".css")
             bundles = Scms.bundle($settings["bundles"])
             #Generate pages
             Scms.parsepages(scripts, stylesheets, bundles)
@@ -230,7 +230,7 @@ module Scms
         end
     end
 
-    def Scms.bundle(bundleConfig)
+    def Scms.bundle(bundleConfig, defaultExt=".bundle")
         scripts = Hash.new
         if bundleConfig != nil
             ScmsUtils.log("Bundeling:")
@@ -243,7 +243,7 @@ module Scms
                     else
                         bundleVersion = 1
                     end
-                    bundleName = File.join("scripts", "#{name}-v#{bundleVersion}.js") #Legasy name filename from root and version
+                    bundleName = File.join("scripts", "#{name}-v#{bundleVersion}.#{defaultExt}") #Legasy name filename from root and version
                     bundleName = File.join(option[1]["generate"]) if option[1]["generate"] != nil #just use the generate
                     scripts[name] = bundleName
                     ScmsUtils.successLog("#{bundleName}")
