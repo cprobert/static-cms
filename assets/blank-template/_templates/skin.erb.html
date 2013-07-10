@@ -37,23 +37,19 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
 
-				<%
-					@page = data.page
-					@page = "/" if @page == "index.html"
-					def isActive(href)
-						if @page == href
-							return "active"
-						end
-					end
-
-					require 'nokogiri'
-					xml_doc  = Nokogiri::XML(File.read(File.join(data.sitedir, "_templates", "menu.xml")))
-					xml_doc.xpath('/menu/page').each do |link|
-				%>
-					<li><a href='<%= link.attr("href") %>' class='<%=isActive(link.attr("href"))%> <%= link.attr("class") %>'>
-						<%= link.content %>
-					</a></li>	
-				<% end %>
+              <%
+                @currentpagename = data.pagename
+                def isActive(pagename)
+                    return active = "active" if @currentpagename == pagename
+                end
+                data.navigation.each do |nav|
+              %>
+                <li class='<%=isActive(nav[:name])%>'>
+                  <a href='<%= nav[:url] %>'>
+                    <%= nav[:name] %>
+                  </a>
+                </li> 
+              <% end %>
 			  
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>

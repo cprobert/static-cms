@@ -105,23 +105,34 @@ module Scms
     def Scms.parsepages(scripts, stylesheets, bundles)
         # build views from templates
         @template = $settings["template"] 
+        
         if $settings["pages"] != nil
+            # Build navigation
+            navigation = Array.new
+            $settings["pages"].each do |page|
+                if page != nil
+                    page.each do |pageoptions|
+                        pagename =  pageoptions[0]
+                        pageconfig = pageoptions[1]
+                        pageurl = pageconfig["generate"]
+                        navigation.push({:name => pagename, :url => pageurl}) unless pageconfig["navigation"] == false
+                    end
+                end
+            end
+
             ScmsUtils.log("Compiling Pages:")
             $settings["pages"].each do |page|
                 if page != nil
-                    page.each do |option|
-                        #ScmsUtils.log( "option (#{option.class}) = #{option[0]}" )
-                        pageconfig = option[1]
-                        #ScmsUtils.log( "Pageconfig = #{pageconfig}" )
-                        
+                    page.each do |pageoptions|
+                        pagename =  pageoptions[0]
+                        pageconfig = pageoptions[1]
+                        pageurl = pageconfig["generate"]
+                        ScmsUtils.successLog("#{pageurl}")
                         if pageconfig["template"] == nil
                             skin = @template
                         else
                             skin = pageconfig["template"]
                         end
-                        
-                        page = pageconfig["generate"]
-                        ScmsUtils.successLog("#{page}")
                         
                         resource = Hash.new
                         if pageconfig["resource"] != nil
@@ -194,14 +205,16 @@ module Scms
                             end
                             #ScmsUtils.log( "view = #{view[0]} - #{view[1]}" )
                         end
-                        
+
                         monkeyhook = "";
                         if @mode == "cms"
                             monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>"
                         end
                         
                         hash = { 
-                            :page => page, 
+                            :page => pageurl,
+                            :pagename => pagename,
+                            :pageurl => pageurl,
                             :views => views, 
                             :resource => resource, 
                             :config => pageconfig, 
@@ -209,7 +222,8 @@ module Scms
                             :stylesheets => stylesheets, 
                             :bundles => bundles,
                             :sitedir => $website, 
-                            :monkeyhook => monkeyhook 
+                            :monkeyhook => monkeyhook,
+                            :navigation => navigation
                         }
                         
                         erb = File.join($website, skin)
@@ -282,8 +296,8 @@ module Scms
         begin 
             result = ERB.new(template).result(data.instance_eval { binding })
         rescue Exception => e  
-                    ScmsUtils.errLog("**Critical Error: Could not parse template**")
-                    ScmsUtils.log( "_(if your using resources make sure their not empty)_" )
+                    ScmsUtils.errLog("Critical Error: Could not parse template")
+                    ScmsUtils.log( "(if your using resources make sure their not empty)" )
                     ScmsUtils.errLog( e.message )
         end
         
@@ -302,7 +316,8 @@ module Scms
                 #config = YAML.load_file(yamlpath)
             rescue Exception => e  
                 ScmsUtils.errLog("Error Loading _config.yml (check there are no tabs in the file)")
-                ScmsUtils.log( "_[Verify your config](http://yaml-online-parser.appspot.com/)_")
+                ScmsUtils.log( "Verify your config")
+                ScmsUtils.log( "http://yaml-online-parser.appspot.com/")
                 ScmsUtils.errLog( e.message )
                 ScmsUtils.errLog( e.backtrace.inspect )
             end
@@ -377,35 +392,5 @@ module Scms
     def Scms.Upgrade()
         File.rename("config.yml", "_config.yml") if File.exists? File.join($website, "config.yml")
         File.rename("s3config.yml", "_s3config.yml") if File.exists? File.join($website, "s3config.yml")
-    end
-
-    def Scms.crunch(crunchDir)
-        ScmsUtils.log( "Starting crunching CSS and JavaScript in:\n#{crunchDir}\n\n" )
-        Dir.chdir(crunchDir) do
-            Dir.glob("**/*.{css, js}").each do |asset|
-                #fullFileName = File.basename(asset)
-                #ScmsUtils.log( "Crunching #{fullFileName}" )
-                ext = File.extname(asset)
-                Scms.yuicompress(asset, ext)
-            end
-        end
-    end 
-
-    def Scms.yuicompress(asset, ext)
-        if File.exists?(asset)
-            #ScmsUtils.log( " Encoding: #{asset.encoding}" )
-            enc = "--charset utf-8"
-            enc = ""
-            cmd = "java"
-            params = "-jar \"#{File.join(Folders[:tools], "yuicompressor", "yuicompressor-2.4.7.jar")}\"  #{enc} --type #{ext.gsub(".","")} \"#{asset}\" -o \"#{asset}\""
-            ##Need to check if asset exists
-            if system("#{cmd} #{params}")
-                ScmsUtils.log( "_Crunched #{File.basename(asset)}_" )
-            else
-                ScmsUtils.errLog( "Error crunching: #{asset}" )
-            end
-        else
-            ScmsUtils.errLog( "#{asset} does not exist" )
-        end
     end
 end
