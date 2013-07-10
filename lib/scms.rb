@@ -266,6 +266,7 @@ module Scms
                     Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
                     File.open(bundleName, 'w') {|f| f.write(content) }
                     if File.extname(bundleName) == ".js"
+                        puts "Minifing: #{bundleName}"
                         Scms.packr(bundleName) unless /(-min)|(\.min)/.match(bundleName)
                     end
                 end
