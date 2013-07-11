@@ -44,7 +44,7 @@ module Scms
         else
             ScmsUtils.errLog("Config is empty")
         end
-        
+
         ScmsUtils.log("Built website:")
         ScmsUtils.log(ScmsUtils.uriEncode("file:///#{@website}"))
     end
@@ -165,9 +165,7 @@ module Scms
                         end
 
                         monkeyhook = "";
-                        if @mode == "cms"
-                            monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>"
-                        end
+                        monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>" if @mode == "cms"
                         
                         pagemodel = Hash.new
                         pagemodel = { 
@@ -195,6 +193,13 @@ module Scms
                             pubsubdir = File.dirname(out)
                             Dir.mkdir(pubsubdir, 755) unless File::directory?(pubsubdir)
                             html = Scms.parsetemplate(File.read(erb), pagemodel)
+
+                            html = html.gsub('~/', ScmsUtils.uriEncode("file:///#{@website}/")) if @mode == "cms"
+                            websiteroot = '/'
+                            websiteroot = @settings["url"] unless @settings["url"] == nil
+
+                            html = html.gsub('~/', websiteroot)
+
                             File.open(out, 'w') {|f| f.write(html) }
                         end
                     end

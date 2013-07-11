@@ -81,7 +81,7 @@ monkeyhook = File.join(Folders[:website], "scripts", "air-monkey-hook.js")
 if options[:mode] == "cms"
   FileUtils.cp(File.join(Folders[:assets], "air-monkey-hook.js"), monkeyhook)
 else
-  File.remove(monkeyhook)
+  FileUtils.rm(monkeyhook) if File.exists(monkeyhook)
 end
 
 #puts "System root folder = #{Folders[:root]}"
