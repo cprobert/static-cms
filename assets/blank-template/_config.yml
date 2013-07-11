@@ -8,13 +8,13 @@ pages:
     title: My Homepage
     description: Meta description
     keywords: "CMS, S3, Ruby"
-    views : 
+    views:
         intro: _views/home-intro.html
         main: _views/home-main.html
 - about: 
     generate: ~/about.html
     navigation: About
-    views : 
+    views:
         intro: _views/about-intro.html
         main: _views/about-main.html
 - contact: #Pageless for nav only

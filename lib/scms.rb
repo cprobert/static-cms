@@ -210,6 +210,9 @@ module Scms
     end
 
     def Scms.parsetemplate(template, hash)
+        #lagasy fix
+        template = template.gsub('data.','page.')
+
         page = OpenStruct.new(hash)
         result = ""
         
@@ -317,17 +320,16 @@ module Scms
 
     def Scms.copywebsite(website, pub)
         if pub != nil
-            ScmsUtils.log("Compiling to: #{pub}")
             FileUtils.mkdir pub unless Dir.exists? pub
             source = File.join(website)
             Dir.chdir(source) do          
                 Dir.glob("**/*").reject{|f| f['.svn']}.each do |oldfile|
-                  newfile = File.join(@target, oldfile.sub(source, ''))
+                  newfile = File.join(pub, oldfile.sub(source, ''))
                   #puts newfile
                   File.file?(oldfile) ? FileUtils.copy(oldfile, newfile) : FileUtils.mkdir(newfile) unless File.exist? newfile
                 end
             end
-            ScmsUtils.log(ScmsUtils.uriEncode("file:///#{pub}"))
+            ScmsUtils.log("Output to: #{ScmsUtils.uriEncode("file:///#{pub}")}")
         end
     end
 
