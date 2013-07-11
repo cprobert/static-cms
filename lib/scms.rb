@@ -185,7 +185,7 @@ module Scms
                         }
                         
                         erb = File.join(@website, skin)
-                        out = File.join(@website, pageconfig["generate"]) unless pageconfig["generate"] == nil
+                        out = File.join(@website, File.join(pageconfig["generate"].sub('~/',''))) unless pageconfig["generate"] == nil
                         
                         ScmsUtils.successLog("#{pageurl}")
                         ScmsUtils.errLog("Template doesn't exist: #{erb}") unless File.exists?(erb)

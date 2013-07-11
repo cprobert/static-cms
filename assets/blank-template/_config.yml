@@ -3,7 +3,7 @@ template: _templates/skin.erb.html # The website skin (erb template)
 # Define your pages here
 pages:
 - index: 
-    generate: index.html 
+    generate: ~/index.html 
     navigation: Home
     title: My Homepage
     description: Meta description
@@ -12,7 +12,7 @@ pages:
         intro: _views/home-intro.html
         main: _views/home-main.html
 - about: 
-    generate: about.html
+    generate: ~/about.html
     navigation: About
     views : 
         intro: _views/about-intro.html
