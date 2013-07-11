@@ -26,3 +26,7 @@ Desktop.ini
 
 # Mac crap
 .DS_Store
+/assets/blank-template/index.html
+/assets/blank-template/about.html
+/assets/blank-template/scripts/bootstrap.min-v2.1.1.js
+/assets/blank-template/stylesheets/style-1.0.css

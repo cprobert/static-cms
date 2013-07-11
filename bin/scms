@@ -55,17 +55,15 @@ end
 optparse.parse!
 
 #Set globals
-$website = (options[:website].nil?) ? Dir.pwd : options[:website] 
-$html = (ENV["SCMS_HTML_OUT"] or "false")
-#puts "html mode: #{$html}"
 $stdout.sync = true
 root_folder = File.expand_path("../", File.dirname(__FILE__))
+website = (options[:website].nil?) ? Dir.pwd : options[:website] 
 Folders = {
   :root => root_folder,
-  :website => File.join($website),
+  :website => File.join(website),
   :pub => (ENV["SCMS_PUBLISH_FOLDER"] or options[:pub]),
   :assets => File.join(root_folder, "assets"),
-  :config => (ENV["SCMS_CONFIG_FOLDER"] or File.join($website))
+  :config => (ENV["SCMS_CONFIG_FOLDER"] or File.join(website))
 }
 
 if options[:action] == "create"
@@ -79,6 +77,13 @@ if options[:action] == "create"
     exit
 end
 
+monkeyhook = File.join(Folders[:website], "scripts", "air-monkey-hook.js")
+if options[:mode] == "cms"
+  FileUtils.cp(File.join(Folders[:assets], "air-monkey-hook.js"), monkeyhook)
+else
+  File.remove(monkeyhook)
+end
+
 #puts "System root folder = #{Folders[:root]}"
 #puts "Website folder = #{Folders[:website]}"
 #puts "Pub dir = #{Folders[:pub]}"
@@ -86,7 +91,7 @@ end
 #puts "Mode = #{options[:mode]}"
 
 raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:website])
-Scms.Upgrade()
-deployDir = Scms.build(Folders[:pub], Folders[:config], options[:mode])
-#puts "deployDir = #{deployDir}"
+Scms.upgrade(Folders[:website])
+Scms.build(Folders[:website], Folders[:pub], Folders[:config], options[:mode])
+Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
 Scms.deploy(deployDir, Folders[:config]) if options[:action] == "deploy"

@@ -3,6 +3,31 @@ module ScmsUtils
     require 'fileutils'
     require 'open-uri'
 
+    def ScmsUtils.getsettings(yamlpath)
+        ScmsUtils.log("Loading Config: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
+        config = nil
+        
+        if File.exist?(yamlpath)
+            tree = File.read(yamlpath)
+            begin
+                myconfig = ERB.new(tree).result()
+                #puts "Conf = #{myconfig}"
+                config = YAML.load(myconfig)
+                #config = YAML.load_file(yamlpath)
+            rescue Exception => e  
+                ScmsUtils.errLog("Error Loading _config.yml (check there are no tabs in the file)")
+                ScmsUtils.log( "Verify your config")
+                ScmsUtils.log( "http://yaml-online-parser.appspot.com/")
+                ScmsUtils.errLog( e.message )
+                ScmsUtils.errLog( e.backtrace.inspect )
+            end
+        else
+            ScmsUtils.errLog("Config file does not exist: #{yamlpath}")
+        end
+        
+        return config
+    end
+
     def ScmsUtils.run(cmd, params)
         if system("#{cmd} #{params}")
             ScmsUtils.successLog( "#{cmd} ran successfully" )
@@ -13,7 +38,7 @@ module ScmsUtils
     
     def ScmsUtils.errLog(msg)
         if !msg.nil?
-            if $html == "true"
+            if ENV["SCMS_HTML_OUT"] == "true"
                 puts "<div style='color: red;'>#{ScmsUtils.txt_2_html(msg)}</div>"
             else
                 puts msg
@@ -23,7 +48,7 @@ module ScmsUtils
     
     def ScmsUtils.successLog(msg)
         if !msg.nil?
-            if $html == "true"
+            if ENV["SCMS_HTML_OUT"] == "true"
                 puts "<div style='color: green;'>#{ScmsUtils.txt_2_html(msg)}</div>"
             else
                 puts msg
@@ -33,7 +58,7 @@ module ScmsUtils
     
     def ScmsUtils.log(msg)
         if !msg.nil?
-            if $html == "true"
+            if ENV["SCMS_HTML_OUT"] == "true"
                 puts "<div>#{ScmsUtils.txt_2_html(msg)}</div>"
             else
                 puts msg

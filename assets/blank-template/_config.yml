@@ -1,25 +1,36 @@
 template: _templates/skin.erb.html
 
+# Define your pages here
 pages:
 - index: 
     generate: index.html 
+    navigation: Home
+    title: My Homepage
+    description: Meta description
+    keywords: "CMS, S3, Ruby"
     views : 
         intro: _views/home-intro.html
         main: _views/home-main.html
 - about: 
     generate: about.html
+    navigation: About
     views : 
         intro: _views/about-intro.html
         main: _views/about-main.html
+- contact: #Pageless for nav only
+    navigation: contact
+    url: about:blank
+    navigation-meta: contactform
 
+# Define your bundles here (versioning is recomended if your caching assets)
 bundles:
 - script:
     generate: scripts/bootstrap.min-v2.1.1.js
-    bundle:
+    files:
      - scripts/bootstrap.js
 - style:
     generate: stylesheets/style-1.0.css
-    bundle:
+    files:
       - stylesheets/bootstrap.css
       - stylesheets/bootstrap-responsive.css
       - stylesheets/style.css
