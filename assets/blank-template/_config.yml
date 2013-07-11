@@ -1,5 +1,5 @@
 template: _templates/skin.erb.html # The website skin (erb template)
-#websiteroot: / #Whats the website root when published - All references in html ~/ will be replaced with this
+#url: http://www.mywebsite.com/ #Whats the website root when published - All references in html ~/ will be replaced with this
 # Define your pages here
 pages:
 - index: 
@@ -19,8 +19,8 @@ pages:
         main: _views/about-main.html
 - contact: #Pageless for nav only
     navigation: contact
+    navigation_meta: contactform
     url: about:blank
-    navigation-meta: contactform
 
 # Define your bundles here (versioning is recomended if your caching assets)
 bundles:

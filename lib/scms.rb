@@ -64,7 +64,7 @@ module Scms
                         pageurl = pageconfig["generate"]
                         pageurl = pageconfig["url"] unless pageconfig["url"] == nil
                         navtext = pageconfig["navigation"]
-                        navmeta = pageconfig["navigation-meta"]
+                        navmeta = pageconfig["navigation_meta"]
                         navigation.push({"text" => navtext, "url" => pageurl, "pagename" => pagename, "meta" => navmeta}) unless navtext == nil
                     end
                 end
@@ -195,7 +195,7 @@ module Scms
                             html = Scms.parsetemplate(File.read(erb), pagemodel)
 
                             html = html.gsub('~/', ScmsUtils.uriEncode("file:///#{@website}/")) if @mode == "cms"
-                            websiteroot = '/'
+                            websiteroot = ''
                             websiteroot = @settings["url"] unless @settings["url"] == nil
 
                             html = html.gsub('~/', websiteroot)
