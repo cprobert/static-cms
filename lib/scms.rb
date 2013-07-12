@@ -192,11 +192,16 @@ module Scms
                         if File.exists?(erb) && out != nil
                             pubsubdir = File.dirname(out)
                             Dir.mkdir(pubsubdir, 755) unless File::directory?(pubsubdir)
-                            html = Scms.parsetemplate(File.read(erb), pagemodel)
+
+                            erbtemplate = File.read(erb)
+                            erbtemplate = erbtemplate.gsub('data.','page.')#lagasy fix
+                            File.open(erb, 'w') {|f| f.write(erbtemplate) }#lagasy fix
+
+                            html = Scms.parsetemplate(erbtemplate, pagemodel)
 
                             html = html.gsub('~/', ScmsUtils.uriEncode("file:///#{@website}/")) if @mode == "cms"
-                            websiteroot = ''
-                            websiteroot = @settings["url"] unless @settings["url"] == nil
+                            websiteroot = '/'
+                            websiteroot = @settings["url"] unless @settings["rooturl"] == nil
 
                             html = html.gsub('~/', websiteroot)
 
@@ -210,9 +215,6 @@ module Scms
     end
 
     def Scms.parsetemplate(template, hash)
-        #lagasy fix
-        template = template.gsub('data.','page.')
-
         page = OpenStruct.new(hash)
         result = ""
         
@@ -306,15 +308,6 @@ module Scms
                 ScmsUtils.errLog( "Error processing: #{asset}" )
                 ScmsUtils.errLog( e.message )
             end
-        end
-    end
-
-    def Scms.deploy(website, config)
-        yamlpath=File.join(config, "_s3config.yml")
-        if File.exists?(yamlpath) 
-            S3Deploy.sync(website, config)
-        else
-            raise "The following file doesn't exist #{yamlpath}"
         end
     end
 

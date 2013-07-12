@@ -95,4 +95,5 @@ raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:
 Scms.upgrade(Folders[:website])
 Scms.build(Folders[:website], Folders[:pub], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
-Scms.deploy(Folders[:website], Folders[:config]) if options[:action] == "deploy"
+mimetypefile = File.join(Folders[:root], "assets", "mime.types")   
+S3Deploy.sync(Folders[:website], Folders[:config], mimetypefile) if options[:action] == "deploy"
