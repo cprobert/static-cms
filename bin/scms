@@ -58,6 +58,7 @@ optparse.parse!
 $stdout.sync = true
 root_folder = File.expand_path("../", File.dirname(__FILE__))
 website = (options[:website].nil?) ? Dir.pwd : options[:website] 
+$website = website
 Folders = {
   :root => root_folder,
   :website => File.join(website),
@@ -94,4 +95,4 @@ raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:
 Scms.upgrade(Folders[:website])
 Scms.build(Folders[:website], Folders[:pub], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
-Scms.deploy(deployDir, Folders[:config]) if options[:action] == "deploy"
+Scms.deploy(Folders[:website], Folders[:config]) if options[:action] == "deploy"
