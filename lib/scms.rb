@@ -123,8 +123,11 @@ module Scms
                                     if !htmlsnipet.empty?
                                         viewmodel = Hash.new
                                         viewmodel = { 
-                                            :page => pagedata, 
-                                            :sitedir => @website, 
+                                            :name => pagename,
+                                            :title => title,
+                                            :url => pageurl,
+                                            :data => pagedata,
+                                            :rootdir => @website, 
                                             :resource => resource 
                                         }
 
@@ -149,7 +152,7 @@ module Scms
                                         end
                                         
                                         if @mode == "cms"
-                                            views[view[0]] = "<div class='cms' data-view='#{view[1]}' data-page='#{pagedata}'>#{Scms.parsetemplate(viewSnippet, viewmodel)}</div>"
+                                            views[view[0]] = "<div class='cms' data-view='#{view[1]}' data-page='#{pageurl}'>#{Scms.parsetemplate(viewSnippet, viewmodel)}</div>"
                                         else
                                             views[view[0]] = Scms.parsetemplate(viewSnippet, viewmodel)
                                         end
@@ -244,23 +247,27 @@ module Scms
                     content = ""
                     assetList = ""
                     files = option[1]["files"]
-                    files.each do |asset|
-                        assetList += "\t#{asset}\n" 
-                        assetname = File.join(@website, asset)
-                        if File::exists?(assetname)
-                            content = content + "\n" + File.read(assetname)
-                        else
-                            ScmsUtils.errLog( "Error: No such file #{assetname}" )
+                    if files != nil
+                        files.each do |asset|
+                            assetList += "\t#{asset}\n" 
+                            assetname = File.join(@website, asset)
+                            if File::exists?(assetname)
+                                content = content + "\n" + File.read(assetname)
+                            else
+                                ScmsUtils.errLog( "Error: No such file #{assetname}" )
+                            end
                         end
-                    end
-                    ScmsUtils.log("#{assetList}")
-                    
-                    bundleDir = File.dirname(bundleName)
-                    Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
-                    File.open(bundleName, 'w') {|f| f.write(content) }
-                    if File.extname(bundleName) == ".js"
-                        puts "Minifing: #{bundleName}"
-                        Scms.packr(bundleName) unless /(-min)|(\.min)/.match(bundleName)
+                        ScmsUtils.log("#{assetList}")
+                        
+                        bundleDir = File.dirname(bundleName)
+                        Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
+                        File.open(bundleName, 'w') {|f| f.write(content) }
+                        if File.extname(bundleName) == ".js"
+                            puts "Minifing: #{bundleName}"
+                            Scms.packr(bundleName) unless /(-min)|(\.min)/.match(bundleName)
+                        end
+                    else
+                        ScmsUtils.errLog("No files in bundle"); 
                     end
                 end
             end
