@@ -26,22 +26,20 @@ pages:
         intro: _views/deploy-intro.erb
         main: _views/deploy-main.erb
 
-scripts:
+bundles:
 - base:
-    version: 1.0
-    bundle:
+    generate: scripts/base-v1.0.js
+    files:
      - scripts/demo.js
 - libraries-min:
-    version: 1.1
-    bundle:
+    generate: scripts/libraries-min-v1.1.js
+    files:
      - google-code-prettify/prettify.js
      - google-code-prettify/lang-yaml.js
      - scripts/bootstrap.js
-
-stylesheets:
 - base:
-    version: 1.1
-    bundle:
+    generate: stylesheets/base-v1.1.css
+    files:
       - stylesheets/bootstrap.css
       - stylesheets/demo.css
       - stylesheets/bootstrap-responsive.css

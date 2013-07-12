@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title><%= data.resource["title"] %></title>
+    <title><%= page.resource["title"] %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
-	<link href='<%= data.stylesheets["base"] %>' type='text/css' rel='stylesheet'/>
+	<link href='<%= page.bundles["base"] %>' type='text/css' rel='stylesheet'/>
 
 	<script src="scripts/jquery-1.8.2.min.js"></script>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -43,25 +43,25 @@
           <a class="brand" href="/Static-CMS/">Static-CMS</a>
           <div class="nav-collapse">
             <ul class="nav">
-			<%
-				@page = data.page
-				@page = "/" if @page == "index.html"
-				def isActive(href)
-					if @page == href
-						return "active"
-					else
-						return ""
-					end
-				end
-			
-				require 'nokogiri'
-				xml_doc  = Nokogiri::XML(File.read(File.join(data.sitedir, "_templates", "menu.xml")))
-				xml_doc.xpath('/menu/page').each do |link|
-			%>
-				<li><a href='<%= link.attr("href") %>' class='<%=isActive(link.attr("href"))%> <%= link.attr("class") %>'>
-					<%= link.content %>
-				</a></li>	
-			<% end %>
+                  <%
+                    @url = page.url
+                    @url = "/" if @url == "index.html"
+                    def isActive(href)
+                      if @url == href
+                        return "active"
+                      end
+                    end
+
+                    require 'nokogiri'
+                    xml_doc  = Nokogiri::XML(File.read(File.join(page.rootdir, "_templates", "menu.xml")))
+                    xml_doc.xpath('/menu/page').each do |link|
+                  %>
+                    <li class='<%=isActive(link.attr("href"))%> <%= link.attr("class") %>'>
+                      <a href='<%= link.attr("href") %>'>
+                        <%= link.content %>
+                      </a>
+                    </li>
+                  <% end %>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -72,12 +72,12 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
 	  <header id="overview" class="jumbotron subhead">
-			<%= data.views["intro"] %>
+			<%= page.views["intro"] %>
 	  </header>
 
       <!-- Example row of columns -->
       <div class="row">
-        <%= data.views["main"] %>
+        <%= page.views["main"] %>
       </div>
 
       <hr>
@@ -85,16 +85,13 @@
       <footer>
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
-			<p>Page: <%= data.page %></p>
-			<p>Sitedir: <%= data.sitedir %></p>
-			
-			<p>Scripts: <%= data.scripts %></p>
-			<p>Stylesheets: <%= data.stylesheets %></p>
-			<p>Config: <%= data.config %></p>
+			<p>Page Name: <%= page.name %></p>
+			<p>Bundles: <%= page.bundles %></p>
+			<p>Config: <%= page.config %></p>
 			
 			
-			<p>Resource: <%= data.resource %></p>
-			<p>Views: (access like this: data.views["viewname"])</p>
+			<p>Resource: <%= page.resource %></p>
+			<p>Views: (access like this: page.views["viewname"])</p>
 		</div>
 		<script>
 			$(function(){
@@ -116,8 +113,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     
-	<script src='<%= data.scripts["libraries-min"] %>'></script>
-	<script src='<%= data.scripts["base"] %>'></script>
-    <%= data.monkeyhook %>
+	<script src='<%= page.bundles["libraries-min"] %>'></script>
+	<script src='<%= page.bundles["base"] %>'></script>
+    <%= page.monkeyhook %>
   </body>
 </html>

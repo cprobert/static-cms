@@ -8,7 +8,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-	<link href='scripts/base-v1.1..css' type='text/css' rel='stylesheet'/>
+	<link href='stylesheets/base-v1.1.css' type='text/css' rel='stylesheet'/>
 
 	<script src="scripts/jquery-1.8.2.min.js"></script>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -43,19 +43,25 @@
           <a class="brand" href="/Static-CMS/">Static-CMS</a>
           <div class="nav-collapse">
             <ul class="nav">
-			
-				<li><a href='structure.html' class='active '>
-					Structure
-				</a></li>	
-			
-				<li><a href='deploy.html' class=' '>
-					Deploy
-				</a></li>	
-			
-				<li><a href='http://ipassexam.github.io/Air-Monkey/' class=' '>
-					Editor
-				</a></li>	
-			
+                  
+                    <li class='active '>
+                      <a href='structure.html'>
+                        Structure
+                      </a>
+                    </li>
+                  
+                    <li class=' '>
+                      <a href='deploy.html'>
+                        Deploy
+                      </a>
+                    </li>
+                  
+                    <li class=' '>
+                      <a href='http://ipassexam.github.io/Air-Monkey/'>
+                        Editor
+                      </a>
+                    </li>
+                  
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -101,10 +107,10 @@
 	  &lt;body&gt;
 		&lt;div class=&quot;container&quot;&gt;
 			&lt;header&gt;
-			  &lt;%= data.views[&quot;intro&quot;] %&gt;
+			  &lt;%= page.views[&quot;intro&quot;] %&gt;
 			&lt;/header&gt;
 		  &lt;div&gt;
-		    &lt;%= data.views[&quot;main&quot;] %&gt;
+		    &lt;%= page.views[&quot;main&quot;] %&gt;
 		  &lt;/div&gt;
 		  &lt;footer&gt;&lt;/footer&gt;
 		&lt;/div&gt; 
@@ -113,7 +119,7 @@
           </code></pre>
 
 		</div>
-		<p>This is standard HTML 5 mark-up for a page. What&#39;s interesting is the code: <strong>&lt;%= data.views[&quot;intro&quot;] %&gt;</strong> . This is how you inject the content from the view into the page.</p>
+		<p>This is standard HTML 5 mark-up for a page. What&#39;s interesting is the code: <strong>&lt;%= page.views[&quot;intro&quot;] %&gt;</strong> . This is how you inject the content from the view into the page.</p>
       <p>Further reading for the template language <a href="http://www.stuartellis.eu/articles/erb/">http://www.stuartellis.eu/articles/erb/</a></p>
 		<h2>Creating a view</h2>
 		<p>Open the views (home-intro.html and home-main.html) in your favourite text editor and add some html, e.g</p>
@@ -142,8 +148,8 @@
 		</div>
 		<p>What&#39;s going on here?</p>
 		<p>The &quot;pages&quot; configuration option contains a list of pages. Each page in turn contains the name of the page to generate and a list of views to &#39;inject&#39; into the template.</p>
-		<p>The view defined as intro: will be injected into template here: &lt;%= data.views[&quot;intro&quot;] %&gt;<br />
-			The view defined as main: will be injected into template here: &lt;%= data.views[&quot;main&quot;] %&gt;<br />
+		<p>The view defined as intro: will be injected into template here: &lt;%= page.views[&quot;intro&quot;] %&gt;<br />
+			The view defined as main: will be injected into template here: &lt;%= page.views[&quot;main&quot;] %&gt;<br />
 			<em>Note: Yaml doesn&#39;t like it if you use [tab] key - use spaces insted.</em></p>
 		
 		<h2>Asset Bundling</h2>
@@ -153,17 +159,17 @@
 	bundles:
 	- script:
 		generate: scripts/script-v1.0.js
-		bundle:
+		files:
 		 - scripts/demo.js
 	- libraries:
 		generate: scripts/libs-v1.0.js
-		bundle:
+		files:
 		 - google-code-prettify/prettify.js
 		 - google-code-prettify/lang-yaml.js
 		 - scripts/bootstrap-button.js
 	- styles:
 		generate: stylesheets/styles-v1.0.js
-		bundle:
+		files:
 		  - stylesheets/bootstrap.css
 		  - stylesheets/demo.css
 		  - stylesheets/bootstrap-responsive.css
@@ -175,8 +181,8 @@
 		<p>You then replace your script and css references in your skin file like this:</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-rb">
-    &lt;link href=&#39;&lt;%= data.stylesheets[&quot;styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
-    &lt;script src=&#39;&lt;%= data.scripts[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
+    &lt;link href=&#39;&lt;%= page.stylesheets[&quot;styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
+    &lt;script src=&#39;&lt;%= page.scripts[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
 		</code></pre>
 		</div>
 		<p>Note the version is automatically built into the name of the bundled asset.</p>
@@ -191,16 +197,13 @@
       <footer>
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
-			<p>Page: structure.html</p>
-			<p>Sitedir: I:/Code/GitHub/Static-CMS</p>
-			
-			<p>Scripts: {"base"=>"scripts/base-v1.0..js", "libraries-min"=>"scripts/libraries-min-v1.1..js"}</p>
-			<p>Stylesheets: {"base"=>"scripts/base-v1.1..css"}</p>
+			<p>Page Name: structure</p>
+			<p>Bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
 			<p>Config: {"generate"=>"structure.html", "resource"=>"_resources/structure.yml", "views"=>{"intro"=>"_views/structure-intro.erb", "main"=>"_views/structure-main.erb"}}</p>
 			
 			
 			<p>Resource: {"title"=>"s3cms folder structure"}</p>
-			<p>Views: (access like this: data.views["viewname"])</p>
+			<p>Views: (access like this: page.views["viewname"])</p>
 		</div>
 		<script>
 			$(function(){
@@ -222,8 +225,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     
-	<script src='scripts/libraries-min-v1.1..js'></script>
-	<script src='scripts/base-v1.0..js'></script>
+	<script src='scripts/libraries-min-v1.1.js'></script>
+	<script src='stylesheets/base-v1.1.css'></script>
     
   </body>
 </html>
