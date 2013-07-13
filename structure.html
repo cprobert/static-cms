@@ -181,8 +181,8 @@
 		<p>You then replace your script and css references in your skin file like this:</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-rb">
-    &lt;link href=&#39;&lt;%= page.stylesheets[&quot;styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
-    &lt;script src=&#39;&lt;%= page.scripts[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
+    &lt;link href=&#39;&lt;%= page.bundles[&quot;styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
+    &lt;script src=&#39;&lt;%= page.bundles[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
 		</code></pre>
 		</div>
 		<p>Note the version is automatically built into the name of the bundled asset.</p>
@@ -197,13 +197,20 @@
       <footer>
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
-			<p>Page Name: structure</p>
-			<p>Bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
-			<p>Config: {"generate"=>"structure.html", "resource"=>"_resources/structure.yml", "views"=>{"intro"=>"_views/structure-intro.erb", "main"=>"_views/structure-main.erb"}}</p>
-			
-			
-			<p>Resource: {"title"=>"s3cms folder structure"}</p>
-			<p>Views: (access like this: page.views["viewname"])</p>
+            <ul>
+                <li>page.name: structure</li>
+                <li>page.title: structure</li>
+                <li>page.description: </li>
+                <li>page.keywords: </li>
+                <li>page.url: structure.html</li>
+                <li>page.rootdir: I:/Code/GitHub/Static-CMS</li>
+                <li>page.resource: {"title"=>"s3cms folder structure"}</li>
+                <li>page.config: {"generate"=>"structure.html", "resource"=>"_resources/structure.yml", "views"=>{"intro"=>"_views/structure-intro.erb", "main"=>"_views/structure-main.erb"}}</li>
+                <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
+                <li>page.data: {"structure"=>{"generate"=>"structure.html", "resource"=>"_resources/structure.yml", "views"=>{"intro"=>"_views/structure-intro.erb", "main"=>"_views/structure-main.erb"}}}</li>
+                <li>Views: (access like this: page.views["viewname"])</li>
+                
+            </ul>
 		</div>
 		<script>
 			$(function(){

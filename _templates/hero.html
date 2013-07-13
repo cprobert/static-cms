@@ -85,13 +85,20 @@
       <footer>
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
-			<p>Page Name: <%= page.name %></p>
-			<p>Bundles: <%= page.bundles %></p>
-			<p>Config: <%= page.config %></p>
-			
-			
-			<p>Resource: <%= page.resource %></p>
-			<p>Views: (access like this: page.views["viewname"])</p>
+            <ul>
+                <li>page.name: <%= page.name %></li>
+                <li>page.title: <%= page.title %></li>
+                <li>page.description: <%= page.description %></li>
+                <li>page.keywords: <%= page.keywords %></li>
+                <li>page.url: <%= page.url %></li>
+                <li>page.rootdir: <%= page.rootdir %></li>
+                <li>page.resource: <%= page.resource %></li>
+                <li>page.config: <%= page.config %></li>
+                <li>page.bundles: <%= page.bundles %></li>
+                <li>page.data: <%= page.data %></li>
+                <li>Views: (access like this: page.views["viewname"])</li>
+                
+            </ul>
 		</div>
 		<script>
 			$(function(){

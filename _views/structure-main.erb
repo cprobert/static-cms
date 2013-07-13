@@ -95,8 +95,8 @@
 		<p>You then replace your script and css references in your skin file like this:</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-rb">
-    &lt;link href=&#39;&lt;%= page.stylesheets[&quot;styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
-    &lt;script src=&#39;&lt;%= page.scripts[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
+    &lt;link href=&#39;&lt;%= page.bundles[&quot;styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
+    &lt;script src=&#39;&lt;%= page.bundles[&quot;libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
 		</code></pre>
 		</div>
 		<p>Note the version is automatically built into the name of the bundled asset.</p>

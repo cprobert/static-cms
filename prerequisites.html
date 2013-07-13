@@ -110,13 +110,20 @@
       <footer>
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
-			<p>Page Name: prerequisites</p>
-			<p>Bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
-			<p>Config: {"generate"=>"prerequisites.html", "resource"=>"_resources/prerequisites.yml", "views"=>{"intro"=>"_views/prerequisites-intro.erb", "main"=>"_views/prerequisites-main.erb"}}</p>
-			
-			
-			<p>Resource: {"title"=>"s3cms what you need to install first"}</p>
-			<p>Views: (access like this: page.views["viewname"])</p>
+            <ul>
+                <li>page.name: prerequisites</li>
+                <li>page.title: prerequisites</li>
+                <li>page.description: </li>
+                <li>page.keywords: </li>
+                <li>page.url: prerequisites.html</li>
+                <li>page.rootdir: I:/Code/GitHub/Static-CMS</li>
+                <li>page.resource: {"title"=>"s3cms what you need to install first"}</li>
+                <li>page.config: {"generate"=>"prerequisites.html", "resource"=>"_resources/prerequisites.yml", "views"=>{"intro"=>"_views/prerequisites-intro.erb", "main"=>"_views/prerequisites-main.erb"}}</li>
+                <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
+                <li>page.data: {"prerequisites"=>{"generate"=>"prerequisites.html", "resource"=>"_resources/prerequisites.yml", "views"=>{"intro"=>"_views/prerequisites-intro.erb", "main"=>"_views/prerequisites-main.erb"}}}</li>
+                <li>Views: (access like this: page.views["viewname"])</li>
+                
+            </ul>
 		</div>
 		<script>
 			$(function(){

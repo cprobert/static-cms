@@ -139,13 +139,20 @@
       <footer>
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
-			<p>Page Name: deploy</p>
-			<p>Bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</p>
-			<p>Config: {"generate"=>"deploy.html", "resource"=>"_resources/deploy.yml", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}</p>
-			
-			
-			<p>Resource: {"title"=>"Publish a s3cms website to Amazon S3"}</p>
-			<p>Views: (access like this: page.views["viewname"])</p>
+            <ul>
+                <li>page.name: deploy</li>
+                <li>page.title: deploy</li>
+                <li>page.description: </li>
+                <li>page.keywords: </li>
+                <li>page.url: deploy.html</li>
+                <li>page.rootdir: I:/Code/GitHub/Static-CMS</li>
+                <li>page.resource: {"title"=>"Publish a s3cms website to Amazon S3"}</li>
+                <li>page.config: {"generate"=>"deploy.html", "resource"=>"_resources/deploy.yml", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}</li>
+                <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
+                <li>page.data: {"deploy"=>{"generate"=>"deploy.html", "resource"=>"_resources/deploy.yml", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}}</li>
+                <li>Views: (access like this: page.views["viewname"])</li>
+                
+            </ul>
 		</div>
 		<script>
 			$(function(){
