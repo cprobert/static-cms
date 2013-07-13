@@ -32,7 +32,8 @@ module Scms
                     begin
                         require_relative bootstrap
                     rescue Exception=>e
-                        ScmsUtils.errLog( e )
+                        ScmsUtils.errLog(e.message)
+                        ScmsUtils.log(e.backtrace.inspect  )
                     end
                 else
                     ScmsUtils.log("Bootstrap does not exist #{bootstrap}")
