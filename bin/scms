@@ -11,6 +11,12 @@ require 'optparse'
 require 'fileutils'
 require 'Scms'
 
+class String
+  def to_path(end_slash=false)
+    "#{'/' if self[0]=='\\'}#{self.split('\\').join('/')}#{'/' if end_slash}" 
+  end 
+end
+
 options = {}
 optparse = OptionParser.new do|opts|
   # Set a banner, displayed at the top
@@ -20,6 +26,10 @@ optparse = OptionParser.new do|opts|
   # Define the options, and what they do
   opts.on('-w', '--website WEBSITE', "Website directory (full path)") do |w|
     options[:website] = w
+  end
+
+  opts.on('-c', '--config CONFIGDIR', "Configeration directory if different from Website (full path)") do |c|
+    options[:configdir] = c
   end
   
   opts.on('-o', '--output BuildDIR', "Website build dir (full path)") do |o|
@@ -34,11 +44,6 @@ optparse = OptionParser.new do|opts|
   options[:mode] = "pub"
   opts.on( '-m', '--mode MODE', 'CMS or Publish' ) do|m|
      options[:mode] = m
-  end
-   
-  options[:html] = "true"
-  opts.on( '-f', '--html HTML', 'true or false' ) do|h|
-     options[:html] = h
   end
 
   options[:verbose] = false
@@ -57,14 +62,14 @@ optparse.parse!
 #Set globals
 $stdout.sync = true
 root_folder = File.expand_path("../", File.dirname(__FILE__))
-website = (options[:website].nil?) ? Dir.pwd : options[:website] 
+website = ((options[:website].nil?) ? Dir.pwd : options[:website]).to_path
 $website = website
 Folders = {
   :root => root_folder,
-  :website => File.join(website),
-  :pub => (ENV["SCMS_PUBLISH_FOLDER"] or options[:pub]),
-  :assets => File.join(root_folder, "assets"),
-  :config => (ENV["SCMS_CONFIG_FOLDER"] or File.join(website))
+  :website => website,
+  :pub => (options[:pub] or ENV["SCMS_PUBLISH_FOLDER"] or '').to_path,
+  :config => (options[:configdir] or ENV["SCMS_CONFIG_FOLDER"] or website).to_path,
+  :assets => File.join(root_folder, "assets")
 }
 
 if options[:action] == "create"
@@ -93,7 +98,7 @@ end
 
 raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:website])
 Scms.upgrade(Folders[:website])
-Scms.build(Folders[:website], Folders[:pub], Folders[:config], options[:mode])
+Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
 mimetypefile = File.join(Folders[:root], "assets", "mime.types")   
 S3Deploy.sync(Folders[:website], Folders[:config], mimetypefile) if options[:action] == "deploy"

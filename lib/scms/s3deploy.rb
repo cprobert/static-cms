@@ -9,19 +9,12 @@ module S3Deploy
         ENV["S3CONF"] = config
         ENV["AWS_CALLING_FORMAT"] = "SUBDOMAIN"
         ENV["S3SYNC_MIME_TYPES_FILE"] = mimetypefile
-        puts "S3SYNC_MIME_TYPES_FILE: #{ENV["S3SYNC_MIME_TYPES_FILE"] }"
+        #puts "S3SYNC_MIME_TYPES_FILE: #{ENV["S3SYNC_MIME_TYPES_FILE"] }"
 
         s3yamlpath=File.join(config, "_s3config.yml")
         settings = YAML.load_file(s3yamlpath)
         throw "No bucket defined in _s3config.yml settings file" if settings['bucket'] == nil
         ScmsUtils.log( "Syncing with Amazon S3: #{settings['bucket']}" )
-        
-        removeold = "--delete"
-        if settings['clean'] != nil
-            unless settings['clean']
-                removeold = ""
-            end
-        end
 
         exclude = "(\\.svn$)|(^_)"
         if settings['ignore'] != nil
@@ -29,7 +22,7 @@ module S3Deploy
         end
         
         cmd = "s3sync"
-        params = "#{removeold} --exclude=\"#{exclude}\" --progress --make-dirs --recursive"
+        params = "--exclude=\"#{exclude}\" --progress --make-dirs --recursive"
 
         #First deploy private directories
         Dir.glob("#{pub}/_*/").each do |f|
@@ -49,7 +42,9 @@ module S3Deploy
         end
 
         ScmsUtils.log( "Syncing root (public)" )
-        roorparams = "#{params}  --public-read \"#{pub}/\" #{settings['bucket']}:/"
+        removeold = ""
+        removeold = "--delete"  if settings['clean'].to_s == "true"
+        roorparams = "#{removeold} #{params} --public-read \"#{pub}/\" #{settings['bucket']}:/"
         #Finnaly deploy all remaining files (except excludes)
         ScmsUtils.run(cmd, roorparams)
         ScmsUtils.successLog("Deployed :)")

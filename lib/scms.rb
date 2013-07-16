@@ -13,7 +13,7 @@ module Scms
     
     include YAML
     
-    def Scms.build(website, pub, config, mode)
+    def Scms.build(website, config, mode)
         @website = website
         @mode = mode
         #ScmsUtils.log("Mode: #{mode}")
@@ -320,7 +320,7 @@ module Scms
     end
 
     def Scms.copywebsite(website, pub)
-        if pub != nil
+        if pub.to_s.strip.length != 0
             FileUtils.mkdir pub unless Dir.exists? pub
             source = File.join(website)
             Dir.chdir(source) do          
