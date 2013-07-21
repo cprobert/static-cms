@@ -158,7 +158,7 @@ module Scms
                                             views[view[0]] = Scms.parsetemplate(viewSnippet, viewmodel)
                                         end
                                     else
-                                        ScmsUtils.writelog("Empty file: #{viewpath}")
+                                        ScmsUtils.log("Empty view: #{view[1]}")
                                     end
                                 else
                                     ScmsUtils.errLog("View not found: #{view[0]} - #{view[1]} [#{viewpath}]")
@@ -198,8 +198,8 @@ module Scms
                             Dir.mkdir(pubsubdir, 755) unless File::directory?(pubsubdir)
 
                             erbtemplate = File.read(erb)
-                            erbtemplate = erbtemplate.gsub('data.','page.')#lagasy fix
-                            File.open(erb, 'w') {|f| f.write(erbtemplate) }#lagasy fix
+                            #erbtemplate = erbtemplate.gsub('data.','page.')#lagasy fix
+                            #File.open(erb, 'w') {|f| f.write(erbtemplate) }#lagasy fix
 
                             html = Scms.parsetemplate(erbtemplate, pagemodel)
 
