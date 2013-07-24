@@ -36,7 +36,9 @@ module Scms
                         ScmsUtils.log(e.backtrace.inspect  )
                     end
                 else
-                    ScmsUtils.log("Bootstrap does not exist #{bootstrap}")
+                    ScmsUtils.errLog("Bootstrap does not exist #{@settings["bootstrap"]}")
+                    ScmsUtils.writelog("::Bootstrap does not exist #{@settings["bootstrap"]}", @website)
+                    ScmsUtils.writelog("type NUL > #{bootstrap}", @website)
                 end
             end 
             
@@ -93,7 +95,9 @@ module Scms
                                 #ScmsUtils.log( "_Resource found: #{pageconfig["resource"]}_" )
                                 resource = YAML.load_file(resourcepath)
                             else
-                                ScmsUtils.errLog( "Resource not found: #{resourcepath}" )
+                                ScmsUtils.errLog("Resource not found: #{pageconfig["resource"]}")
+                                ScmsUtils.writelog("::Resource not found #{pageconfig["resource"]}", @website)
+                                ScmsUtils.writelog("type NUL > #{resourcepath}", @website)
                             end
                         end
                         
@@ -110,7 +114,9 @@ module Scms
                                     ScmsUtils.errLog( "Handler doesnt have a render method" )
                                 end
                             else
-                                ScmsUtils.errLog( "**Handler not found: #{handlerpath}**" )
+                                ScmsUtils.errLog("Handler not found: #{pageconfig["handler"]}")
+                                ScmsUtils.writelog("::Handler not found #{pageconfig["handler"]}", @website)
+                                ScmsUtils.writelog("type NUL > #{handlerpath}", @website)
                             end
                         end
                         
@@ -162,7 +168,8 @@ module Scms
                                     end
                                 else
                                     ScmsUtils.errLog("View not found: #{view[0]} - #{view[1]} [#{viewpath}]")
-                                    ScmsUtils.writelog("View not found: #{view[0]} - #{view[1]} [#{viewpath}]", @website)
+                                    ScmsUtils.writelog("::View not found: #{view[0]} - #{view[1]} [#{viewpath}]", @website)
+                                    ScmsUtils.writelog("type NUL > #{viewpath}", @website)
                                 end
                                 #ScmsUtils.log( "view = #{view[0]} - #{view[1]}" )
                             end
@@ -192,7 +199,6 @@ module Scms
                         out = File.join(@website, File.join(pageconfig["generate"].sub('~/',''))) unless pageconfig["generate"] == nil
                         
                         ScmsUtils.successLog("#{pageurl}")
-                        ScmsUtils.errLog("Template doesn't exist: #{erb}") unless File.exists?(erb)
                         if File.exists?(erb) && out != nil
                             pubsubdir = File.dirname(out)
                             Dir.mkdir(pubsubdir, 755) unless File::directory?(pubsubdir)
@@ -210,6 +216,10 @@ module Scms
                             html = html.gsub('~/', websiteroot)
 
                             File.open(out, 'w') {|f| f.write(html) }
+                        else
+                            ScmsUtils.errLog("Template doesn't exist: #{skin}")
+                            ScmsUtils.writelog("::Template doesn't exist #{skin}", @website)
+                            ScmsUtils.writelog("type NUL > #{erb}", @website)
                         end
                     end
                 end
@@ -302,6 +312,10 @@ module Scms
                 ScmsUtils.errLog( "Error processing: #{asset}" )
                 ScmsUtils.errLog( e.message )
             end
+        else
+            ScmsUtils.errLog("Sass file doesn't esist: #{asset}")
+            ScmsUtils.writelog("::Sass file doesn't exist #{asset}", @website)
+            ScmsUtils.writelog("type NUL > #{asset}", @website)
         end
     end
     
@@ -316,6 +330,10 @@ module Scms
                 ScmsUtils.errLog( "Error processing: #{asset}" )
                 ScmsUtils.errLog( e.message )
             end
+        else
+            ScmsUtils.errLog("Asset file doesn't exist: #{asset}")
+            ScmsUtils.writelog("::Asset file doesn't exist #{asset}", @website)
+            ScmsUtils.writelog("type NUL > #{asset}", @website)
         end
     end
 
