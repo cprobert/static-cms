@@ -162,7 +162,7 @@ module Scms
                                     end
                                 else
                                     ScmsUtils.errLog("View not found: #{view[0]} - #{view[1]} [#{viewpath}]")
-                                    ScmsUtils.writelog("View not found: #{view[0]} - #{view[1]} [#{viewpath}]")
+                                    ScmsUtils.writelog("View not found: #{view[0]} - #{view[1]} [#{viewpath}]", @website)
                                 end
                                 #ScmsUtils.log( "view = #{view[0]} - #{view[1]}" )
                             end
