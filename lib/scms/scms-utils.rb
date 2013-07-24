@@ -66,8 +66,8 @@ module ScmsUtils
         end
     end
     
-	def ScmsUtils.writelog(pub, log)
-        if !pub.nil? && !log.nil? 
+	def ScmsUtils.writelog(pub)
+        if !pub.nil?
             open(File.join(pub, "build.log"), 'a') { |f|
               f.puts log
             }
