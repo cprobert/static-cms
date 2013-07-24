@@ -194,12 +194,15 @@ module Scms
                             :rootdir => @website, 
                             :monkeyhook => monkeyhook
                         }
-                        
+
+                        break if pageconfig["generate"] == nil
+
                         erb = File.join(@website, skin)
-                        out = File.join(@website, File.join(pageconfig["generate"].sub('~/',''))) unless pageconfig["generate"] == nil
+                        out = File.join(@website, File.join(pageconfig["generate"].sub('~/',''))) 
                         
                         ScmsUtils.successLog("#{pageurl}")
-                        if File.exists?(erb) && out != nil
+
+                        if File.exists?(erb)
                             pubsubdir = File.dirname(out)
                             Dir.mkdir(pubsubdir, 755) unless File::directory?(pubsubdir)
 
@@ -236,7 +239,6 @@ module Scms
             result = ERB.new(template).result(page.instance_eval { binding })
         rescue Exception => e  
                     ScmsUtils.errLog("Critical Error: Could not parse template")
-                    ScmsUtils.log( "(if your using resources make sure their not empty)" )
                     ScmsUtils.errLog( e.message )
         end
         
@@ -261,11 +263,14 @@ module Scms
                     if files != nil
                         files.each do |asset|
                             assetList += "\t#{asset}\n" 
-                            assetname = File.join(@website, asset)
-                            if File::exists?(assetname)
-                                content = content + "\n" + File.read(assetname)
+                            assetdir = File.join(@website, asset)
+                            if File::exists?(assetdir)
+                                #try catch for permisions
+                                content = content + "\n" + File.read(assetdir)
                             else
-                                ScmsUtils.errLog( "Error: No such file #{assetname}" )
+                                ScmsUtils.errLog( "Asset file doesn't exists: #{asset}" )
+                                ScmsUtils.writelog("::Asset file doesn't exists: #{asset}", @website)
+                                ScmsUtils.writelog("type NUL > #{assetdir}", @website)
                             end
                         end
                         ScmsUtils.log("#{assetList}")
@@ -313,7 +318,7 @@ module Scms
                 ScmsUtils.errLog( e.message )
             end
         else
-            ScmsUtils.errLog("Sass file doesn't esist: #{asset}")
+            ScmsUtils.errLog("Sass file doesn't exists: #{asset}")
             ScmsUtils.writelog("::Sass file doesn't exist #{asset}", @website)
             ScmsUtils.writelog("type NUL > #{asset}", @website)
         end
