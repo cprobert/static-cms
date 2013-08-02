@@ -93,6 +93,7 @@ module Scms
                             resourcepath = File.join(@website, pageconfig["resource"])
                             if File.exists?(resourcepath)
                                 #ScmsUtils.log( "_Resource found: #{pageconfig["resource"]}_" )
+                                #todo: error handeling
                                 resource = YAML.load_file(resourcepath)
                             else
                                 ScmsUtils.errLog("Resource not found: #{pageconfig["resource"]}")
@@ -126,6 +127,7 @@ module Scms
                                 views[view[0]] = ""
                                 viewpath = File.join(@website, view[1])
                                 if File.exists?(viewpath)
+                                    #todo: error handeling
                                     htmlsnipet = File.read(viewpath)
                                     if !htmlsnipet.empty?
                                         viewmodel = Hash.new
@@ -140,8 +142,10 @@ module Scms
 
                                         if hasHandler
                                             ScmsUtils.log("Rendering with handler")
+                                            #todo: error handeling
                                             viewSnippet = Handler.render(viewpath)
                                         else
+                                            #todo: why not use htmlsnipet
                                             snnipetCode = File.read(viewpath)
                                             case File.extname(view[1])
                                             when ".md"
@@ -152,6 +156,7 @@ module Scms
                                                     viewSnippet = snnipetCode
                                                     puts e.message  
                                                     puts e.backtrace.inspect  
+                                                    #todo: use scmslog
                                                 end
                                             else
                                               viewSnippet = snnipetCode
@@ -217,7 +222,7 @@ module Scms
                             websiteroot = @settings["url"] unless @settings["rooturl"] == nil
 
                             html = html.gsub('~/', websiteroot)
-
+                            #todo: error handeling
                             File.open(out, 'w') {|f| f.write(html) }
                         else
                             ScmsUtils.errLog("Template doesn't exist: #{skin}")
@@ -240,6 +245,7 @@ module Scms
         rescue Exception => e  
                     ScmsUtils.errLog("Critical Error: Could not parse template")
                     ScmsUtils.errLog( e.message )
+                    #todo: log error to build.log
         end
         
         return result
@@ -266,6 +272,7 @@ module Scms
                             assetdir = File.join(@website, asset)
                             if File::exists?(assetdir)
                                 #try catch for permisions
+                                #todo: error handeling
                                 content = content + "\n" + File.read(assetdir)
                             else
                                 ScmsUtils.errLog( "Asset file doesn't exists: #{asset}" )
@@ -276,6 +283,7 @@ module Scms
                         ScmsUtils.log("#{assetList}")
                         
                         bundleDir = File.dirname(bundleName)
+                        #todo: error handeling
                         Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
                         File.open(bundleName, 'w') {|f| f.write(content) }
                         if File.extname(bundleName) == ".js"
