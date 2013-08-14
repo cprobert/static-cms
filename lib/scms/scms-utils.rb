@@ -7,6 +7,7 @@ module ScmsUtils
         ScmsUtils.log("Loading Config: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
         config = nil
 
+##http://snk.tuxfamily.org/log/yaml-json-validation-kwalify-ruby19.html
         #'kwalify'
         #schema = Kwalify::Yaml.load_file('some_complex_schema.yaml')
         #validator = Kwalify::Validator.new(schema)

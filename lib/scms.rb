@@ -33,7 +33,7 @@ module Scms
                         require_relative bootstrap
                     rescue Exception=>e
                         ScmsUtils.errLog(e.message)
-                        ScmsUtils.log(e.backtrace.inspect  )
+                        ScmsUtils.log(e.backtrace.inspect)
                     end
                 else
                     ScmsUtils.errLog("Bootstrap does not exist #{@settings["bootstrap"]}")
@@ -93,8 +93,12 @@ module Scms
                             resourcepath = File.join(@website, pageconfig["resource"])
                             if File.exists?(resourcepath)
                                 #ScmsUtils.log( "_Resource found: #{pageconfig["resource"]}_" )
-                                #todo: error handeling
-                                resource = YAML.load_file(resourcepath)
+                                begin
+                                    resource = YAML.load_file(resourcepath)
+                                rescue Exception=>e
+                                    ScmsUtils.errLog(e.message)
+                                    ScmsUtils.log(e.backtrace.inspect)
+                                end
                             else
                                 ScmsUtils.errLog("Resource not found: #{pageconfig["resource"]}")
                                 ScmsUtils.writelog("::Resource not found #{pageconfig["resource"]}", @website)
@@ -127,8 +131,12 @@ module Scms
                                 views[view[0]] = ""
                                 viewpath = File.join(@website, view[1])
                                 if File.exists?(viewpath)
-                                    #todo: error handeling
-                                    htmlsnipet = File.read(viewpath)
+                                    begin
+                                        htmlsnipet = File.read(viewpath)
+                                    rescue Exception=>e
+                                        ScmsUtils.errLog(e.message)
+                                        ScmsUtils.log(e.backtrace.inspect)
+                                    end
                                     if !htmlsnipet.empty?
                                         viewmodel = Hash.new
                                         viewmodel = { 
@@ -142,8 +150,13 @@ module Scms
 
                                         if hasHandler
                                             ScmsUtils.log("Rendering with handler")
-                                            #todo: error handeling
-                                            viewSnippet = Handler.render(viewpath)
+                                            begin
+                                                viewSnippet = Handler.render(viewpath)
+                                            rescue Exception=>e
+                                                ScmsUtils.errLog(e.message)
+                                                ScmsUtils.log(e.backtrace.inspect)
+                                            end
+                                            
                                         else
                                             #todo: why not use htmlsnipet
                                             snnipetCode = File.read(viewpath)
@@ -222,8 +235,12 @@ module Scms
                             websiteroot = @settings["url"] unless @settings["rooturl"] == nil
 
                             html = html.gsub('~/', websiteroot)
-                            #todo: error handeling
-                            File.open(out, 'w') {|f| f.write(html) }
+                            begin
+                                File.open(out, 'w') {|f| f.write(html) }
+                            rescue Exception=>e
+                                ScmsUtils.errLog(e.message)
+                                ScmsUtils.log(e.backtrace.inspect)
+                            end
                         else
                             ScmsUtils.errLog("Template doesn't exist: #{skin}")
                             ScmsUtils.writelog("::Template doesn't exist #{skin}", @website)
@@ -243,9 +260,8 @@ module Scms
         begin 
             result = ERB.new(template).result(page.instance_eval { binding })
         rescue Exception => e  
-                    ScmsUtils.errLog("Critical Error: Could not parse template")
-                    ScmsUtils.errLog( e.message )
-                    #todo: log error to build.log
+            ScmsUtils.errLog("Critical Error: Could not parse template")
+            ScmsUtils.errLog( e.message )
         end
         
         return result
@@ -272,8 +288,13 @@ module Scms
                             assetdir = File.join(@website, asset)
                             if File::exists?(assetdir)
                                 #try catch for permisions
-                                #todo: error handeling
-                                content = content + "\n" + File.read(assetdir)
+                                begin
+                                    content = content + "\n" + File.read(assetdir)
+                                rescue Exception=>e
+                                    ScmsUtils.errLog(e.message)
+                                    ScmsUtils.log(e.backtrace.inspect)
+                                end
+                                
                             else
                                 ScmsUtils.errLog( "Asset file doesn't exists: #{asset}" )
                                 ScmsUtils.writelog("::Asset file doesn't exists: #{asset}", @website)
@@ -283,8 +304,13 @@ module Scms
                         ScmsUtils.log("#{assetList}")
                         
                         bundleDir = File.dirname(bundleName)
-                        #todo: error handeling
-                        Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
+                        begin
+                            Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
+                        rescue Exception=>e
+                            ScmsUtils.errLog(e.message)
+                            ScmsUtils.log(e.backtrace.inspect)
+                        end
+                        
                         File.open(bundleName, 'w') {|f| f.write(content) }
                         if File.extname(bundleName) == ".js"
                             puts "Minifing: #{bundleName}"
