@@ -14,7 +14,7 @@ module S3Deploy
         s3yamlpath=File.join(config, "_s3config.yml")
         settings = YAML.load_file(s3yamlpath)
         throw "No bucket defined in _s3config.yml settings file" if settings['bucket'] == nil
-        ScmsUtils.log( "Syncing with Amazon S3: #{settings['bucket']}" )
+        ScmsUtils.boldlog( "Syncing with Amazon S3: #{settings['bucket']}" )
 
         exclude = "(\\.svn$)|(^_)"
         if settings['ignore'] != nil
@@ -27,7 +27,7 @@ module S3Deploy
         #First deploy private directories
         Dir.glob("#{pub}/_*/").each do |f|
             privatedir = File.basename(f)
-            ScmsUtils.log( "Backing up #{privatedir} (private)" )
+            ScmsUtils.log( "Backing up: #{privatedir} (private)" )
             privateparams = "#{params} \"#{pub}/#{privatedir}/\" #{settings['bucket']}:#{privatedir}/"
             ScmsUtils.run(cmd, privateparams)
         end
@@ -35,13 +35,13 @@ module S3Deploy
         #Them deploy publid dir with caching
         if settings['cache'] != nil
             settings['cache'].each do |folder| 
-                ScmsUtils.log( "Syncing #{folder}(public: caching: 1 year)" )
+                ScmsUtils.log("Publishing: #{folder}(public: caching: 1 year)")
                 cacheparams = "#{params}  --public-read --cache-control='max-age=31449600' \"#{pub}/#{folder}/\" #{settings['bucket']}:#{folder}/"
                 ScmsUtils.run(cmd, cacheparams)
             end
         end
 
-        ScmsUtils.log( "Syncing root (public)" )
+        ScmsUtils.log("Publishing root (public)")
         removeold = ""
         removeold = "--delete"  if settings['clean'].to_s == "true"
         roorparams = "#{removeold} #{params} --public-read \"#{pub}/\" #{settings['bucket']}:/"

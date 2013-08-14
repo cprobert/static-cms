@@ -64,6 +64,16 @@ module ScmsUtils
         end
     end
     
+    def ScmsUtils.boldlog(msg)
+        if !msg.nil?
+            if ENV["SCMS_HTML_OUT"] == "true"
+                puts "<strong>#{ScmsUtils.txt_2_html(msg)}</strong>"
+            else
+                puts msg
+            end
+        end
+    end
+
     def ScmsUtils.log(msg)
         if !msg.nil?
             if ENV["SCMS_HTML_OUT"] == "true"
@@ -76,7 +86,7 @@ module ScmsUtils
     
 	def ScmsUtils.writelog(log, pub)
         if !pub.nil? && !log.nil? 
-            open(File.join(pub, "build.log"), 'a') { |f|
+            open(File.join(pub, "_build.log"), 'a') { |f|
               f.puts log
             }
         end

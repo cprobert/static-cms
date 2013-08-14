@@ -18,7 +18,7 @@ module Scms
         @mode = mode
         #ScmsUtils.log("Mode: #{mode}")
         
-        ScmsUtils.log("Website #{@website}")
+        ScmsUtils.boldlog("Compiling #{@website}")
         Scms.sassall(File.join(@website))
         
         yamlpath=File.join(config, "_config.yml")
@@ -48,7 +48,7 @@ module Scms
             ScmsUtils.errLog("Config is empty")
         end
 
-        ScmsUtils.log("Built website:")
+        ScmsUtils.boldlog("Built website:")
         ScmsUtils.log(ScmsUtils.uriEncode("file:///#{@website}"))
     end
 
@@ -167,8 +167,8 @@ module Scms
                                                     viewSnippet = doc.to_html
                                                 rescue Exception => e  
                                                     viewSnippet = snnipetCode
-                                                    puts e.message  
-                                                    puts e.backtrace.inspect  
+                                                    ScmsUtils.errLog(e.message)
+                                                    ScmsUtils.log(e.backtrace.inspect)
                                                     #todo: use scmslog
                                                 end
                                             else
@@ -261,7 +261,7 @@ module Scms
             result = ERB.new(template).result(page.instance_eval { binding })
         rescue Exception => e  
             ScmsUtils.errLog("Critical Error: Could not parse template")
-            ScmsUtils.errLog( e.message )
+            ScmsUtils.errLog(e.message)
         end
         
         return result
@@ -270,21 +270,21 @@ module Scms
     def Scms.bundle(bundleConfig)
         bundles = Hash.new
         if bundleConfig != nil
-            ScmsUtils.log("Bundeling:")
+            
             bundleConfig.each do |bundle|
                 #ScmsUtils.log( "bundle (#{bundle.class}) = #{bundle}" )
                 bundle.each do |option|
                     name = option[0]
                     bundleName = File.join(option[1]["generate"])
                     bundles[name] = bundleName
-                    ScmsUtils.successLog("#{bundleName}")
+                    ScmsUtils.boldlog("Bundeling:")
 
                     content = ""
                     assetList = ""
                     files = option[1]["files"]
                     if files != nil
                         files.each do |asset|
-                            assetList += "\t#{asset}\n" 
+                            assetList += " - #{asset}\n" 
                             assetdir = File.join(@website, asset)
                             if File::exists?(assetdir)
                                 #try catch for permisions
@@ -294,27 +294,28 @@ module Scms
                                     ScmsUtils.errLog(e.message)
                                     ScmsUtils.log(e.backtrace.inspect)
                                 end
-                                
                             else
-                                ScmsUtils.errLog( "Asset file doesn't exists: #{asset}" )
+                                ScmsUtils.errLog("Asset file doesn't exists: #{asset}")
                                 ScmsUtils.writelog("::Asset file doesn't exists: #{asset}", @website)
                                 ScmsUtils.writelog("type NUL > #{assetdir}", @website)
                             end
                         end
                         ScmsUtils.log("#{assetList}")
                         
-                        bundleDir = File.dirname(bundleName)
+                        bundleFullPath = File.join(@website, bundleName)
+                        bundleDir = File.dirname(File.join(@website, bundleName))
                         begin
                             Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
+                            File.open(bundleFullPath, 'w') {|f| f.write(content) }
+                            ScmsUtils.successLog("Created: #{bundleName}")
                         rescue Exception=>e
+                            ScmsUtils.errLog("Error creating bundle: #{bundleName}")
                             ScmsUtils.errLog(e.message)
                             ScmsUtils.log(e.backtrace.inspect)
                         end
-                        
-                        File.open(bundleName, 'w') {|f| f.write(content) }
                         if File.extname(bundleName) == ".js"
                             puts "Minifing: #{bundleName}"
-                            Scms.packr(bundleName) unless /(-min)|(\.min)/.match(bundleName)
+                            Scms.packr(bundleFullPath) unless /(-min)|(\.min)/.match(bundleName)
                         end
                     else
                         ScmsUtils.errLog("No files in bundle"); 
@@ -346,10 +347,10 @@ module Scms
                 output = sass_engine.to_css
                 css_file = "#{File.dirname(asset)}/#{File.basename(asset,'.*')}.css"
                 File.open(css_file, 'w') { |file| file.write(output) }
-                ScmsUtils.log( "_Sassed: #{css_file}_" )
+                ScmsUtils.log( "CSS minified (sassed): #{css_file}" )
             rescue Exception => e  
-                ScmsUtils.errLog( "Error processing: #{asset}" )
-                ScmsUtils.errLog( e.message )
+                ScmsUtils.errLog("Error processing: #{asset}")
+                ScmsUtils.errLog(e.message)
             end
         else
             ScmsUtils.errLog("Sass file doesn't exists: #{asset}")
@@ -364,15 +365,13 @@ module Scms
                 code = File.read(asset)
                 compressed = Packr.pack(code)
                 File.open(asset, 'w') { |f| f.write(compressed) }
-                ScmsUtils.log( "Minified #{File.basename(asset)}" )
+                ScmsUtils.log("Minified #{File.basename(asset)}")
             rescue Exception => e  
-                ScmsUtils.errLog( "Error processing: #{asset}" )
-                ScmsUtils.errLog( e.message )
+                ScmsUtils.errLog("Error processing: #{asset}")
+                ScmsUtils.errLog(e.message)
             end
         else
-            ScmsUtils.errLog("Asset file doesn't exist: #{asset}")
-            ScmsUtils.writelog("::Asset file doesn't exist #{asset}", @website)
-            ScmsUtils.writelog("type NUL > #{asset}", @website)
+            ScmsUtils.errLog("Can't minify asset because file doesn't exist: #{asset}")
         end
     end
 
