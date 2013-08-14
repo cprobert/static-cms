@@ -90,11 +90,11 @@ else
   FileUtils.rm(monkeyhook) if File.exist?(monkeyhook)
 end
 
-ScmsUtils.log "System root folder = #{Folders[:root]}"
-ScmsUtils.log "Website folder = #{Folders[:website]}"
-ScmsUtils.log "Pub dir = #{Folders[:pub]}"
-ScmsUtils.log "Config dir = #{Folders[:config]}"
-ScmsUtils.log "Mode = #{options[:mode]}"
+#ScmsUtils.log "System root folder = #{Folders[:root]}"
+#ScmsUtils.log "Website folder = #{Folders[:website]}"
+#ScmsUtils.log "Pub dir = #{Folders[:pub]}"
+#ScmsUtils.log "Config dir = #{Folders[:config]}"
+#ScmsUtils.log "Mode = #{options[:mode]}"
 
 raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:website])
 Scms.upgrade(Folders[:website])
