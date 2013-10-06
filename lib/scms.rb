@@ -64,6 +64,7 @@ module Scms
                     pagedata.each do |pageoptions|
                         pagename =  pageoptions[0]
                         pageconfig = pageoptions[1]
+                        pageurl = "about:blank"
                         pageurl = pageconfig["generate"]
                         pageurl = pageconfig["url"] unless pageconfig["url"] == nil
                         navtext = pageconfig["navigation"]
@@ -137,52 +138,53 @@ module Scms
                                         ScmsUtils.errLog(e.message)
                                         ScmsUtils.log(e.backtrace.inspect)
                                     end
-                                    if !htmlsnipet.empty?
-                                        viewmodel = Hash.new
-                                        viewmodel = { 
-                                            :name => pagename,
-                                            :title => title,
-                                            :url => pageurl,
-                                            :data => pagedata,
-                                            :rootdir => @website, 
-                                            :resource => resource 
-                                        }
+                                    
+                                    if htmlsnipet.empty?
+                                        ScmsUtils.log("Empty view: #{view[1]}")
+                                    end
 
-                                        if hasHandler
-                                            ScmsUtils.log("Rendering with handler")
-                                            begin
-                                                viewSnippet = Handler.render(viewpath)
-                                            rescue Exception=>e
-                                                ScmsUtils.errLog(e.message)
-                                                ScmsUtils.log(e.backtrace.inspect)
-                                            end
-                                            
-                                        else
-                                            #todo: why not use htmlsnipet
-                                            snnipetCode = File.read(viewpath)
-                                            case File.extname(view[1])
-                                            when ".md"
-                                                begin  
-                                                    doc = Maruku.new(snnipetCode)
-                                                    viewSnippet = doc.to_html
-                                                rescue Exception => e  
-                                                    viewSnippet = snnipetCode
-                                                    ScmsUtils.errLog(e.message)
-                                                    ScmsUtils.log(e.backtrace.inspect)
-                                                    #todo: use scmslog
-                                                end
-                                            else
-                                              viewSnippet = snnipetCode
-                                            end
+                                    viewmodel = Hash.new
+                                    viewmodel = { 
+                                        :name => pagename,
+                                        :title => title,
+                                        :url => pageurl,
+                                        :data => pagedata,
+                                        :rootdir => @website, 
+                                        :resource => resource 
+                                    }
+
+                                    if hasHandler
+                                        ScmsUtils.log("Rendering with handler")
+                                        begin
+                                            viewSnippet = Handler.render(viewpath)
+                                        rescue Exception=>e
+                                            ScmsUtils.errLog(e.message)
+                                            ScmsUtils.log(e.backtrace.inspect)
                                         end
                                         
-                                        if @mode == "cms"
-                                            views[view[0]] = "<div class='cms' data-view='#{view[1]}' data-page='#{pageurl}'>#{Scms.parsetemplate(viewSnippet, viewmodel)}</div>"
-                                        else
-                                            views[view[0]] = Scms.parsetemplate(viewSnippet, viewmodel)
-                                        end
                                     else
-                                        ScmsUtils.log("Empty view: #{view[1]}")
+                                        #todo: why not use htmlsnipet
+                                        snnipetCode = File.read(viewpath)
+                                        case File.extname(view[1])
+                                        when ".md"
+                                            begin  
+                                                doc = Maruku.new(snnipetCode)
+                                                viewSnippet = doc.to_html
+                                            rescue Exception => e  
+                                                viewSnippet = snnipetCode
+                                                ScmsUtils.errLog(e.message)
+                                                ScmsUtils.log(e.backtrace.inspect)
+                                                #todo: use scmslog
+                                            end
+                                        else
+                                          viewSnippet = snnipetCode
+                                        end
+                                    end
+                                    
+                                    if @mode == "cms"
+                                        views[view[0]] = "<div class='cms' data-view='#{view[1]}' data-page='#{pageurl}'>#{Scms.parsetemplate(viewSnippet, viewmodel)}</div>"
+                                    else
+                                        views[view[0]] = Scms.parsetemplate(viewSnippet, viewmodel)
                                     end
                                 else
                                     ScmsUtils.errLog("View not found: #{view[0]} - #{view[1]} [#{viewpath}]")
@@ -195,6 +197,9 @@ module Scms
 
                         monkeyhook = "";
                         monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>" if @mode == "cms"
+
+                        livereload = ""
+                        livereload = "<script>document.write('<script src=\"http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>" if @mode != "deploy"
                         
                         pagemodel = Hash.new
                         pagemodel = { 
@@ -210,7 +215,8 @@ module Scms
                             :navigation => navigation,
                             :data => pagedata,
                             :rootdir => @website, 
-                            :monkeyhook => monkeyhook
+                            :monkeyhook => monkeyhook,
+                            :livereload => livereload
                         }
 
                         break if pageconfig["generate"] == nil

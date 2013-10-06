@@ -10,6 +10,7 @@
 require 'optparse'
 require 'fileutils'
 require 'Scms'
+require "scms/version"
 
 class String
   def to_path(end_slash=false)
@@ -46,13 +47,15 @@ optparse = OptionParser.new do|opts|
      options[:mode] = m
   end
 
-  options[:verbose] = false
-  opts.on( '-v', '--verbose', 'Output more information' ) do
-     options[:verbose] = true
+  options[:version] = false
+  opts.on( '-v', '--version', 'Output scms version' ) do
+     puts "Version: #{Scms::VERSION}"
+     exit
   end
   # This displays the help screen, all programs are
   # assumed to have this option.
    opts.on( '-h', '--help', 'Display this help screen' ) do
+     puts "Default action = build; default website directory = current working directory"
      puts opts
      exit
    end
@@ -73,8 +76,9 @@ Folders = {
 }
 
 if options[:action] == "create"
-    if Dir.exists? Folders[:website]
-        throw "Website already exists!!!"
+    if File.exists?(File.join(Folders[:website], "_config.yml"))
+    #if Dir.exists? Folders[:website]
+         "Website already exists!!!"
     else
         puts "Making website: #{Folders[:website]}"
         FileUtils.mkdir_p Folders[:website]
@@ -87,7 +91,7 @@ monkeyhook = File.join(Folders[:website], "scripts", "air-monkey-hook.js")
 if options[:mode] == "cms"
   FileUtils.cp(File.join(Folders[:assets], "air-monkey-hook.js"), monkeyhook)
 else
-  FileUtils.rm(monkeyhook) if File.exist?(monkeyhook)
+  FileUtils.rm(monkeyhook) if File.exist?(monkeyhook) && options[:action] == "deploy"
 end
 
 #ScmsUtils.log "System root folder = #{Folders[:root]}"
@@ -100,5 +104,15 @@ raise "No website in folder #{Folders[:website]}" if !File::directory?(Folders[:
 Scms.upgrade(Folders[:website])
 Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
+
+if options[:action] == "watch"
+  require 'filewatcher'
+  puts "Setting up watcher"
+  FileWatcher.new(["_views"],"Watching files:").watch do |filename|
+    puts "Updated " + filename
+    Scms.build(Folders[:website], Folders[:config], options[:mode])
+  end
+end
+
 mimetypefile = File.join(Folders[:root], "assets", "mime.types")   
 S3Deploy.sync(Folders[:website], Folders[:config], mimetypefile) if options[:action] == "deploy"

@@ -1,5 +1,5 @@
 /// Author Courtenay Probert
-/// Version 1.1
+/// Version 1.1.1
 
 $(function() {
 	function editMe(cms) {
@@ -12,7 +12,7 @@ $(function() {
             alert("Page missing");
             
         try{
-            if(window.parentSandboxBridge != undefined)
+            if(window.parentSandboxBridge !== undefined)
                 window.parentSandboxBridge.editView(view, page);
             else
                 alert("No Parent Sandbox Bridge");
@@ -25,39 +25,36 @@ $(function() {
 		.attr('target','_blank')
 		.click(function(e){
 			e.preventDefault();
-			href = $(this).attr("href")
+			href = $(this).attr("href");
 			alert("Loading: "+ href);
 			window.parentSandboxBridge.openExternalURL(href);
-	});	
+	});
 
 	$(".cms").each(function(i) {
 		var $this = $(this);
 		$this.addClass("cmsEdit");
 		var bgColor = $(this).css("background-color");
 
+		var addTextMsg = "Double click to add text";
 		$this
-		  .bind("dblclick", function() {
-			editMe(this);
-		  })
-		  .attr("title", "Double click to edit")
-		  .mouseover(function() {
-			var htmlStr = $(this).html();
-			if ($.trim(htmlStr) == "")
-			  $this.html("Double click to add text");
-			
-			$(this)
-			  .css({
-				backgroundColor: 'AliceBlue',
-				cursor: 'pointer'
-			  });
-		  })
-		  .mouseout(function() {
-			if ($this.html() == "Double click to add text")
-			  $this.html("");
-			
-			$this.css({
-			  backgroundColor: bgColor
+			.bind("dblclick", function() {
+				editMe(this);
+			})
+			.attr("title", "Double click to edit")
+			.mouseover(function() {
+				if ($.trim($this.html()) === "")
+					$this.html(addTextMsg);
+				$(this).css({
+						backgroundColor: 'AliceBlue',
+						cursor: 'pointer'
+				});
+			})
+			.mouseout(function() {
+				if ($.trim($this.html()) === addTextMsg)
+					$this.html("");
+				$this.css({
+					backgroundColor: bgColor
+				});
 			});
-		 });
-	});
+	}).attr("style", "min-height: 25px;");
 });
