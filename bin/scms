@@ -105,10 +105,9 @@ Scms.upgrade(Folders[:website])
 Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
 
-if options[:action] == "watch"
+if options[:action] == "listen"
   require 'filewatcher'
-  puts "Setting up watcher"
-  FileWatcher.new(["_views"],"Watching files:").watch do |filename|
+  FileWatcher.new(["_views", "_templates", "_source"],"Watching files:").watch do |filename|
     puts "Updated " + filename
     Scms.build(Folders[:website], Folders[:config], options[:mode])
   end

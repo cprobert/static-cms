@@ -6,6 +6,9 @@ require 'Scms/version'
 Gem::Specification.new do |spec|
   spec.name          = "scms"
   spec.version       = Scms::VERSION
+
+  spec.required_ruby_version = '>= 1.9.3'
+
   spec.authors       = ["Courtenay Probert"]
   spec.email         = ["courtenay@probert.me.uk"]
   spec.description   = "A static website CMS for Amazon's S3"
@@ -25,7 +28,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sass"
   spec.add_dependency "packr"
   spec.add_dependency "filewatcher"
-  #spec.add_dependency "guard-livereload"
+  spec.add_dependency "listen"
+  spec.add_dependency "guard"
+  spec.add_dependency "guard-livereload"
   
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
