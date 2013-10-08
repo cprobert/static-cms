@@ -38,7 +38,7 @@ optparse = OptionParser.new do|opts|
   end
  
   options[:action] = "build"
-   opts.on( '-a', '--action ACTION', 'Build, Deploy, Create or Clean' ) do|a|
+   opts.on( '-a', '--action ACTION', 'build, deploy, listen or create' ) do|a|
      options[:action] = a
   end
    
