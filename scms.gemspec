@@ -17,6 +17,10 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
+
+  spec.files.grep(%r{^bin/.*}) { |f| 
+    puts "exe: #{f}"
+  }
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
@@ -28,7 +32,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sass"
   spec.add_dependency "packr"
   spec.add_dependency "filewatcher"
+  spec.add_dependency "webrick"
+  spec.add_dependency "launchy"
   
-  spec.add_development_dependency "bundler", "~> 1.3"
+  #spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
 end

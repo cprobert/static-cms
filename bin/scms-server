@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+# This software code is made available "AS IS" without warranties of any
+# kind.  You may copy, display, modify and redistribute the software
+# code either by itself or as incorporated into your code; provided that
+# you do not remove any proprietary notices.  Your use of this software
+# code is at your own risk and you waive any claim against the author
+# with respect to your use of this software code.
+# (c) 2007 Static-CMS
+
+require 'optparse'
+require 'fileutils'
+require 'Scms'
+require "scms/version"
+require 'webrick'
+require 'launchy'
+
+options = {}
+optparse = OptionParser.new do|opts|
+  # Set a banner, displayed at the top of the help screen.
+  opts.banner = "Usage: scms-server [options]"
+   
+  options[:dir] = Dir::pwd
+  opts.on( '-d', '--dir DIR', 'Document Root of http server [default = current working dir]' ) do|d|
+     options[:dir] = d
+  end
+
+  # options[:host] = "localhost"
+  # opts.on( '-h', '--host HOST', 'http host for http server [default = localhost]' ) do|h|
+  #    options[:host] = h
+  # end
+
+  options[:port] = 8008
+  opts.on( '-p', '--port PORT', 'port for http server [default = 8008]' ) do|p|
+     options[:port] = p
+  end
+
+  options[:version] = false
+  opts.on( '-v', '--version', 'Output scms version' ) do
+     puts "Version: #{Scms::VERSION}"
+     exit
+  end
+  # This displays the help screen, all programs are assumed to have this option.
+   opts.on( '-h', '--help', 'Display this help screen' ) do
+     puts opts
+     exit
+   end
+end
+optparse.parse!
+include WEBrick
+ 
+port = options[:port]
+puts "Starting server: http://#{Socket.gethostname}:#{port}"
+server = HTTPServer.new(:Port => port, :DocumentRoot => options[:dir])
+trap("INT"){ server.shutdown }
+
+uri = "http://localhost:#{port}"
+Launchy.open( uri ) do |exception|
+  puts "Attempted to open #{uri} and failed because #{exception}"
+end
+
+server.start

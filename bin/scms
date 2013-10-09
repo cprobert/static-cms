@@ -22,7 +22,7 @@ options = {}
 optparse = OptionParser.new do|opts|
   # Set a banner, displayed at the top
   # of the help screen.
-  opts.banner = "Usage: Scms [options]"
+  opts.banner = "Usage: scms [options]"
  
   # Define the options, and what they do
   opts.on('-w', '--website WEBSITE', "Website directory (full path)") do |w|
@@ -106,11 +106,15 @@ Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
 
 if options[:action] == "listen"
+
+
+
   require 'filewatcher'
   FileWatcher.new(["_views", "_templates", "_source"],"Watching files:").watch do |filename|
     puts "Updated " + filename
     Scms.build(Folders[:website], Folders[:config], options[:mode])
   end
+
 end
 
 mimetypefile = File.join(Folders[:root], "assets", "mime.types")   
