@@ -14,6 +14,8 @@ require "scms/version"
 require 'webrick'
 require 'launchy'
 
+puts "Working dir: #{Dir::pwd}"
+
 options = {}
 optparse = OptionParser.new do|opts|
   # Set a banner, displayed at the top of the help screen.
@@ -46,13 +48,14 @@ optparse = OptionParser.new do|opts|
    end
 end
 optparse.parse!
+puts "Doc root: #{options[:dir]}"
 
 include WEBrick
  
 port = options[:port]
 puts "Starting server: http://#{Socket.gethostname}:#{port}"
 #:BindAddress
-server = HTTPServer.new(:Port => port, :DocumentRoot => options[:dir])
+server = HTTPServer.new(:Port=>port,:DocumentRoot=>options[:dir])
 trap("INT"){ server.shutdown }
 
 uri = "http://localhost:#{port}"

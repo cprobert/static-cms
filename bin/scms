@@ -108,10 +108,10 @@ Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
 
 if options[:server]
-  Dir.chdir(Folders[:website]) do
-    Thread.new {
-      %x("scms-server")
-    }
+  if system('scms-server --dir "#{Folders[:website]}"')
+    puts "Launched scms-server"
+  else
+    puts "Close scms-server?"
   end
 end
 
