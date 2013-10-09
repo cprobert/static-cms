@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "scms"
   spec.version       = Scms::VERSION
 
-  spec.required_ruby_version = '>= 1.9.3'
+  spec.required_ruby_version = '>= 1.9.1'
 
   spec.authors       = ["Courtenay Probert"]
   spec.email         = ["courtenay@probert.me.uk"]

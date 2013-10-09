@@ -20,8 +20,7 @@ end
 
 options = {}
 optparse = OptionParser.new do|opts|
-  # Set a banner, displayed at the top
-  # of the help screen.
+  # Set a banner, displayed at the top of the help screen.
   opts.banner = "Usage: scms [options]"
  
   # Define the options, and what they do
@@ -41,19 +40,22 @@ optparse = OptionParser.new do|opts|
    opts.on( '-a', '--action ACTION', 'build, deploy, listen or create' ) do|a|
      options[:action] = a
   end
+
+  options[:server] = false
+  opts.on( '-s', '--server', 'Run a scms server on port localhost:8008' ) do
+     options[:server] = true
+  end
    
   options[:mode] = "pub"
   opts.on( '-m', '--mode MODE', 'CMS or Publish' ) do|m|
      options[:mode] = m
   end
 
-  options[:version] = false
   opts.on( '-v', '--version', 'Output scms version' ) do
      puts "Version: #{Scms::VERSION}"
      exit
   end
-  # This displays the help screen, all programs are
-  # assumed to have this option.
+  # This displays the help screen, all programs are assumed to have this option.
    opts.on( '-h', '--help', 'Display this help screen' ) do
      puts "Default action = build; default website directory = current working directory"
      puts opts
@@ -105,17 +107,23 @@ Scms.upgrade(Folders[:website])
 Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
 
-if options[:action] == "listen"
+if options[:server]
+  Dir.chdir(Folders[:website]) do
+    Thread.new {
+      %x("scms-server")
+    }
+  end
+end
 
-
-
+if options[:action] == "watch"
   require 'filewatcher'
-  FileWatcher.new(["_views", "_templates", "_source"],"Watching files:").watch do |filename|
+  FileWatcher.new(["_views", "_templates", "_source"], "Watching for changes in _views, _templates or _source").watch do |filename|
     puts "Updated " + filename
     Scms.build(Folders[:website], Folders[:config], options[:mode])
   end
-
 end
 
 mimetypefile = File.join(Folders[:root], "assets", "mime.types")   
 S3Deploy.sync(Folders[:website], Folders[:config], mimetypefile) if options[:action] == "deploy"
+
+Process.exit!(true)

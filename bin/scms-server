@@ -46,10 +46,12 @@ optparse = OptionParser.new do|opts|
    end
 end
 optparse.parse!
+
 include WEBrick
  
 port = options[:port]
 puts "Starting server: http://#{Socket.gethostname}:#{port}"
+#:BindAddress
 server = HTTPServer.new(:Port => port, :DocumentRoot => options[:dir])
 trap("INT"){ server.shutdown }
 
@@ -58,4 +60,8 @@ Launchy.open( uri ) do |exception|
   puts "Attempted to open #{uri} and failed because #{exception}"
 end
 
-server.start
+begin
+  server.start
+ensure
+  server.shutdown
+end
