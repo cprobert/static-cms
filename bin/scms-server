@@ -14,8 +14,6 @@ require "scms/version"
 require 'webrick'
 require 'launchy'
 
-puts "Working dir: #{Dir::pwd}"
-
 options = {}
 optparse = OptionParser.new do|opts|
   # Set a banner, displayed at the top of the help screen.
@@ -26,15 +24,15 @@ optparse = OptionParser.new do|opts|
      options[:dir] = d
   end
 
-  # options[:host] = "localhost"
-  # opts.on( '-h', '--host HOST', 'http host for http server [default = localhost]' ) do|h|
-  #    options[:host] = h
-  # end
-
   options[:port] = 8008
   opts.on( '-p', '--port PORT', 'port for http server [default = 8008]' ) do|p|
      options[:port] = p
   end
+
+  # options[:host] = "localhost"
+  # opts.on( '-h', '--host HOST', 'http host for http server [default = localhost]' ) do|h|
+  #    options[:host] = h
+  # end
 
   options[:version] = false
   opts.on( '-v', '--version', 'Output scms version' ) do
@@ -48,7 +46,9 @@ optparse = OptionParser.new do|opts|
    end
 end
 optparse.parse!
-puts "Doc root: #{options[:dir]}"
+
+#puts "Working dir: #{Dir::pwd}"
+#puts "Doc root: #{options[:dir]}"
 
 include WEBrick
  
@@ -63,8 +63,5 @@ Launchy.open( uri ) do |exception|
   puts "Attempted to open #{uri} and failed because #{exception}"
 end
 
-begin
-  server.start
-ensure
-  server.shutdown
-end
+server.start
+exit
