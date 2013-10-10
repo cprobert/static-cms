@@ -1,12 +1,17 @@
-text/plain                     txt
-text/html                      htm html shtml
+text/plain 					   txt
+text/html 					   html htm shtml
 text/javascript                js
 text/css                       css
-text/xml                       xml
+text/xml 					   xml rss xsl
+text/vnd.wap.wml 			   wml
+text/coffeescript 			   coffee
+text/plain 					   pde
+text/plain 					   md markdown
+text/vcard 					   vcf vcard
 
 image/gif                      gif
-image/jpeg                     jpeg jpe jpg
-image/tiff                     tiff tif
+image/jpeg 					   jpeg jpg
+image/tiff 					   tif tiff
 image/png                      png 
 image/vnd.wap.wbmp             wbmp
 image/x-icon                   ico
@@ -53,11 +58,15 @@ application/pdf                pdf
 application/zip                zip
 application/x-tar              tar
 application/x-7z-compressed    7z
+application/x-zip 			   war
 application/x-rar-compressed   rar
 application/x-stuffit          sit
 application/octet-stream       dmg
 application/octet-stream       iso img
+application/rdf+xml 		   rdf
+application/x-chrome-extension crx
 application/octet-stream       msi msp msm
+application/x-x509-ca-cert der pem crt
 application/msword             doc dot     
 application/vnd.ms-excel       xls xlt xla  
 application/vnd.ms-powerpoint  ppt pot pps ppa    
@@ -67,4 +76,18 @@ application/vnd.openxmlformats-officedocument.wordprocessingml.template   dotx
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet         xlsx
 application/vnd.openxmlformats-officedocument.spreadsheetml.template      xltx
 application/vnd.openxmlformats-officedocument.presentationml.presentation pptx
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

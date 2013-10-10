@@ -56,6 +56,10 @@ port = options[:port]
 puts "Starting server: http://#{Socket.gethostname}:#{port}"
 #:BindAddress
 server = HTTPServer.new(:Port=>port,:DocumentRoot=>options[:dir])
+mime_types_file = File.expand_path('../assets/mime.types', File.dirname(__FILE__))
+puts mime_types_file
+WEBrick::HTTPUtils::load_mime_types(mime_types_file)
+
 trap("INT"){ server.shutdown }
 
 uri = "http://localhost:#{port}"
