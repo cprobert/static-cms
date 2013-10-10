@@ -19,9 +19,9 @@ optparse = OptionParser.new do|opts|
   # Set a banner, displayed at the top of the help screen.
   opts.banner = "Usage: scms-server [options]"
    
-  options[:dir] = Dir::pwd
-  opts.on( '-d', '--dir DIR', 'Document Root of http server [default = current working dir]' ) do|d|
-     options[:dir] = d
+  options[:website] = Dir::pwd
+  opts.on( '-w', '--dir DIR', 'Document Root of http server [default = current working dir]' ) do|d|
+     options[:website] = d
   end
 
   options[:port] = 8008
@@ -48,8 +48,8 @@ end
 optparse.parse!
 
 #puts "Working dir: #{Dir::pwd}"
-#puts "Doc root: #{options[:dir]}"
+#puts "Doc root: #{options[:website]}"
  
 port = options[:port]
-ScmsServer.start(port, options[:dir])
+ScmsServer.start(port, options[:website])
 exit

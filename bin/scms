@@ -25,7 +25,7 @@ optparse = OptionParser.new do|opts|
   opts.banner = "Usage: scms [options]"
  
   # Define the options, and what they do
-  opts.on('-w', '--website WEBSITE', "Website directory (defaults to ./)") do |w|
+  opts.on('-w', '--website WEBSITE', "Working directory [website] (defaults to ./)") do |w|
     options[:website] = w
   end
 
@@ -111,7 +111,7 @@ Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
 threads = []
 if options[:server]
   threads << Thread.new {
-    ScmsServer.start(8088, Folders[:website])
+    ScmsServer.start(8002, Folders[:website])
   }
 end
 
