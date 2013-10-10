@@ -11,8 +11,8 @@ require 'optparse'
 require 'fileutils'
 require 'Scms'
 require "scms/version"
-require 'webrick'
-require 'launchy'
+require 'scms/scms-httpserver.rb'
+
 
 options = {}
 optparse = OptionParser.new do|opts|
@@ -49,23 +49,7 @@ optparse.parse!
 
 #puts "Working dir: #{Dir::pwd}"
 #puts "Doc root: #{options[:dir]}"
-
-include WEBrick
  
 port = options[:port]
-puts "Starting server: http://#{Socket.gethostname}:#{port}"
-#:BindAddress
-server = HTTPServer.new(:Port=>port,:DocumentRoot=>options[:dir])
-mime_types_file = File.expand_path('../assets/mime.types', File.dirname(__FILE__))
-puts mime_types_file
-WEBrick::HTTPUtils::load_mime_types(mime_types_file)
-
-trap("INT"){ server.shutdown }
-
-uri = "http://localhost:#{port}"
-Launchy.open( uri ) do |exception|
-  puts "Attempted to open #{uri} and failed because #{exception}"
-end
-
-server.start
+ScmsServer.start(port, options[:dir])
 exit

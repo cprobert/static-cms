@@ -11,6 +11,7 @@ require 'optparse'
 require 'fileutils'
 require 'Scms'
 require "scms/version"
+require 'scms/scms-httpserver.rb'
 
 class String
   def to_path(end_slash=false)
@@ -108,32 +109,27 @@ Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:pub]) if Folders[:pub] != nil
 
 threads = []
-
 if options[:server]
   threads << Thread.new {
-    if system('scms-server')
-      puts "Launched scms-server"
-    else
-      puts "Stop scms?"
-      abort
-    end
+    ScmsServer.start(8088, Folders[:website])
   }
 end
 
 if options[:action] == "watch"
-  watcher = Thread.new {
+  #watcher = Thread.new {
     require 'filewatcher'
     FileWatcher.new(["_views", "_templates", "_source"], "Watching for changes in _views, _templates or _source").watch do |filename|
       puts "Updated " + filename
       Scms.build(Folders[:website], Folders[:config], options[:mode])
     end
-  }
-  watcher.join
+  #}
+  #watcher.join
 end
 
 mimetypefile = File.join(Folders[:root], "assets", "mime.types")   
 S3Deploy.sync(Folders[:website], Folders[:config], mimetypefile) if options[:action] == "deploy"
 
+# join web server thread if it hasn't been used with watch action 
 threads.each { |t|
-  t.join 
+  t.join
 }
