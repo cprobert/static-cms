@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title><%= page.title %></title>
+    <title>scms commands</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
-	<link href='<%= page.bundles["base"] %>' type='text/css' rel='stylesheet'/>
+	<link href='stylesheets/base-v1.1.css' type='text/css' rel='stylesheet'/>
 
 	<script src="scripts/jquery-1.8.2.min.js"></script>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -44,19 +44,31 @@
           <div class="nav-collapse">
             <ul class="nav">
                   
-                  <%
-                    @currentpagename = page.name
-                    def isActive(pagename)
-                        return active = "active" if @currentpagename == pagename
-                    end
-                    page.navigation.each do |nav|
-                  %>
-                    <li class='<%=isActive(nav["pagename"])%>  <%= nav["meta"]%>'>
-                      <a href='<%= nav["url"] %>'>
-                        <%= nav["text"] %>
+                  
+                    <li class='active  '>
+                      <a href='commands.html'>
+                        Commands
                       </a>
                     </li> 
-                  <% end %>
+                  
+                    <li class='  '>
+                      <a href='structure.html'>
+                        Structure
+                      </a>
+                    </li> 
+                  
+                    <li class='  '>
+                      <a href='deploy.html'>
+                        Deploy
+                      </a>
+                    </li> 
+                  
+                    <li class='  '>
+                      <a href=''>
+                        Editor
+                      </a>
+                    </li> 
+                  
                   
             </ul>
           </div><!--/.nav-collapse -->
@@ -68,12 +80,12 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
 	  <header id="overview" class="jumbotron subhead">
-			<%= page.views["intro"] %>
+			
 	  </header>
 
       <!-- Example row of columns -->
       <div class="row">
-        <%= page.views["main"] %>
+        
       </div>
 
       <hr>
@@ -82,16 +94,16 @@
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
             <ul>
-                <li>page.name: <%= page.name %></li>
-                <li>page.title: <%= page.title %></li>
-                <li>page.description: <%= page.description %></li>
-                <li>page.keywords: <%= page.keywords %></li>
-                <li>page.url: <%= page.url %></li>
-                <li>page.rootdir: <%= page.rootdir %></li>
-                <li>page.resource: <%= page.resource %></li>
-                <li>page.config: <%= page.config %></li>
-                <li>page.bundles: <%= page.bundles %></li>
-                <li>page.data: <%= page.data %></li>
+                <li>page.name: commands</li>
+                <li>page.title: scms commands</li>
+                <li>page.description: </li>
+                <li>page.keywords: </li>
+                <li>page.url: commands.html</li>
+                <li>page.rootdir: C:/Code/github/Static-CMS</li>
+                <li>page.resource: {}</li>
+                <li>page.config: {"navigation"=>"Commands", "title"=>"scms commands", "generate"=>"commands.html", "views"=>{"intro"=>"_views/commands-intro.erb", "main"=>"_views/commands-main.erb"}}</li>
+                <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
+                <li>page.data: {"commands"=>{"navigation"=>"Commands", "title"=>"scms commands", "generate"=>"commands.html", "views"=>{"intro"=>"_views/commands-intro.erb", "main"=>"_views/commands-main.erb"}}}</li>
                 <li>Views: (access like this: page.views["viewname"])</li>
                 
             </ul>
@@ -107,7 +119,7 @@
 		</script>
 		
 			
-        <p>&copy; Courtenay Probert <%= Time.now.strftime("%Y") %></p>
+        <p>&copy; Courtenay Probert 2013</p>
       </footer>
 
     </div> <!-- /container -->
@@ -116,9 +128,9 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     
-	<script src='<%= page.bundles["libraries-min"] %>'></script>
-	<script src='<%= page.bundles["base"] %>'></script>
-    <%= page.monkeyhook %>
-    <%= page.livereload %>
+	<script src='scripts/libraries-min-v1.1.js'></script>
+	<script src='stylesheets/base-v1.1.css'></script>
+    
+    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
   </body>
 </html>

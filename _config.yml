@@ -2,47 +2,60 @@ template: _templates/hero.html
 
 pages:
 - index: 
+    title: scms a simple CMS for Amazon S3
     generate: index.html 
     resource: _resources/index.yml
     views : 
         intro: _views/home-intro.erb
         main: _views/home-main.erb
 - prerequisites:
+    title: scms what you need to install first
     generate: prerequisites.html
     resource: _resources/prerequisites.yml
     views : 
         intro: _views/prerequisites-intro.erb
         main: _views/prerequisites-main.erb
+- commands : 
+    navigation: Commands
+    title: scms commands
+    generate: commands.html
+    views : 
+        intro: _views/commands-intro.erb
+        main: _views/commands-main.erb
 - structure : 
+    navigation: Structure
+    title: s3cms folder structure
     generate: structure.html
-    resource: _resources/structure.yml
     views : 
         intro: _views/structure-intro.erb
         main: _views/structure-main.erb
 - deploy: 
+    navigation: Deploy
+    title: Publish a s3cms website to Amazon S3
     generate: deploy.html
-    resource: _resources/deploy.yml
     views : 
         intro: _views/deploy-intro.erb
         main: _views/deploy-main.erb
-
+- editor:
+    navigation: Editor
+    
 bundles:
 - base:
     generate: scripts/base-v1.0.js
     files:
-     - scripts/demo.js
+     - _source/scripts/base.js
 - libraries-min:
     generate: scripts/libraries-min-v1.1.js
     files:
-     - google-code-prettify/prettify.js
-     - google-code-prettify/lang-yaml.js
-     - scripts/bootstrap.js
+     - _source/google-code-prettify/prettify.js
+     - _source/google-code-prettify/lang-yaml.js
+     - _source/scripts/bootstrap.js
 - base:
     generate: stylesheets/base-v1.1.css
     files:
-      - stylesheets/bootstrap.css
-      - stylesheets/demo.css
-      - stylesheets/bootstrap-responsive.css
-      - google-code-prettify/sons-of-obsidian.css
+      - _source/stylesheets/bootstrap.css
+      - _source/stylesheets/base.css
+      - _source/stylesheets/bootstrap-responsive.css
+      - _source/google-code-prettify/sons-of-obsidian.css
 
 

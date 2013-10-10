@@ -40,27 +40,35 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/Static-CMS/">Static-CMS</a>
+          <a class="brand" href="/">Static-CMS</a>
           <div class="nav-collapse">
             <ul class="nav">
                   
-                    <li class=' '>
+                  
+                    <li class='  '>
+                      <a href='commands.html'>
+                        Commands
+                      </a>
+                    </li> 
+                  
+                    <li class='  '>
                       <a href='structure.html'>
                         Structure
                       </a>
-                    </li>
+                    </li> 
                   
-                    <li class='active '>
+                    <li class='active  '>
                       <a href='deploy.html'>
                         Deploy
                       </a>
-                    </li>
+                    </li> 
                   
-                    <li class=' '>
-                      <a href='http://ipassexam.github.io/Air-Monkey/'>
+                    <li class='  '>
+                      <a href=''>
                         Editor
                       </a>
-                    </li>
+                    </li> 
+                  
                   
             </ul>
           </div><!--/.nav-collapse -->
@@ -141,15 +149,15 @@
 		<div style="diplay: none;" id="theme-vars">
             <ul>
                 <li>page.name: deploy</li>
-                <li>page.title: deploy</li>
+                <li>page.title: Publish a s3cms website to Amazon S3</li>
                 <li>page.description: </li>
                 <li>page.keywords: </li>
                 <li>page.url: deploy.html</li>
-                <li>page.rootdir: I:/Code/GitHub/Static-CMS</li>
-                <li>page.resource: {"title"=>"Publish a s3cms website to Amazon S3"}</li>
-                <li>page.config: {"generate"=>"deploy.html", "resource"=>"_resources/deploy.yml", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}</li>
+                <li>page.rootdir: C:/Code/github/Static-CMS</li>
+                <li>page.resource: {}</li>
+                <li>page.config: {"navigation"=>"Deploy", "title"=>"Publish a s3cms website to Amazon S3", "generate"=>"deploy.html", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}</li>
                 <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
-                <li>page.data: {"deploy"=>{"generate"=>"deploy.html", "resource"=>"_resources/deploy.yml", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}}</li>
+                <li>page.data: {"deploy"=>{"navigation"=>"Deploy", "title"=>"Publish a s3cms website to Amazon S3", "generate"=>"deploy.html", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}}</li>
                 <li>Views: (access like this: page.views["viewname"])</li>
                 
             </ul>
@@ -177,5 +185,6 @@
 	<script src='scripts/libraries-min-v1.1.js'></script>
 	<script src='stylesheets/base-v1.1.css'></script>
     
+    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
   </body>
 </html>
