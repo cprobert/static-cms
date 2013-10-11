@@ -8,10 +8,13 @@ When your happy with your website StaticCMS will also deploy to AmazonS3 setting
 
 Find it useful? Then let me know: https://twitter.com/c_probert
 
- $ gem install scms
- $ scms --create mynewsite
- $ cd mynewsite
- $ scms --serve
+gem install scms
+
+scms --create mynewsite
+
+cd mynewsite
+
+scms --serve
 
 Further Reading
 ---------------
