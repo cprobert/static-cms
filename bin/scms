@@ -34,8 +34,8 @@ optparse = OptionParser.new do|opts|
   end
 
   options[:create] = nil
-  opts.on( '-c', '--create', 'Create a new scms website' ) do |w|
-     options[:create] = w
+  opts.on( '-c', '--create NewWebSiteName', 'Create a new scms website' ) do |newsite|
+     options[:create] = newsite
   end
 
   options[:server] = false
@@ -83,17 +83,25 @@ optparse.parse!
 #Set globals
 $stdout.sync = true
 root_folder = File.expand_path("../", File.dirname(__FILE__))
-$website = options[:website]
 Folders = {
   :root => root_folder,
-  :website => $website,
+  :website => options[:website],
   :destination => (options[:destination] or ENV["SCMS_PUBLISH_FOLDER"] or '').to_path,
-  :config => (options[:configdir] or ENV["SCMS_CONFIG_FOLDER"] or $website),
+  :config => (options[:configdir] or ENV["SCMS_CONFIG_FOLDER"] or options[:website]),
   :assets => File.join(root_folder, "assets")
 }
+$website = Folders[:website]
+
+ScmsUtils.log "System root folder = #{Folders[:root]}"
+ScmsUtils.log "Website folder = #{Folders[:website]}"
+ScmsUtils.log "Destination dir = #{Folders[:destination]}"
+ScmsUtils.log "Config dir = #{Folders[:config]}"
+ScmsUtils.log "Mode = #{options[:mode]}"
+
 raise "Invalid working directory! #{Folders[:website]}" if !File::directory?(Folders[:website])
 
 if options[:create] != nil
+    puts "Creating scms website: #{options[:create]}"
     newWorkingDir = File.join(Folders[:website], options[:create])
     if File.exists?(File.join(newWorkingDir, "_config.yml"))
     #if Dir.exists? Folders[:website]
@@ -113,14 +121,8 @@ else
   FileUtils.rm(monkeyhook) if File.exist?(monkeyhook) && options[:publish]
 end
 
-#ScmsUtils.log "System root folder = #{Folders[:root]}"
-#ScmsUtils.log "Website folder = #{Folders[:website]}"
-#ScmsUtils.log "Destination dir = #{Folders[:destination]}"
-#ScmsUtils.log "Config dir = #{Folders[:config]}"
-#ScmsUtils.log "Mode = #{options[:mode]}"
-
 Scms.build(Folders[:website], Folders[:config], options[:mode])
-Scms.copywebsite(Folders[:website], Folders[:destination]) if Folders[:destination] != nil
+Scms.copywebsite(Folders[:website], Folders[:destination]) if Folders[:destination] != ''
 
 threads = []
 if options[:server]
