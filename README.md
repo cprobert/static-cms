@@ -18,6 +18,4 @@ Further Reading
 
  * Homepage: http://cprobert.github.io/Static-CMS
  * WYSIWYG editor: http://ipassexam.github.io/Air-Monkey/
-
-
  * ERB template language: http://www.stuartellis.eu/articles/erb/
