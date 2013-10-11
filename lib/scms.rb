@@ -396,8 +396,8 @@ module Scms
         end
     end
 
-    def Scms.upgrade(website)
-        File.rename("config.yml", "_config.yml") if File.exists? File.join(website, "config.yml")
-        File.rename("s3config.yml", "_s3config.yml") if File.exists? File.join(website, "s3config.yml")
-    end
+    # def Scms.upgrade(website)
+    #     File.rename("config.yml", "_config.yml") if File.exists? File.join(website, "config.yml")
+    #     File.rename("s3config.yml", "_s3config.yml") if File.exists? File.join(website, "s3config.yml")
+    # end
 end

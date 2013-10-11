@@ -20,7 +20,7 @@ optparse = OptionParser.new do|opts|
   opts.banner = "Usage: scms-server [options]"
    
   options[:website] = Dir::pwd
-  opts.on( '-w', '--dir DIR', 'Document Root of http server [default = current working dir]' ) do|d|
+  opts.on( '-s', '--source DIR', 'Document Root of http server [default = current working dir]' ) do|d|
      options[:website] = d
   end
 
@@ -29,10 +29,10 @@ optparse = OptionParser.new do|opts|
      options[:port] = p
   end
 
-  # options[:host] = "localhost"
-  # opts.on( '-h', '--host HOST', 'http host for http server [default = localhost]' ) do|h|
-  #    options[:host] = h
-  # end
+  options[:host] = Socket.gethostname
+  opts.on( '-h', '--host HOST', 'http host for http server [default = localhost]' ) do|h|
+     options[:host] = h
+  end
 
   options[:version] = false
   opts.on( '-v', '--version', 'Output scms version' ) do
@@ -50,6 +50,5 @@ optparse.parse!
 #puts "Working dir: #{Dir::pwd}"
 #puts "Doc root: #{options[:website]}"
  
-port = options[:port]
-ScmsServer.start(port, options[:website])
+ScmsServer.start(options[:website], options[:port], options[:host])
 exit

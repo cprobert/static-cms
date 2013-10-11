@@ -4,13 +4,17 @@ require 'launchy'
 module ScmsServer
 	include WEBrick
 
-	def ScmsServer.start(port, root_document)
+	def ScmsServer.start(root_document, port, hostname="localhost")
 
-		puts "Starting server: http://#{Socket.gethostname}:#{port}"
+		puts "Starting server: http://#{hostname}:#{port}"
 		#:BindAddress
-		server = HTTPServer.new(:Port=> port, :DocumentRoot=> root_document)
+		server = HTTPServer.new(
+			:DocumentRoot => root_document,
+			:Port => port, 
+			:BindAddress => hostname
+		)
+
 		mime_types_file = File.expand_path('../../assets/mime.types', File.dirname(__FILE__))
-		puts mime_types_file
 		WEBrick::HTTPUtils::load_mime_types(mime_types_file)
 
 		trap("INT"){ 
@@ -19,14 +23,23 @@ module ScmsServer
 		  exit!
 		}
 
-		uri = "http://localhost:#{port}"
+		uri = "http://#{hostname}:#{port}"
 		Launchy.open( uri ) do |exception|
 		  puts "Attempted to open #{uri} and failed because #{exception}"
 		end
 
-		server.start
-
-		return server
+		begin
+			server.start
+		rescue SystemExit, Interrupt
+			puts "Closing web brick"
+			server.start
+		rescue StandardError => e
+			puts "StandardError"
+			server.shutdown
+		rescue Exception => e
+			puts "scms-server exception"
+			rais e
+		end
 	end
 
 end

@@ -1,4 +1,4 @@
-template: _templates/skin.erb.html # The website skin (erb template)
+template: _layouts/skin.erb.html # The website skin (erb template)
 #rooturl: http://www.mywebsite.com/ #Whats the website root when published - All references in html  will be replaced with this
 # Define your pages here
 pages:
@@ -9,14 +9,14 @@ pages:
     description: Meta description
     keywords: "CMS, S3, Ruby"
     views:
-        intro: _views/home-intro.html
-        main: _views/home-main.html
+        intro: _views/home/intro.html
+        main: _views/home/main.html
 - about: 
     generate: about.html
     navigation: About
     views:
-        intro: _views/about-intro.html
-        main: _views/about-main.html
+        intro: _views/about/intro.html
+        main: _views/about/main.html
 - contact: #Pageless for nav only
     navigation: contact
     navigation_meta: contactform
@@ -25,12 +25,13 @@ pages:
 # Define your bundles here (versioning is recomended if your caching assets)
 bundles:
 - script:
-    generate: scripts/bootstrap.min-v2.1.1.js
+    generate: js/bootstrap.min-v2.1.1.js
     files:
-     - scripts/bootstrap.js
+     - _source/scripts/bootstrap.js
+     - _source/scripts/script.js
 - style:
-    generate: stylesheets/style-1.0.css
+    generate: css/style-1.0.css
     files:
-      - stylesheets/bootstrap.css
-      - stylesheets/bootstrap-responsive.css
-      - stylesheets/style.css
+      - _source/stylesheets/bootstrap.css
+      - _source/stylesheets/bootstrap-responsive.css
+      - _source/stylesheets/style.css
