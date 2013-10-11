@@ -3,19 +3,19 @@
 		<h2>Folder Structure</h2>
 		<p>Take a look in the new folder, it should look something like:</p>
 		<ul>
-			<li>_templates\skin.erb.html</li>
-			<li>_views\home-intro.html</li>
-			<li>_views\home-main.html</li>
+			<li>_layouts\skin.erb.html</li>
+			<li>_views\home\intro.html</li>
+			<li>_views\home\main.html</li>
 			<li>_config.yml</li>
 		</ul>
 		<h2>Creating a Template</h2>
-		<p>Open the template &quot;_templates/skin.html&quot;, and look at the code:</p>
+		<p>Open the template &quot;_layouts/skin.html&quot;, and look at the code:</p>
 		<div class="code">
           <pre class="prettyprint"><code class="language-html">
 	&lt;!DOCTYPE html&gt;
 	&lt;html lang=&quot;en&quot;&gt;
 	  &lt;head&gt;
-		&lt;title&gt;s3cms&lt;/title&gt;
+		&lt;title&gt;scms&lt;/title&gt;
 		&lt;meta charset=&quot;utf-8&quot;&gt;
 	  &lt;/head&gt;
 	  &lt;body&gt;
@@ -49,14 +49,14 @@
 		<div class="code">
         
         <pre class="prettyprint"><code class="language-yaml">
-    template: templates/skin.html
+    template: _layouts/skin.html
 
     pages:
     - index: 
         generate: index.html 
         views : 
-            intro: views/home-intro.html
-            main: views/home-main.html
+            intro: _views/home/intro.html
+            main: _views/home/main.html
         </code></pre>
 
 		</div>
@@ -67,27 +67,27 @@
 			<em>Note: Yaml doesn&#39;t like it if you use [tab] key - use spaces insted.</em></p>
 		
 		<h2>Asset Bundling</h2>
-		<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. s3cms has a system that allows you to &#39;bundle&#39; your css and javascript files. In your config.yaml (replace references with the names of your assets):</p>
+		<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. scms has a system that allows you to &#39;bundle&#39; your css and javascript files. In your config.yaml (replace references with the names of your assets):</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-yaml">
 	bundles:
 	- script:
-		generate: scripts/script-v1.0.js
+		generate: js/script-v1.0.js
 		files:
-		 - scripts/demo.js
+		 - _source/scripts/demo.js
 	- libraries:
-		generate: scripts/libs-v1.0.js
+		generate: js/libs-v1.0.js
 		files:
-		 - google-code-prettify/prettify.js
-		 - google-code-prettify/lang-yaml.js
-		 - scripts/bootstrap-button.js
+		 - _source/google-code-prettify/prettify.js
+		 - _source/google-code-prettify/lang-yaml.js
+		 - _source/scripts/bootstrap-button.js
 	- styles:
-		generate: stylesheets/styles-v1.0.js
+		generate: css/styles-v1.0.js
 		files:
-		  - stylesheets/bootstrap.css
-		  - stylesheets/demo.css
-		  - stylesheets/bootstrap-responsive.css
-		  - google-code-prettify/sons-of-obsidian.css
+		  - _source/stylesheets/bootstrap.css
+		  - _source/stylesheets/demo.css
+		  - _source/stylesheets/bootstrap-responsive.css
+		  - _source/google-code-prettify/sons-of-obsidian.css
 		</code></pre>
 		</div>
 		<p>Whats going on here?</p>

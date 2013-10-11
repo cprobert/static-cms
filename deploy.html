@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Publish a s3cms website to Amazon S3</title>
+    <title>Publish a scms website to Amazon S3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -47,7 +47,7 @@
                   
                     <li class='  '>
                       <a href='commands.html'>
-                        Commands
+                        Options
                       </a>
                     </li> 
                   
@@ -64,7 +64,7 @@
                     </li> 
                   
                     <li class='  '>
-                      <a href=''>
+                      <a href='http://ipassexam.github.io/Air-Monkey/'>
                         Editor
                       </a>
                     </li> 
@@ -84,7 +84,7 @@
 <h1>How to Publish your Website</h1>
 <p>Static-CSM can publish to Amazon S3. Perfect for extremely inexpensive hosting.</p>
 <ol>
-<li>Create s3config.yml</li>
+<li>Create _s3config.yml</li>
 <li>Add S3 certificates</li>
 <li>Run deployment script</li>
 </ol>
@@ -98,15 +98,14 @@
         <section id="gridSystem">
 	<div class="span12">
 		<h2>
-			Editing your s3config.yml</h2>
+			Editing your _s3config.yml</h2>
 		<p>
-			Open s3config.yml in your text editor and edit the following:</p>
+			Open _s3config.yml in your text editor and edit the following:</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-yaml">
 	bucket: www.mywebsite.com
 	aws_access_key_id: addyourkeyhere
 	aws_secret_access_key: addyoursecrethere
-	ssl_cert_dir: s3certs
 	clean: true
 
 	cache:
@@ -130,7 +129,7 @@
 		<p>From a terminal:</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-bsh">
-  $  scms -a deploy -w pathto/www.mywebsite.com
+  $  scms --publish
 		</code></pre>
 		</div>
 		<p>The compiled html files will be synced with S3 (only changed files will be uploaded).</p>
@@ -149,15 +148,15 @@
 		<div style="diplay: none;" id="theme-vars">
             <ul>
                 <li>page.name: deploy</li>
-                <li>page.title: Publish a s3cms website to Amazon S3</li>
+                <li>page.title: Publish a scms website to Amazon S3</li>
                 <li>page.description: </li>
                 <li>page.keywords: </li>
                 <li>page.url: deploy.html</li>
                 <li>page.rootdir: C:/Code/github/Static-CMS</li>
                 <li>page.resource: {}</li>
-                <li>page.config: {"navigation"=>"Deploy", "title"=>"Publish a s3cms website to Amazon S3", "generate"=>"deploy.html", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}</li>
+                <li>page.config: {"navigation"=>"Deploy", "title"=>"Publish a scms website to Amazon S3", "generate"=>"deploy.html", "views"=>{"intro"=>"_views/deploy/intro.erb", "main"=>"_views/deploy/main.erb"}}</li>
                 <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
-                <li>page.data: {"deploy"=>{"navigation"=>"Deploy", "title"=>"Publish a s3cms website to Amazon S3", "generate"=>"deploy.html", "views"=>{"intro"=>"_views/deploy-intro.erb", "main"=>"_views/deploy-main.erb"}}}</li>
+                <li>page.data: {"deploy"=>{"navigation"=>"Deploy", "title"=>"Publish a scms website to Amazon S3", "generate"=>"deploy.html", "views"=>{"intro"=>"_views/deploy/intro.erb", "main"=>"_views/deploy/main.erb"}}}</li>
                 <li>Views: (access like this: page.views["viewname"])</li>
                 
             </ul>

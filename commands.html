@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>scms commands</title>
+    <title>scms options</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -47,7 +47,7 @@
                   
                     <li class='active  '>
                       <a href='commands.html'>
-                        Commands
+                        Options
                       </a>
                     </li> 
                   
@@ -64,7 +64,7 @@
                     </li> 
                   
                     <li class='  '>
-                      <a href=''>
+                      <a href='http://ipassexam.github.io/Air-Monkey/'>
                         Editor
                       </a>
                     </li> 
@@ -80,12 +80,59 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
 	  <header id="overview" class="jumbotron subhead">
-			
+			<div class="hero-unit">
+<h1>SCMS Options</h1>
+<p>The easyest way to get a full list of options is to use the built in help</p>
+<div class="code">
+		<pre class="prettyprint"><code class="language-bsh">
+   $ scms --help
+		</code></pre>
+		</div>
+</div>
+
 	  </header>
 
       <!-- Example row of columns -->
       <div class="row">
         
+
+
+
+<section id="gridSystem">
+	<div class="span12">
+		<h2>Working Directory</h2>
+		<p>By defualt scms processes files in the current working directory.  This can by changes by specifing a source</p>
+
+		<div class="code">
+		<pre class="prettyprint"><code class="language-bsh">
+  $  scms --source /pathto/www.mywebsite.com
+		</code></pre>
+		</div>
+		
+		<h2>Output Directory</h2>
+		<p>By defualt scms compiles files in the current working directory.  This can by changes by specifing a destination</p>
+
+		<div class="code">
+		<pre class="prettyprint"><code class="language-bsh">
+  $  scms --destination /pathto/outputdir
+		</code></pre>
+		</div>
+
+		<h2>Running multiple sites</h2>
+		<p>Occasionally you may want to run multiple scms sites in serve mode.  This will cause a port clash for the web servers, but you can avaid this by specifying a port yourself (default = 8002).</p>
+
+		<div class="code">
+		<pre class="prettyprint"><code class="language-bsh">
+  $  scms --server --port 8003
+		</code></pre>
+		</div>
+
+		<h2>Live reload</h2>
+		<p>scms can be used with <a href="http://livereload.com/" target="_blank">http://livereload.com/</a>.</p>
+		<p>You can either use the browser plugins or add  &lt;%= page.livereload %&gt;  to your layout template</p>
+	</div>
+</section>
+
       </div>
 
       <hr>
@@ -95,15 +142,15 @@
 		<div style="diplay: none;" id="theme-vars">
             <ul>
                 <li>page.name: commands</li>
-                <li>page.title: scms commands</li>
+                <li>page.title: scms options</li>
                 <li>page.description: </li>
                 <li>page.keywords: </li>
                 <li>page.url: commands.html</li>
                 <li>page.rootdir: C:/Code/github/Static-CMS</li>
                 <li>page.resource: {}</li>
-                <li>page.config: {"navigation"=>"Commands", "title"=>"scms commands", "generate"=>"commands.html", "views"=>{"intro"=>"_views/commands-intro.erb", "main"=>"_views/commands-main.erb"}}</li>
+                <li>page.config: {"navigation"=>"Options", "title"=>"scms options", "generate"=>"commands.html", "views"=>{"intro"=>"_views/commands/intro.erb", "main"=>"_views/commands/main.erb"}}</li>
                 <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
-                <li>page.data: {"commands"=>{"navigation"=>"Commands", "title"=>"scms commands", "generate"=>"commands.html", "views"=>{"intro"=>"_views/commands-intro.erb", "main"=>"_views/commands-main.erb"}}}</li>
+                <li>page.data: {"commands"=>{"navigation"=>"Options", "title"=>"scms options", "generate"=>"commands.html", "views"=>{"intro"=>"_views/commands/intro.erb", "main"=>"_views/commands/main.erb"}}}</li>
                 <li>Views: (access like this: page.views["viewname"])</li>
                 
             </ul>

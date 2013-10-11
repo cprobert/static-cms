@@ -47,7 +47,7 @@
                   
                     <li class='  '>
                       <a href='commands.html'>
-                        Commands
+                        Options
                       </a>
                     </li> 
                   
@@ -64,7 +64,7 @@
                     </li> 
                   
                     <li class='  '>
-                      <a href=''>
+                      <a href='http://ipassexam.github.io/Air-Monkey/'>
                         Editor
                       </a>
                     </li> 
@@ -82,6 +82,8 @@
 	  <header id="overview" class="jumbotron subhead">
 			<div class="hero-unit">
     <h1>Easyily Build Super-Fast Static Websites!</h1>
+
+    <h2>A ruby gem for creating simple static websites in minutes.</h2>
     
     <pre class="prettyprint" style="margin-top: 25px;"><code class="language-bsh">
   $ gem install scms
@@ -90,6 +92,7 @@
   $ scms --serve
     </code></pre>
     
+    <p>scms also comes with a WYSIWYG editor called <a href="http://ipassexam.github.io/Air-Monkey/">Air-Monkey</a>, so your clients can edit their sites in point and click environment.</p>
     <p>check the <a href="prerequisites.html">prerequisites</a></p>
 </div>
 	  </header>
@@ -97,36 +100,36 @@
       <!-- Example row of columns -->
       <div class="row">
         <div class="span4">
-    <h2>Creating a new site</h2>
-    <p>To create new website:</p>
+    <h2>Built in web server</h2>
+    <p>Use the --serve option to build and view your website</p>
     <div class="code">
         <pre class="prettyprint"><code class="language-bsh">
-  $ scms&nbsp;-a&nbsp;create
+  $ scms&nbsp;--serve
         </code></pre>
     </div>
-    <p>The new html files will be found in the &quot;websites&quot; folder.</p>
+    <p>To stop the built in web server use [Ctrl] + [C]</p>
 </div>
 
 <div class="span4">
-    <h2>Compile</h2>
-    <p>To compile the templates into a html website:</p>
+    <h2>Change dectection</h2>
+    <p>The --watch option to detect changes to your views and layouts:</p>
     <div class="code">
         <pre class="prettyprint"><code class="language-bsh">
-  $ scms&nbsp;-a&nbsp;build
+  $ scms&nbsp;--watch
         </code></pre>
     </div>
-    <p><em>The default action is build(feel free to exclude the -a flag).</em></p>
+    <p>To stop the filewatcher use [Ctrl] + [C]</p>
 </div>
 
 <div class="span4">
-    <h2>Publish</h2>
-    <p>To publish your website:</p>
+    <h2>Multi options</h2>
+    <p>You can use multiple options together</p>
     <div class="code">
         <pre class="prettyprint"><code class="language-bsh">
-  $ scms&nbsp;-a&nbsp;deploy
+  $ scms&nbsp;--watch&nbsp;--serve
         </code></pre>
     </div>
-    <p><em>The default website path is the current working dir.</em></p>
+    <p>Note: scms processes files in the current working directory</p>
 </div>
 
 <div class="span12">
@@ -148,10 +151,10 @@
                 <li>page.keywords: </li>
                 <li>page.url: index.html</li>
                 <li>page.rootdir: C:/Code/github/Static-CMS</li>
-                <li>page.resource: {"title"=>"s3cms a simple CMS for Amazon S3"}</li>
-                <li>page.config: {"title"=>"scms a simple CMS for Amazon S3", "generate"=>"index.html", "resource"=>"_resources/index.yml", "views"=>{"intro"=>"_views/home-intro.erb", "main"=>"_views/home-main.erb"}}</li>
+                <li>page.resource: {}</li>
+                <li>page.config: {"title"=>"scms a simple CMS for Amazon S3", "generate"=>"index.html", "resource"=>"_resources/index.yml", "views"=>{"intro"=>"_views/home/intro.erb", "main"=>"_views/home/main.erb"}}</li>
                 <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
-                <li>page.data: {"index"=>{"title"=>"scms a simple CMS for Amazon S3", "generate"=>"index.html", "resource"=>"_resources/index.yml", "views"=>{"intro"=>"_views/home-intro.erb", "main"=>"_views/home-main.erb"}}}</li>
+                <li>page.data: {"index"=>{"title"=>"scms a simple CMS for Amazon S3", "generate"=>"index.html", "resource"=>"_resources/index.yml", "views"=>{"intro"=>"_views/home/intro.erb", "main"=>"_views/home/main.erb"}}}</li>
                 <li>Views: (access like this: page.views["viewname"])</li>
                 
             </ul>

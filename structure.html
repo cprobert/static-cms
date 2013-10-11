@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>s3cms folder structure</title>
+    <title>scms folder structure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -47,7 +47,7 @@
                   
                     <li class='  '>
                       <a href='commands.html'>
-                        Commands
+                        Options
                       </a>
                     </li> 
                   
@@ -64,7 +64,7 @@
                     </li> 
                   
                     <li class='  '>
-                      <a href=''>
+                      <a href='http://ipassexam.github.io/Air-Monkey/'>
                         Editor
                       </a>
                     </li> 
@@ -84,7 +84,7 @@
 <div class="hero-unit">
 	<h1>Folder Structure</h1>
 	
-	<p>At the simplest level s3cms publishes all files in the public folder.  You can also generate files that will be merged with these static assets.</p>
+	<p>The best way to understand the folder structure is to generate a new site and have a look at the files and code it produces.</p>
 	
 </div>
 
@@ -97,19 +97,19 @@
 		<h2>Folder Structure</h2>
 		<p>Take a look in the new folder, it should look something like:</p>
 		<ul>
-			<li>_templates\skin.erb.html</li>
-			<li>_views\home-intro.html</li>
-			<li>_views\home-main.html</li>
+			<li>_layouts\skin.erb.html</li>
+			<li>_views\home\intro.html</li>
+			<li>_views\home\main.html</li>
 			<li>_config.yml</li>
 		</ul>
 		<h2>Creating a Template</h2>
-		<p>Open the template &quot;_templates/skin.html&quot;, and look at the code:</p>
+		<p>Open the template &quot;_layouts/skin.html&quot;, and look at the code:</p>
 		<div class="code">
           <pre class="prettyprint"><code class="language-html">
 	&lt;!DOCTYPE html&gt;
 	&lt;html lang=&quot;en&quot;&gt;
 	  &lt;head&gt;
-		&lt;title&gt;s3cms&lt;/title&gt;
+		&lt;title&gt;scms&lt;/title&gt;
 		&lt;meta charset=&quot;utf-8&quot;&gt;
 	  &lt;/head&gt;
 	  &lt;body&gt;
@@ -143,14 +143,14 @@
 		<div class="code">
         
         <pre class="prettyprint"><code class="language-yaml">
-    template: templates/skin.html
+    template: _layouts/skin.html
 
     pages:
     - index: 
         generate: index.html 
         views : 
-            intro: views/home-intro.html
-            main: views/home-main.html
+            intro: _views/home/intro.html
+            main: _views/home/main.html
         </code></pre>
 
 		</div>
@@ -161,27 +161,27 @@
 			<em>Note: Yaml doesn&#39;t like it if you use [tab] key - use spaces insted.</em></p>
 		
 		<h2>Asset Bundling</h2>
-		<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. s3cms has a system that allows you to &#39;bundle&#39; your css and javascript files. In your config.yaml (replace references with the names of your assets):</p>
+		<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. scms has a system that allows you to &#39;bundle&#39; your css and javascript files. In your config.yaml (replace references with the names of your assets):</p>
 		<div class="code">
 		<pre class="prettyprint"><code class="language-yaml">
 	bundles:
 	- script:
-		generate: scripts/script-v1.0.js
+		generate: js/script-v1.0.js
 		files:
-		 - scripts/demo.js
+		 - _source/scripts/demo.js
 	- libraries:
-		generate: scripts/libs-v1.0.js
+		generate: js/libs-v1.0.js
 		files:
-		 - google-code-prettify/prettify.js
-		 - google-code-prettify/lang-yaml.js
-		 - scripts/bootstrap-button.js
+		 - _source/google-code-prettify/prettify.js
+		 - _source/google-code-prettify/lang-yaml.js
+		 - _source/scripts/bootstrap-button.js
 	- styles:
-		generate: stylesheets/styles-v1.0.js
+		generate: css/styles-v1.0.js
 		files:
-		  - stylesheets/bootstrap.css
-		  - stylesheets/demo.css
-		  - stylesheets/bootstrap-responsive.css
-		  - google-code-prettify/sons-of-obsidian.css
+		  - _source/stylesheets/bootstrap.css
+		  - _source/stylesheets/demo.css
+		  - _source/stylesheets/bootstrap-responsive.css
+		  - _source/google-code-prettify/sons-of-obsidian.css
 		</code></pre>
 		</div>
 		<p>Whats going on here?</p>
@@ -207,15 +207,15 @@
 		<div style="diplay: none;" id="theme-vars">
             <ul>
                 <li>page.name: structure</li>
-                <li>page.title: s3cms folder structure</li>
+                <li>page.title: scms folder structure</li>
                 <li>page.description: </li>
                 <li>page.keywords: </li>
                 <li>page.url: structure.html</li>
                 <li>page.rootdir: C:/Code/github/Static-CMS</li>
                 <li>page.resource: {}</li>
-                <li>page.config: {"navigation"=>"Structure", "title"=>"s3cms folder structure", "generate"=>"structure.html", "views"=>{"intro"=>"_views/structure-intro.erb", "main"=>"_views/structure-main.erb"}}</li>
+                <li>page.config: {"navigation"=>"Structure", "title"=>"scms folder structure", "generate"=>"structure.html", "views"=>{"intro"=>"_views/structure/intro.erb", "main"=>"_views/structure/main.erb"}}</li>
                 <li>page.bundles: {"base"=>"stylesheets/base-v1.1.css", "libraries-min"=>"scripts/libraries-min-v1.1.js"}</li>
-                <li>page.data: {"structure"=>{"navigation"=>"Structure", "title"=>"s3cms folder structure", "generate"=>"structure.html", "views"=>{"intro"=>"_views/structure-intro.erb", "main"=>"_views/structure-main.erb"}}}</li>
+                <li>page.data: {"structure"=>{"navigation"=>"Structure", "title"=>"scms folder structure", "generate"=>"structure.html", "views"=>{"intro"=>"_views/structure/intro.erb", "main"=>"_views/structure/main.erb"}}}</li>
                 <li>Views: (access like this: page.views["viewname"])</li>
                 
             </ul>

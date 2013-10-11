@@ -1,0 +1,38 @@
+
+
+
+
+<section id="gridSystem">
+	<div class="span12">
+		<h2>Working Directory</h2>
+		<p>By defualt scms processes files in the current working directory.  This can by changes by specifing a source</p>
+
+		<div class="code">
+		<pre class="prettyprint"><code class="language-bsh">
+  $  scms --source /pathto/www.mywebsite.com
+		</code></pre>
+		</div>
+		
+		<h2>Output Directory</h2>
+		<p>By defualt scms compiles files in the current working directory.  This can by changes by specifing a destination</p>
+
+		<div class="code">
+		<pre class="prettyprint"><code class="language-bsh">
+  $  scms --destination /pathto/outputdir
+		</code></pre>
+		</div>
+
+		<h2>Running multiple sites</h2>
+		<p>Occasionally you may want to run multiple scms sites in serve mode.  This will cause a port clash for the web servers, but you can avaid this by specifying a port yourself (default = 8002).</p>
+
+		<div class="code">
+		<pre class="prettyprint"><code class="language-bsh">
+  $  scms --server --port 8003
+		</code></pre>
+		</div>
+
+		<h2>Live reload</h2>
+		<p>scms can be used with <a href="http://livereload.com/" target="_blank">http://livereload.com/</a>.</p>
+		<p>You can either use the browser plugins or add  &lt;%= page.livereload %&gt;  to your layout template</p>
+	</div>
+</section>
