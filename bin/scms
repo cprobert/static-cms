@@ -90,13 +90,16 @@ Folders = {
   :config => (options[:configdir] or ENV["SCMS_CONFIG_FOLDER"] or options[:website]),
   :assets => File.join(root_folder, "assets")
 }
+# These can be used in the bootstrap.rb 
 $website = Folders[:website]
+$watch = options[:watch]
+$cms = options[:mode] == "cms"
 
-ScmsUtils.log "System root folder = #{Folders[:root]}"
-ScmsUtils.log "Website folder = #{Folders[:website]}"
-ScmsUtils.log "Destination dir = #{Folders[:destination]}"
-ScmsUtils.log "Config dir = #{Folders[:config]}"
-ScmsUtils.log "Mode = #{options[:mode]}"
+# ScmsUtils.log "System root folder = #{Folders[:root]}"
+# ScmsUtils.log "Website folder = #{Folders[:website]}"
+# ScmsUtils.log "Destination dir = #{Folders[:destination]}"
+# ScmsUtils.log "Config dir = #{Folders[:config]}"
+# ScmsUtils.log "Mode = #{options[:mode]}"
 
 raise "Invalid working directory! #{Folders[:website]}" if !File::directory?(Folders[:website])
 
@@ -134,7 +137,7 @@ end
 if options[:watch]
   #watcher = Thread.new {
     require 'filewatcher'
-    FileWatcher.new(["_views", "_layouts", "_templates", "_source"], "Watching for changes in _views, _layouts or _source").watch do |filename|
+    FileWatcher.new(["_config.yml", "_views", "_layouts", "_templates", "_source"], "Watching for changes in _views, _layouts or _source").watch do |filename|
       puts "Updated " + filename
       Scms.build(Folders[:website], Folders[:config], options[:mode])
     end
