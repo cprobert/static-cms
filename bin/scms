@@ -93,7 +93,9 @@ Folders = {
 # These can be used in the bootstrap.rb 
 $website = Folders[:website]
 $watch = options[:watch]
-$cms = options[:mode] == "cms"
+$cmsmode = options[:mode] == "cms"
+
+configfile = File.join(Folders[:website], "_config.yml")
 
 # ScmsUtils.log "System root folder = #{Folders[:root]}"
 # ScmsUtils.log "Website folder = #{Folders[:website]}"
@@ -127,22 +129,35 @@ end
 Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:destination]) if Folders[:destination] != ''
 
-threads = []
-if options[:server]
-  threads << Thread.new {
-    ScmsServer.start(Folders[:website], options[:port])
-  }
+if options[:watch]
+    require "Listen"
+
+    psst = []
+    #psst.push("_config.yml")# if File.exists?(configfile)
+    psst.push("_views") if File.directory? "_views"
+    psst.push("_layouts") if File.directory? "_layouts"
+    psst.push("_templates") if File.directory? "_templates"
+    psst.push("_source") if File.directory? "_source"
+    psst.push("_resources") if File.directory? "_resources"
+
+    puts "Setting up listen"
+    listener = Listen.to(psst, force_polling: true ) do |modified, added, removed|
+      puts "modified: #{modified}" if modified.length > 0
+      puts "added: #{added}" if added.length > 0
+      puts "removed: #{removed}" if removed.length > 0
+
+      Scms.build(Folders[:website], Folders[:config], options[:mode]) if modified.length > 0
+    end
+    trap("INT"){ 
+      puts "Closing file watcher"
+      listener.stop
+    }
+    listener.start # not blocking
+    sleep unless options[:server]
 end
 
-if options[:watch]
-  #watcher = Thread.new {
-    require 'filewatcher'
-    FileWatcher.new(["_config.yml", "_views", "_layouts", "_templates", "_source"], "Watching for changes in _views, _layouts or _source").watch do |filename|
-      puts "Updated " + filename
-      Scms.build(Folders[:website], Folders[:config], options[:mode])
-    end
-  #}
-  #watcher.join
+if options[:server]
+    ScmsServer.start(Folders[:website], options[:port])
 end
 
 if options[:publish]
@@ -152,8 +167,3 @@ if options[:publish]
     S3Deploy.sync(Folders[:website], Folders[:config], mimetypefile) 
   end
 end
-
-# join web server thread if it hasn't been used with watch action 
-threads.each { |t|
-  t.join
-}

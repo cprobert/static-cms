@@ -20,7 +20,7 @@ module ScmsServer
 		trap("INT"){ 
 		  puts "Closed http server"
 		  server.shutdown
-		  exit!
+		  #exit!
 		}
 
 		uri = "http://#{hostname}:#{port}"
