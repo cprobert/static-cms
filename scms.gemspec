@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sass"
   spec.add_dependency "packr"
   spec.add_dependency "listen"
+  spec.add_dependency "filewatcher"
   spec.add_dependency "webrick"
   spec.add_dependency "launchy"
   

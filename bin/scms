@@ -130,7 +130,16 @@ Scms.build(Folders[:website], Folders[:config], options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:destination]) if Folders[:destination] != ''
 
 if options[:watch]
-    require "Listen"
+    require "filewatcher"
+    #  I dont really want to use filewatcher but I can't get listen to watch the config file
+    # I'd use filewatcher to monitor directories but it crashes if a file id deleted
+    watcher = Thread.new {
+      puts "Watching yam files"
+      FileWatcher.new(["_config.yml"]).watch do |filename|
+        puts "Updated " + filename
+        Scms.build(Folders[:website], Folders[:config], options[:mode])
+      end
+    }
 
     psst = []
     #psst.push("_config.yml")# if File.exists?(configfile)
@@ -140,18 +149,15 @@ if options[:watch]
     psst.push("_source") if File.directory? "_source"
     psst.push("_resources") if File.directory? "_resources"
 
+    require "listen"
     puts "Setting up listen"
-    listener = Listen.to(psst, force_polling: true ) do |modified, added, removed|
+    listener = Listen.to(psst, force_polling: true) do |modified, added, removed|
       puts "modified: #{modified}" if modified.length > 0
       puts "added: #{added}" if added.length > 0
       puts "removed: #{removed}" if removed.length > 0
 
       Scms.build(Folders[:website], Folders[:config], options[:mode]) if modified.length > 0
     end
-    trap("INT"){ 
-      puts "Closing file watcher"
-      listener.stop
-    }
     listener.start # not blocking
     sleep unless options[:server]
 end

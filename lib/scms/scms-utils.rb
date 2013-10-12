@@ -3,11 +3,27 @@ module ScmsUtils
     require 'fileutils'
     require 'open-uri'
 
+    require 'socket'
+    require 'timeout'
+
+    def ScmsUtils.port_open?(ip, port, seconds=1)
+      Timeout::timeout(seconds) do
+        begin
+          TCPSocket.new(ip, port).close
+          true
+        rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+          false
+        end
+      end
+    rescue Timeout::Error
+      false
+    end
+
     def ScmsUtils.getsettings(yamlpath)
         ScmsUtils.log("Loading Config: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
         config = nil
 
-##http://snk.tuxfamily.org/log/yaml-json-validation-kwalify-ruby19.html
+        ##http://snk.tuxfamily.org/log/yaml-json-validation-kwalify-ruby19.html
         #'kwalify'
         #schema = Kwalify::Yaml.load_file('some_complex_schema.yaml')
         #validator = Kwalify::Validator.new(schema)
