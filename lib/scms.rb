@@ -199,7 +199,9 @@ module Scms
                         monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>" if @mode == "cms"
 
                         livereload = ""
-                        livereload = "<script>document.write('<script src=\"http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>" if @mode != "deploy"
+                        if @mode != "deploy"
+                            livereload = "<script>document.write('<script src=\"http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>" if @mode != "cms"
+                        end
                         
                         pagemodel = Hash.new
                         pagemodel = { 
