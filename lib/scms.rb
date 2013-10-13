@@ -134,7 +134,7 @@ module Scms
                                 viewname = viewparts[0]
                                 viewqs = viewparts[1]
 
-                                puts "viewname: #{viewname}, viewqs: #{viewqs}"
+                                #puts "viewname: #{viewname}, viewqs: #{viewqs}"
 
                                 viewpath = File.join(@website, viewname)
                                 
@@ -180,16 +180,17 @@ module Scms
                                     else
                                         #todo: why not use htmlsnipet
                                         snnipetCode = File.read(viewpath)
+                                        
                                         case File.extname(view[1])
                                         when ".md"
                                             begin  
+                                                snnipetCode = snnipetCode.encode('UTF-8', :invalid => :replace, :undef => :replace)
                                                 doc = Maruku.new(snnipetCode)
                                                 viewSnippet = doc.to_html
                                             rescue Exception => e  
                                                 viewSnippet = snnipetCode
                                                 ScmsUtils.errLog(e.message)
                                                 ScmsUtils.log(e.backtrace.inspect)
-                                                #todo: use scmslog
                                             end
                                         else
                                           viewSnippet = snnipetCode
