@@ -130,7 +130,15 @@ module Scms
                         if pageconfig["views"] != nil
                             pageconfig["views"].each do |view| 
                                 views[view[0]] = ""
-                                viewpath = File.join(@website, view[1])
+                                viewparts = view[1].split("?") # This allows views to have a query string in the config
+                                viewname = viewparts[0]
+                                viewqs = viewparts[1]
+
+                                puts "viewname: #{viewname}, viewqs: #{viewqs}"
+
+                                viewpath = File.join(@website, viewname)
+                                
+
                                 if File.exists?(viewpath)
                                     begin
                                         htmlsnipet = File.read(viewpath)
@@ -143,6 +151,9 @@ module Scms
                                         ScmsUtils.log("Empty view: #{view[1]}")
                                     end
 
+                                    model = Hash.new
+                                    model = Hash[viewqs.split('&').map{ |q| q.split('=') }] if viewqs != nil
+
                                     viewmodel = Hash.new
                                     viewmodel = { 
                                         :name => pagename,
@@ -150,7 +161,11 @@ module Scms
                                         :url => pageurl,
                                         :data => pagedata,
                                         :rootdir => @website, 
-                                        :resource => resource 
+                                        :resource => resource,
+                                        :view => {
+                                            :name => viewname,
+                                            :model => model
+                                        }
                                     }
 
                                     if hasHandler
