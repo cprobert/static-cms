@@ -111,13 +111,18 @@ module Scms
                         if pageconfig["handler"] != nil
                             handlerpath = File.join(@website, pageconfig["handler"])
                             if File.exists?(handlerpath)
-                                #ScmsUtils.log( "Handler found: #{pageconfig["handler"]}" )
-                                require handlerpath
-                                funDefined = defined? Handler.render
-                                if funDefined != nil
-                                    hasHandler = true
-                                else
-                                    ScmsUtils.errLog( "Handler doesnt have a render method" )
+                                ScmsUtils.log( "Handler found: #{pageconfig["handler"]}" )
+                                hasHandler = true
+                                begin
+                                     require handlerpath
+                                #     #hasHandler = ScmsHandler.instance_methods(false).include? :render
+                                #     hasHandler = ScmsHandler.method_defined?(:render)
+                                #     puts "has render method: #{hasHandler}"
+                                #     if !hasHandler
+                                #         ScmsUtils.errLog( "Handler doesnt have a render method" )
+                                #     end
+                                rescue Exception => e 
+                                    ScmsUtils.errLog( "Problem running: ScmsHandler: #{e.message}" )
                                 end
                             else
                                 ScmsUtils.errLog("Handler not found: #{pageconfig["handler"]}")
@@ -171,7 +176,7 @@ module Scms
                                     if hasHandler
                                         ScmsUtils.log("Rendering with handler")
                                         begin
-                                            viewSnippet = Handler.render(viewpath)
+                                            viewSnippet = ScmsHandler.render(viewpath)
                                         rescue Exception=>e
                                             ScmsUtils.errLog(e.message)
                                             ScmsUtils.log(e.backtrace.inspect)
