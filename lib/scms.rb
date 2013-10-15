@@ -2,6 +2,7 @@ require "scms/version"
 
 module Scms
     require 'scms/scms-utils.rb'
+    require 'scms/scms-xmlhandler.rb'
     require 'scms/s3deploy.rb'
 
     require 'erb'
@@ -187,6 +188,8 @@ module Scms
                                         snnipetCode = File.read(viewpath)
                                         
                                         case File.extname(view[1])
+                                        when ".xml"
+                                            viewSnippet = ScmsXmlHandler.transform(snnipetCode)
                                         when ".md"
                                             begin  
                                                 snnipetCode = snnipetCode.encode('UTF-8', :invalid => :replace, :undef => :replace)
