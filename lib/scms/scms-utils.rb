@@ -19,8 +19,8 @@ module ScmsUtils
       false
     end
 
-    def ScmsUtils.getsettings(yamlpath)
-        ScmsUtils.log("Loading Config: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
+    def ScmsUtils.readyaml(yamlpath)
+        ScmsUtils.log("Loading yaml: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
         config = nil
 
         ##http://snk.tuxfamily.org/log/yaml-json-validation-kwalify-ruby19.html

@@ -11,6 +11,7 @@ require 'optparse'
 require 'fileutils'
 require 'Scms'
 require "scms/version"
+require 'scms/scms-watcher.rb'
 require 'scms/scms-httpserver.rb'
 
 class String
@@ -62,7 +63,7 @@ optparse = OptionParser.new do|opts|
     options[:configdir] = c
   end
    
-  options[:mode] = "pub"
+  options[:mode] = nil
   opts.on( '-m', '--mode Mode', 'CMS or Publish (for use with Air-Monkey: http://ipassexam.github.io/Air-Monkey/)' ) do|m|
      options[:mode] = m
   end
@@ -90,12 +91,10 @@ Folders = {
   :config => (options[:configdir] or ENV["SCMS_CONFIG_FOLDER"] or options[:website]),
   :assets => File.join(root_folder, "assets")
 }
-# These can be used in the bootstrap.rb 
+# Globals: These can be used in the bootstrap.rb 
 $website = Folders[:website]
 $watch = options[:watch]
 $cmsmode = options[:mode] == "cms"
-
-configfile = File.join(Folders[:website], "_config.yml")
 
 # ScmsUtils.log "System root folder = #{Folders[:root]}"
 # ScmsUtils.log "Website folder = #{Folders[:website]}"
@@ -126,44 +125,19 @@ else
   FileUtils.rm(monkeyhook) if File.exist?(monkeyhook) && options[:publish]
 end
 
-Scms.build(Folders[:website], Folders[:config], options[:mode])
+settings = Scms.getsettings(Folders[:config])
+Scms.sassall(Folders[:website])
+Scms.bundle(settings, Folders[:website])
+Scms.build(Folders[:website], settings, options[:mode])
 Scms.copywebsite(Folders[:website], Folders[:destination]) if Folders[:destination] != ''
 
 if options[:watch]
-    require "filewatcher"
-    #  I dont really want to use filewatcher but I can't get listen to watch the config file
-    # I'd use filewatcher to monitor directories but it crashes if a file id deleted
-    watcher = Thread.new {
-      puts "Watching yam files"
-      FileWatcher.new(["_config.yml"]).watch do |filename|
-        puts "Updated " + filename
-        Scms.build(Folders[:website], Folders[:config], options[:mode])
-      end
-    }
-
-    psst = []
-    #psst.push("_config.yml")# if File.exists?(configfile)
-    psst.push("_views") if File.directory? "_views"
-    psst.push("_layouts") if File.directory? "_layouts"
-    psst.push("_templates") if File.directory? "_templates"
-    psst.push("_source") if File.directory? "_source"
-    psst.push("_resources") if File.directory? "_resources"
-
-    require "listen"
-    puts "Setting up listen"
-    listener = Listen.to(psst, force_polling: true) do |modified, added, removed|
-      puts "modified: #{modified}" if modified.length > 0
-      puts "added: #{added}" if added.length > 0
-      puts "removed: #{removed}" if removed.length > 0
-
-      Scms.build(Folders[:website], Folders[:config], options[:mode]) if modified.length > 0
-    end
-    listener.start # not blocking
-    sleep unless options[:server]
+  ScmsWatcher.watch(settings, options, Folders[:config])
+  sleep unless options[:server]
 end
 
 if options[:server]
-    ScmsServer.start(Folders[:website], options[:port])
+  ScmsServer.start(Folders[:website], options[:port])
 end
 
 if options[:publish]

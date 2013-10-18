@@ -4,7 +4,7 @@ module S3Deploy
 
     def S3Deploy.sync(pub, config, mimetypefile)
         #yamlpath=File.join(config, "_config.yml")
-        #scmsSettings = ScmsUtils.getsettings(yamlpath)
+        #scmsSettings = ScmsUtils.readyaml(yamlpath)
 
         ENV["S3CONF"] = config
         ENV["AWS_CALLING_FORMAT"] = "SUBDOMAIN"
