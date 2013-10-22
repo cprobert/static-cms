@@ -63,6 +63,7 @@ module Scms
     def Scms.parsePages(settings, website)
         # build pages defined in config file
         Scms.parseSettingsPages(settings, website)
+        # build pages pased on _pages folder
         Scms.parsePagesDir(settings, website)
     end
 
@@ -93,8 +94,8 @@ module Scms
                             end
                         end
 
-                        #  Need something here for pageless navs
-                        #break if pageconfig["generate"] == nil
+                        # Dont save a page if no views have been defined (so the config han have pages for nav building)
+                        break if views.length < 1
 
                         Scms.save(settings, website, pageOptions, views)
                     end
@@ -198,8 +199,8 @@ module Scms
                 :name => pageOptions.name,
                 :title => pageOptions.title,
                 :url => pageOptions.url,
-                :rootdir => website, 
                 :resource => pageOptions.resource,
+                :rootdir => website, 
                 :view => {
                     :name => viewname,
                     :path => viewfullpath,
@@ -293,10 +294,10 @@ module Scms
                 :description => pageOptions.description,
                 :keywords => pageOptions.keywords,
                 :url => pageOptions.url,
-                :views => views, 
                 :resource => pageOptions.resource, 
                 :bundles => bundleModel,
                 :navigation => navModel,
+                :views => views, 
                 :rootdir => website, 
                 :monkeyhook => monkeyhook,
                 :livereload => livereload

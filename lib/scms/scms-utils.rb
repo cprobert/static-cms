@@ -22,14 +22,6 @@ module ScmsUtils
     def ScmsUtils.readyaml(yamlpath)
         ScmsUtils.log("Loading yaml: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
         config = nil
-
-        ##http://snk.tuxfamily.org/log/yaml-json-validation-kwalify-ruby19.html
-        #'kwalify'
-        #schema = Kwalify::Yaml.load_file('some_complex_schema.yaml')
-        #validator = Kwalify::Validator.new(schema)
-        #parser = Kwalify::Yaml::Parser.new(validator)
-        #yaml = some_complex_object.to_yaml # machine-generate
-        #data = parser.parse(yaml)          # parse & validate <== FAIL
         
         if File.exist?(yamlpath)
             tree = File.read(yamlpath)

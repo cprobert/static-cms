@@ -50,14 +50,14 @@ module Scms
         if pageconfig != nil
           @template = pageconfig["template"] unless pageconfig["template"] == nil
           
-          @url = "#{name}/index.html" if pageconfig["indexFolderMode"] != nil # needs better name
-          @url = pageconfig["generate"] if pageconfig["generate"] != nil
+          @url = "#{name}/index.html" if pageconfig["cleanurl"] == true
+          @url = pageconfig["generate"] if pageconfig["generate"] != nil #depreciated
+          @url = pageconfig["url"] if pageconfig["url"] != nil
 
           @title = pageconfig["title"] unless pageconfig["title"] == nil
           @keywords = pageconfig["keywords"] if pageconfig["keywords"] != nil
           @description = pageconfig["description"] if pageconfig["description"] != nil
           @handler = pageconfig["handler"]
-
           @resource = getResource(website, pageconfig["resource"])
         end
       end  
