@@ -125,11 +125,11 @@ else
   FileUtils.rm(monkeyhook) if File.exist?(monkeyhook) && options[:publish]
 end
 
-settings = Scms.getsettings(Folders[:config])
+settings = Scms.getSettings(Folders[:config])
 Scms.sassall(Folders[:website])
 Scms.bundle(settings, Folders[:website])
 Scms.build(Folders[:website], settings, options[:mode])
-Scms.copywebsite(Folders[:website], Folders[:destination]) if Folders[:destination] != ''
+Scms.copyWebsite(Folders[:website], Folders[:destination]) if Folders[:destination] != ''
 
 if options[:watch]
   ScmsWatcher.watch(settings, options, Folders[:config])

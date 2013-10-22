@@ -14,7 +14,7 @@ module ScmsWatcher
 				puts "***********************************"
 				puts ""
 
-				settings = Scms.getsettings(configdir)
+				settings = Scms.getSettings(configdir)
 				Scms.bundle(settings, Folders[:website])
 				Scms.build(Folders[:website], settings, options[:mode])
 			end
