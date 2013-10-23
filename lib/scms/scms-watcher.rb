@@ -16,11 +16,13 @@ module ScmsWatcher
 
 				settings = Scms.getSettings(configdir)
 				Scms.bundle(settings, Folders[:website])
-				Scms.build(Folders[:website], settings, options[:mode])
+				Scms.build(Folders[:website], settings, options[:mode], options[:watch])
 			end
 	    }
 
+	    #  [todo] Create this by getting all directories that start with _
 	    psst = []
+	    psst.push("_pages") if File.directory? "_pages" # .html .htm .md .xml .erb, etc
 	    psst.push("_views") if File.directory? "_views" # .html .htm .md .xml .erb, etc
 	    psst.push("_layouts") if File.directory? "_layouts" # .html .htm .erb
 	    psst.push("_templates") if File.directory? "_templates" # .html .htm .erb
@@ -29,15 +31,46 @@ module ScmsWatcher
 	    
 	    puts "Listening to #{psst}"
 	    listener = Listen.to(psst, force_polling: true) do |modified, added, removed|
-			# puts "modified: #{modified}" if modified.length > 0
-			# puts "added: #{added}" if added.length > 0
-			# puts "removed: #{removed}" if removed.length > 0
+
+			sassfile = false
+			bundlefile = false
+			buildfile = false
+
+			if removed.length > 0
+				removed.each{|filename|
+					removedfile = Pathname.new(filename).relative_path_from(Pathname.new(Folders[:website])).to_s
+					#ext = File.extname(removedfile)  
+
+					puts ""
+					puts "***********************************************"
+					puts "  Deleted: #{removedfile}"
+					puts "***********************************************"
+					puts ""
+
+					if removedfile.start_with?('_pages/')
+						buildfile = true
+					end
+				}
+			end
+
+			if added.length > 0
+				added.each{|filename|
+					addedfile = Pathname.new(filename).relative_path_from(Pathname.new(Folders[:website])).to_s
+					#ext = File.extname(addedfile)  
+
+					puts ""
+					puts "***********************************************"
+					puts "  Added: #{addedfile}"
+					puts "***********************************************"
+					puts ""
+
+					if addedfile.start_with?('_pages/')
+						buildfile = true
+					end
+				}
+			end
 
 			if modified.length > 0
-				sassfile = false
-				bundlefile = false
-				buildfile = true
-
 				modified.each{|filename|
 					modifiedfile = Pathname.new(filename).relative_path_from(Pathname.new(Folders[:website])).to_s
 					ext = File.extname(modifiedfile)  
@@ -47,6 +80,8 @@ module ScmsWatcher
 					puts "  Modified: #{modifiedfile}"
 					puts "***********************************************"
 					puts ""
+
+					buildfile = true
 
 					if modifiedfile.start_with?('_source/')
 						bundlefile = true
@@ -60,12 +95,13 @@ module ScmsWatcher
 						break
 					end
 				}
-
-				Scms.sassall(Folders[:website]) if sassfile
-				Scms.bundle(settings, Folders[:website]) if bundlefile
-				Scms.build(Folders[:website], settings, options[:mode]) if buildfile
 			end
+
+			Scms.sassall(Folders[:website]) if sassfile
+			Scms.bundle(settings, Folders[:website]) if bundlefile
+			Scms.build(Folders[:website], settings, options[:mode], options[:watch]) if buildfile
 	    end
+
 	    listener.start # not blocking
 	    listener.ignore! /\.png/
 	    listener.ignore! /\.gif/

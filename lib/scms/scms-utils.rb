@@ -20,9 +20,7 @@ module ScmsUtils
     end
 
     def ScmsUtils.readyaml(yamlpath)
-        ScmsUtils.log("Loading yaml: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
         config = nil
-        
         if File.exist?(yamlpath)
             tree = File.read(yamlpath)
             begin
@@ -32,6 +30,7 @@ module ScmsUtils
                 #config = YAML.load_file(yamlpath)
             rescue Exception => e  
                 ScmsUtils.errLog("Error Loading _config.yml (check there are no tabs in the file)")
+                ScmsUtils.log("Yaml: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")
                 ScmsUtils.log( "Verify your config")
                 ScmsUtils.log( "http://yaml-online-parser.appspot.com/")
                 ScmsUtils.errLog( e.message )

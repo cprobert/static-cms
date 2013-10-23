@@ -27,7 +27,7 @@ module Scms
         end
     end
 
-    def Scms.build(website, settings, mode = "pub")
+    def Scms.build(website, settings, mode = "pub", watch = false)
         @mode = mode
         #ScmsUtils.log("Mode: #{mode}")
         
@@ -51,7 +51,7 @@ module Scms
                     ScmsUtils.writelog("type NUL > #{bootstrap}", website)
                 end
             end 
-            Scms.parsePages(settings, website)
+            Scms.parsePages(settings, website, watch)
         else
             ScmsUtils.errLog("Config is empty")
         end
@@ -60,14 +60,14 @@ module Scms
         ScmsUtils.log(ScmsUtils.uriEncode("file:///#{website}"))
     end
 
-    def Scms.parsePages(settings, website)
+    def Scms.parsePages(settings, website, watch = false)
         # build pages defined in config file
-        Scms.parseSettingsPages(settings, website)
+        Scms.parseSettingsPages(settings, website, watch)
         # build pages pased on _pages folder
-        Scms.parsePagesDir(settings, website)
+        Scms.parseFolderPages(settings, website, watch)
     end
 
-    def Scms.parseSettingsPages(settings, website)
+    def Scms.parseSettingsPages(settings, website, watch = false)
         if settings["pages"] != nil
 
             ScmsUtils.log("Compiling Pages:")
@@ -79,25 +79,11 @@ module Scms
                         pageconfig = pageOptions[1]
 
                         pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
-                        
-                        views = Hash.new
-                        if pageconfig["views"] != nil
-                            pageconfig["views"].each do |view| 
-                                viewname = view[0]
-                                viewparts = view[1].split("?") # This allows views to have a query string in the config
-                                viewpath = viewparts[0]
-                                viewqs = viewparts[1]
-
-                                viewModel = Hash.new
-                                viewModel = Hash[viewqs.split('&').map{ |q| q.split('=') }] if viewqs != nil
-                                views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions, viewModel)
-                            end
-                        end
+                        views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions)
 
                         # Dont save a page if no views have been defined (so the config han have pages for nav building)
                         break if views.length < 1
-
-                        Scms.save(settings, website, pageOptions, views)
+                        Scms.save(settings, website, pageOptions, views, watch)
                     end
                 end
                 #ScmsUtils.log( out )
@@ -105,7 +91,24 @@ module Scms
         end
     end
 
-    def Scms.parsePagesDir(settings, website)
+    def Scms.getSettingsViews(settingsViews, website, pageOptions)
+        views = Hash.new
+        if settingsViews != nil
+            settingsViews.each do |view| 
+                viewname = view[0]
+                viewparts = view[1].split("?") # This allows views to have a query string in the config
+                viewpath = viewparts[0]
+                viewqs = viewparts[1]
+
+                viewModel = Hash.new
+                viewModel = Hash[viewqs.split('&').map{ |q| q.split('=') }] if viewqs != nil
+                views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions, viewModel)
+            end
+        end
+        return views
+    end
+
+    def Scms.parseFolderPages(settings, website, watch = false)
         pagesFolder = File.join(website, "_pages")
         Dir.glob("#{pagesFolder}/**/*/").each do |pageFolder|
             pagename = File.basename(pageFolder, ".*")
@@ -114,14 +117,14 @@ module Scms
             pageconfig = nil
             pageconfig = Scms.getSettings(pageFolder) if File.exists?(File.join(pageFolder, "_config.yml"))
             pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
-
-            views = Hash.new
+            views = views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions)
+            
             Dir.glob(File.join(pageFolder, "*")).reject { |f| f =~ /\.yml$/ || File.directory?(f) }.each do |view|
                 viewname = File.basename(view, ".*")
                 viewpath = Pathname.new(view).relative_path_from(Pathname.new(website)).to_s
                 views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions)
             end
-            Scms.save(settings, website, pageOptions, views)
+            Scms.save(settings, website, pageOptions, views, watch)
         end
     end
 
@@ -239,19 +242,24 @@ module Scms
                 erb = ERB.new(template)
                 result = erb.result(page.instance_eval { binding })
             rescue StandardError => e
-                ScmsUtils.errLog("Critical Error: Could not parse template")
-                
-                ScmsUtils.errLog(e.message)
-                puts e.inspect
                 puts "page: #{page}"
+                ScmsUtils.errLog("Critical Error: Could not parse template")
+                ScmsUtils.errLog(e.message)
 
-                result = "Invalid Keys in Template\n\n"
+                result = "<code style='border: 1px solid #666; background-color: light-yellow;'><pre>"
+                result += e.message
+                result += "\n\n"
+                result += e.inspect
+                result += "\n\n"
+                result += "Invalid Keys in Template\n\n"
                 result += "Valid Keys are:\n"
                 hash.each do |key, value|
                     result += "- page.#{key}\n"
                     puts "nil value foy key: #{key}" if value == nil
                     singleton_class.send(:define_method, key) { value }
                 end
+                result = "</code></pre>"
+
                 
                 result += "\n\n"
                 result += template
@@ -265,7 +273,7 @@ module Scms
         return result
     end
 
-    def Scms.save(settings, website, pageOptions, views)
+    def Scms.save(settings, website, pageOptions, views, watch = false)
 
         fileName = File.join(website, File.join(pageOptions.url.sub('~/',''))) 
         erb = File.join(website, pageOptions.template)
@@ -283,7 +291,7 @@ module Scms
             monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>" if @mode == "cms"
 
             livereload = ""
-            if @mode != "deploy"
+            if watch
                 livereload = "<script async='true' defer='true'>document.write('<script src=\"http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>" if @mode != "cms"
             end
             
@@ -317,7 +325,7 @@ module Scms
 
             html = html.gsub('~/', ScmsUtils.uriEncode("file:///#{website}/")) if @mode == "cms"
             websiteroot = '/'
-            websiteroot = settings["url"] unless settings["rooturl"] == nil
+            websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
 
             html = html.gsub('~/', websiteroot)
             begin
@@ -334,23 +342,10 @@ module Scms
         end
     end
 
-    def Scms.bundleModel(settings)
-        bundleModel = Hash.new
-        bundleConfig = settings["bundles"]
-        if bundleConfig != nil
-            bundleConfig.each do |bundle|
-                #ScmsUtils.log( "bundle (#{bundle.class}) = #{bundle}" )
-                bundle.each do |option|
-                    name = option[0]
-                    bundleName = File.join(option[1]["generate"])
-                    bundleModel[name] = bundleName
-                end
-            end
-        end
-        return bundleModel
-    end
-
     def Scms.navModel(settings)
+        websiteroot = '/'
+        websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
+
         navModel = Array.new
         settings["pages"].each do |pagedata|
             if pagedata != nil
@@ -362,12 +357,48 @@ module Scms
                     pageurl = pageconfig["url"] unless pageconfig["url"] == nil
                     navtext = pageconfig["navigation"]
                     navmeta = pageconfig["navigation_meta"]
-                    navModel.push({"text" => navtext, "url" => pageurl, "pagename" => pagename, "meta" => navmeta}) unless navtext == nil
+                    navModel.push({"text" => navtext, "url" => pageurl.gsub("~/", websiteroot), "pagename" => pagename, "meta" => navmeta}) unless navtext == nil
+                end
+            end
+        end
+        settings["nav"].each do |pagedata|
+            if pagedata != nil
+                pagedata.each do |pageoptions|
+                    pagename =  pageoptions[0]
+                    pageconfig = pageoptions[1]
+                    pageurl = "about:blank"
+                    pageurl = pageconfig["url"] unless pageconfig["url"] == nil
+                    navtext = pagename
+                    navtext = pageconfig["text"]
+                    navmeta = pageconfig["meta"]
+                    navModel.push({"text" => navtext, "url" => pageurl.gsub("~/", websiteroot), "pagename" => pagename, "meta" => navmeta})
                 end
             end
         end
         return navModel
     end  
+
+    def Scms.bundleModel(settings)
+        bundleModel = Hash.new
+        bundleConfig = settings["bundles"]
+        if bundleConfig != nil
+            bundleConfig.each do |bundle|
+                #ScmsUtils.log( "bundle (#{bundle.class}) = #{bundle}" )
+
+                websiteroot = '/'
+                websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
+
+                bundle.each do |option|
+                    name = option[0]
+                    config = option[1]
+
+                    bundleName = File.join(config["generate"])
+                    bundleModel[name] = bundleName.gsub("~/", websiteroot)
+                end
+            end
+        end
+        return bundleModel
+    end
 
     def Scms.bundle(settings, website)
         bundleConfig = settings["bundles"]
@@ -376,13 +407,15 @@ module Scms
             bundleConfig.each do |bundle|
                 #ScmsUtils.log( "bundle (#{bundle.class}) = #{bundle}" )
                 bundle.each do |option|
-                    #name = option[0]
-                    bundleName = File.join(option[1]["generate"])
+                    name = option[0]
+                    config = option[1]
+
+                    bundleName = File.join(config["generate"].gsub("~/",""))
                     ScmsUtils.boldlog("Bundeling:")
 
                     content = ""
                     assetList = ""
-                    files = option[1]["files"]
+                    files = config["files"]
                     if files != nil
                         files.each do |asset|
                             assetList += " - #{asset}\n" 
