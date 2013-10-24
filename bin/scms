@@ -130,7 +130,7 @@ end
 settings = Scms.getSettings(Folders[:config])
 Scms.sassall(Folders[:website])
 Scms.bundle(settings, Folders[:website])
-Scms.build(Folders[:website], settings, options[:mode], options[:watch])
+Scms.build(Folders[:website], settings, options)
 Scms.copyWebsite(Folders[:website], Folders[:destination]) if Folders[:destination] != ''
 
 if options[:watch]

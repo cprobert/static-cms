@@ -27,9 +27,8 @@ module Scms
         end
     end
 
-    def Scms.build(website, settings, mode = "pub", watch = false)
-        @mode = mode
-        #ScmsUtils.log("Mode: #{mode}")
+    def Scms.build(website, settings, options)
+
         
         ScmsUtils.boldlog("Compiling #{website}")
         
@@ -51,7 +50,7 @@ module Scms
                     ScmsUtils.writelog("type NUL > #{bootstrap}", website)
                 end
             end 
-            Scms.parsePages(settings, website, watch)
+            Scms.parsePages(website, settings, options)
         else
             ScmsUtils.errLog("Config is empty")
         end
@@ -60,14 +59,14 @@ module Scms
         ScmsUtils.log(ScmsUtils.uriEncode("file:///#{website}"))
     end
 
-    def Scms.parsePages(settings, website, watch = false)
+    def Scms.parsePages(website, settings, options)
         # build pages defined in config file
-        Scms.parseSettingsPages(settings, website, watch)
+        Scms.parseSettingsPages(website, settings, options)
         # build pages pased on _pages folder
-        Scms.parseFolderPages(settings, website, watch)
+        Scms.parseFolderPages(website, settings, options)
     end
 
-    def Scms.parseSettingsPages(settings, website, watch = false)
+    def Scms.parseSettingsPages(website, settings, options)
         if settings["pages"] != nil
 
             ScmsUtils.log("Compiling Pages:")
@@ -79,11 +78,11 @@ module Scms
                         pageconfig = pageOptions[1]
 
                         pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
-                        views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions)
+                        views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions, options)
 
                         # Dont save a page if no views have been defined (so the config han have pages for nav building)
                         break if views.length < 1
-                        Scms.save(settings, website, pageOptions, views, watch)
+                        Scms.save(settings, website, pageOptions, views, options)
                     end
                 end
                 #ScmsUtils.log( out )
@@ -91,7 +90,7 @@ module Scms
         end
     end
 
-    def Scms.getSettingsViews(settingsViews, website, pageOptions)
+    def Scms.getSettingsViews(settingsViews, website, pageOptions, options)
         views = Hash.new
         if settingsViews != nil
             settingsViews.each do |view| 
@@ -102,13 +101,13 @@ module Scms
 
                 viewModel = Hash.new
                 viewModel = Hash[viewqs.split('&').map{ |q| q.split('=') }] if viewqs != nil
-                views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions, viewModel)
+                views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions, options, viewModel)
             end
         end
         return views
     end
 
-    def Scms.parseFolderPages(settings, website, watch = false)
+    def Scms.parseFolderPages(website, settings, options)
         pagesFolder = File.join(website, "_pages")
         Dir.glob("#{pagesFolder}/**/*/").each do |pageFolder|
             pagename = File.basename(pageFolder, ".*")
@@ -117,18 +116,21 @@ module Scms
             pageconfig = nil
             pageconfig = Scms.getSettings(pageFolder) if File.exists?(File.join(pageFolder, "_config.yml"))
             pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
-            views = views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions)
+            views = Hash.new
+            if pageconfig != nil
+                views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions, options) if pageconfig["views"] != nil
+            end
             
             Dir.glob(File.join(pageFolder, "*")).reject { |f| f =~ /\.yml$/ || File.directory?(f) }.each do |view|
                 viewname = File.basename(view, ".*")
                 viewpath = Pathname.new(view).relative_path_from(Pathname.new(website)).to_s
-                views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions)
+                views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions, options)
             end
-            Scms.save(settings, website, pageOptions, views, watch)
+            Scms.save(settings, website, pageOptions, views, options)
         end
     end
 
-    def Scms.parseView(viewname, viewpath, website, pageOptions, viewModel = nil)
+    def Scms.parseView(viewname, viewpath, website, pageOptions, options, viewModel = nil)
         #puts "parsing view: #{viewname}"
 
         viewhtml = ""
@@ -211,8 +213,8 @@ module Scms
                 }
             }
             
-            if @mode == "cms"
-                viewhtml = "<div class='cms' data-view='#{pageOptions.name}' data-page='#{pageOptions.url}'>#{Scms.render(viewSnippet, viewmodel)}</div>"
+            if options[:mode] == "cms"
+                viewhtml = "<div class='cms' data-view='#{viewpath}' data-page='#{pageOptions.url}'>#{Scms.render(viewSnippet, viewmodel)}</div>"
             else
                 viewhtml = Scms.render(viewSnippet, viewmodel)
             end
@@ -273,7 +275,7 @@ module Scms
         return result
     end
 
-    def Scms.save(settings, website, pageOptions, views, watch = false)
+    def Scms.save(settings, website, pageOptions, views, options)
 
         fileName = File.join(website, File.join(pageOptions.url.sub('~/',''))) 
         erb = File.join(website, pageOptions.template)
@@ -282,17 +284,17 @@ module Scms
         if File.exists?(erb)
 
             # Build bundle model
-            bundleModel = Scms.bundleModel(settings)
+            bundleModel = Scms.bundleModel(website, settings, options)
             # Build navigation model
-            navModel = Scms.navModel(settings)
+            navModel = Scms.navModel(website, settings, options)
             #puts "navModel: #{navModel}"
 
             monkeyhook = "";
-            monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>" if @mode == "cms"
+            monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>" if options[:mode] == "cms"
 
             livereload = ""
-            if watch
-                livereload = "<script async='true' defer='true'>document.write('<script src=\"http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>" if @mode != "cms"
+            if options[:watch]
+                livereload = "<script async='true' defer='true'>document.write('<script src=\"http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>" if options[:mode] != "cms"
             end
             
             pagemodel = Hash.new
@@ -323,9 +325,11 @@ module Scms
             #html = ""
             html = Scms.render(erbtemplate, pagemodel)
 
-            html = html.gsub('~/', ScmsUtils.uriEncode("file:///#{website}/")) if @mode == "cms"
+            
             websiteroot = '/'
-            websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
+            websiteroot = settings["rooturl"] if settings["rooturl"] != nil
+            #puts "On save mode: #{options[:mode]}"
+            websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
 
             html = html.gsub('~/', websiteroot)
             begin
@@ -342,43 +346,48 @@ module Scms
         end
     end
 
-    def Scms.navModel(settings)
+    def Scms.navModel(website, settings, options)
         websiteroot = '/'
         websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
+        websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
 
         navModel = Array.new
-        settings["pages"].each do |pagedata|
-            if pagedata != nil
-                pagedata.each do |pageoptions|
-                    pagename =  pageoptions[0]
-                    pageconfig = pageoptions[1]
-                    pageurl = "about:blank"
-                    pageurl = pageconfig["generate"]
-                    pageurl = pageconfig["url"] unless pageconfig["url"] == nil
-                    navtext = pageconfig["navigation"]
-                    navmeta = pageconfig["navigation_meta"]
-                    navModel.push({"text" => navtext, "url" => pageurl.gsub("~/", websiteroot), "pagename" => pagename, "meta" => navmeta}) unless navtext == nil
+        if settings["pages"] != nil
+            settings["pages"].each do |pagedata|
+                if pagedata != nil
+                    pagedata.each do |pageoptions|
+                        pagename =  pageoptions[0]
+                        pageconfig = pageoptions[1]
+                        pageurl = "about:blank"
+                        pageurl = pageconfig["generate"]
+                        pageurl = pageconfig["url"] unless pageconfig["url"] == nil
+                        navtext = pageconfig["navigation"]
+                        navmeta = pageconfig["navigation_meta"]
+                        navModel.push({"text" => navtext, "url" => pageurl.gsub("~/", websiteroot), "pagename" => pagename, "meta" => navmeta}) unless navtext == nil
+                    end
                 end
             end
         end
-        settings["nav"].each do |pagedata|
-            if pagedata != nil
-                pagedata.each do |pageoptions|
-                    pagename =  pageoptions[0]
-                    pageconfig = pageoptions[1]
-                    pageurl = "about:blank"
-                    pageurl = pageconfig["url"] unless pageconfig["url"] == nil
-                    navtext = pagename
-                    navtext = pageconfig["text"]
-                    navmeta = pageconfig["meta"]
-                    navModel.push({"text" => navtext, "url" => pageurl.gsub("~/", websiteroot), "pagename" => pagename, "meta" => navmeta})
+        if settings["nav"] != nil
+            settings["nav"].each do |pagedata|
+                if pagedata != nil
+                    pagedata.each do |pageoptions|
+                        pagename =  pageoptions[0]
+                        pageconfig = pageoptions[1]
+                        pageurl = "about:blank"
+                        pageurl = pageconfig["url"] unless pageconfig["url"] == nil
+                        navtext = pagename
+                        navtext = pageconfig["text"]
+                        navmeta = pageconfig["meta"]
+                        navModel.push({"text" => navtext, "url" => pageurl.gsub("~/", websiteroot), "pagename" => pagename, "meta" => navmeta})
+                    end
                 end
             end
         end
         return navModel
     end  
 
-    def Scms.bundleModel(settings)
+    def Scms.bundleModel(website, settings, options)
         bundleModel = Hash.new
         bundleConfig = settings["bundles"]
         if bundleConfig != nil
@@ -387,6 +396,7 @@ module Scms
 
                 websiteroot = '/'
                 websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
+                websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
 
                 bundle.each do |option|
                     name = option[0]

@@ -16,7 +16,7 @@ module ScmsWatcher
 
 				settings = Scms.getSettings(configdir)
 				Scms.bundle(settings, Folders[:website])
-				Scms.build(Folders[:website], settings, options[:mode], options[:watch])
+				Scms.build(Folders[:website], settings, options)
 			end
 	    }
 
@@ -99,7 +99,7 @@ module ScmsWatcher
 
 			Scms.sassall(Folders[:website]) if sassfile
 			Scms.bundle(settings, Folders[:website]) if bundlefile
-			Scms.build(Folders[:website], settings, options[:mode], options[:watch]) if buildfile
+			Scms.build(Folders[:website], settings, options) if buildfile
 	    end
 
 	    listener.start # not blocking
