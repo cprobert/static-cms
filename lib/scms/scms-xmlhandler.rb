@@ -17,9 +17,20 @@ module ScmsXmlHandler
 			xslpi = File.join($website, xslpi)
 			
 			if File.exists?(xslpi)
-				xsl = File.read(xslpi)
-				xslt  = Nokogiri::XSLT(xsl)
-				return xslt.transform(xml).to_html
+				begin 
+					xsl = File.read(xslpi)
+					xslt  = Nokogiri::XSLT(xsl)
+					return xslt.transform(xml).to_html
+				rescue StandardError => e
+					ScmsUtils.errLog("Error transforming")
+					ScmsUtils.errLog(xslpi)
+					ScmsUtils.errLog(e.message)
+					ScmsUtils.errLog(e.inspect)
+					#print e.backtrace.join("\n")
+				rescue Exception => e  
+					ScmsUtils.errLog("Error transforming with #{xslpi}")
+					ScmsUtils.errLog(e.message)
+				end
 			else
 				puts "Cant find pi: #{xslpi}"
 			end
