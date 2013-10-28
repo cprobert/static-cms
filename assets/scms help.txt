@@ -1,0 +1,60 @@
+PageConfig:
+
+root config
+
+template
+rooturl
+bootstrap
+pages
+    navigation
+    navigation_meta
+nav
+    text
+    url
+    meta
+bundles
+
+page config
+
+template
+cleanurl
+url / generate (depreciated)
+title
+keywords
+description
+handler
+resource
+allowEdit
+
+
+viewmodel = { 
+    :name => pageOptions.name,
+    :title => pageOptions.title,
+    :url => pageOptions.url,
+    :resource => pageOptions.resource,
+    :rootdir => website, 
+    :view => {
+        :name => viewname,
+        :path => viewfullpath,
+        :model => viewModel
+    }
+}
+
+pagemodel = { 
+    :name => pageOptions.name,
+    :title => pageOptions.title,
+    :description => pageOptions.description,
+    :keywords => pageOptions.keywords,
+    :url => pageOptions.url,
+    :resource => pageOptions.resource, 
+    :bundles => bundleModel,
+    :navigation => navModel,
+    :views => views, 
+    :rootdir => website, 
+    :monkeyhook => monkeyhook,
+    :livereload => livereload
+}
+
+
+websiteroot = '/'
+                    websiteroot = config["rooturl"] unless config["rooturl"] == nil
