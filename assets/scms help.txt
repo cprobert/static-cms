@@ -2,6 +2,7 @@ PageConfig:
 
 root config
 
+port
 template
 rooturl
 bootstrap
@@ -54,7 +55,3 @@ pagemodel = {
     :monkeyhook => monkeyhook,
     :livereload => livereload
 }
-
-
-websiteroot = '/'
-                    websiteroot = config["rooturl"] unless config["rooturl"] == nil

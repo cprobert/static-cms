@@ -140,7 +140,9 @@ if options[:watch]
 end
 
 if options[:server]
-  ScmsServer.start(Folders[:website], options[:port])
+  port = options[:port]
+  port = settings["port"] if settings["port"] != nil
+  ScmsServer.start(Folders[:website], port)
 end
 
 if options[:publish]
