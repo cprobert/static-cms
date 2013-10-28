@@ -3,7 +3,7 @@ module Scms
   require 'scms/scms-utils.rb'
 
   class PageOptions
-      attr_accessor :name, :template, :url, :title, :keywords, :description, :resource, :handler
+      attr_accessor :name, :template, :url, :title, :keywords, :description, :resource, :handler, :allowEdit
 
       def name= name  
         @name = name  
@@ -37,6 +37,10 @@ module Scms
           @handler = handler
       end
 
+      def allowEdit= allowEdit
+          @allowEdit = allowEdit
+      end
+
       def initialize (name, website, pageconfig, siteConfig)  
         @name = name
         @template = siteConfig["template"]
@@ -46,6 +50,7 @@ module Scms
         @description = ""
         @resource = Hash.new
         @handler = nil
+        @allowEdit = true
 
         if pageconfig != nil
           @template = pageconfig["template"] unless pageconfig["template"] == nil
@@ -59,6 +64,7 @@ module Scms
           @description = pageconfig["description"] if pageconfig["description"] != nil
           @handler = pageconfig["handler"]
           @resource = getResource(website, pageconfig["resource"])
+          @allowEdit = pageconfig["allowEdit"] if pageconfig["allowEdit"] != nil
         end
       end  
 

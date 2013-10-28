@@ -103,6 +103,7 @@ $cmsmode = options[:mode] == "cms"
 # ScmsUtils.log "Mode = #{options[:mode]}"
 
 raise "Invalid working directory! #{Folders[:website]}" if !File::directory?(Folders[:website])
+Dir.chdir Folders[:website]
 
 if options[:create] != nil
     puts "Creating scms website: #{options[:create]}"

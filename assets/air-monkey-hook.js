@@ -37,7 +37,8 @@ $(function() {
 
 		var addTextMsg = "Double click to add text";
 		$this
-			.bind("dblclick", function() {
+			.bind("dblclick", function(event) {
+				event.stopPropagation();
 				editMe(this);
 			})
 			.attr("title", "Double click to edit")

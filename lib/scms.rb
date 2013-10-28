@@ -1,8 +1,9 @@
 module Scms
     require "scms/version"
-    require 'scms/scms-pageoptions.rb'
-    require 'scms/scms-helpers.rb'
     require 'scms/scms-utils.rb'
+    require 'scms/scms-helpers.rb'
+    require 'scms/scms-pageoptions.rb'
+    require 'scms/scms-parser.rb'
     require 'scms/scms-xmlhandler.rb'
     require 'scms/s3deploy.rb'
 
@@ -28,8 +29,6 @@ module Scms
     end
 
     def Scms.build(website, settings, options)
-
-        
         ScmsUtils.boldlog("Compiling #{website}")
         
         if settings           
@@ -50,7 +49,7 @@ module Scms
                     ScmsUtils.writelog("type NUL > #{bootstrap}", website)
                 end
             end 
-            Scms.parsePages(website, settings, options)
+            Scms.generatePages(website, settings, options)
         else
             ScmsUtils.errLog("Config is empty")
         end
@@ -59,19 +58,17 @@ module Scms
         ScmsUtils.log(ScmsUtils.uriEncode("file:///#{website}"))
     end
 
-    def Scms.parsePages(website, settings, options)
+    def Scms.generatePages(website, settings, options)
         # build pages defined in config file
-        Scms.parseSettingsPages(website, settings, options)
+        Scms.generateSettingsPages(website, settings, options)
         # build pages pased on _pages folder
-        Scms.parseFolderPages(website, settings, options)
+        Scms.generateFolderPages(website, settings, options)
     end
 
-    def Scms.parseSettingsPages(website, settings, options)
+    def Scms.generateSettingsPages(website, settings, options)
         if settings["pages"] != nil
-
             ScmsUtils.log("Compiling Pages:")
             settings["pages"].each do |pagedata|
-                #puts "pagedata: #{pagedata}"
                 if pagedata != nil
                     pagedata.each do |pageOptions|
                         pagename =  pageOptions[0]
@@ -82,41 +79,39 @@ module Scms
 
                         # Dont save a page if no views have been defined (so the config han have pages for nav building)
                         break if views.length < 1
-                        Scms.save(settings, website, pageOptions, views, options)
+                        Scms.savePage(settings, website, pageOptions, views, options)
                     end
                 end
-                #ScmsUtils.log( out )
             end
         end
     end
 
     def Scms.getSettingsViews(settingsViews, website, pageOptions, options)
-        views = Hash.new
+        views = Hash.new {}
         if settingsViews != nil
             settingsViews.each do |view| 
                 viewname = view[0]
+                
                 viewparts = view[1].split("?") # This allows views to have a query string in the config
                 viewpath = viewparts[0]
                 viewqs = viewparts[1]
+                viewData = Hash[viewqs.split('&').map{ |q| q.split('=') }] if viewqs != nil
 
-                viewModel = Hash.new
-                viewModel = Hash[viewqs.split('&').map{ |q| q.split('=') }] if viewqs != nil
-                views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions, options, viewModel)
+                viewmodel = Scms.getViewModel(viewname, viewpath, website, pageOptions, options, viewData)
+                views[viewname] = Scms.renderView(viewpath, viewmodel)
             end
         end
         return views
     end
 
-    def Scms.parseFolderPages(website, settings, options)
+    def Scms.generateFolderPages(website, settings, options)
         pagesFolder = File.join(website, "_pages")
         Dir.glob("#{pagesFolder}/**/*/").each do |pageFolder|
             pagename = File.basename(pageFolder, ".*")
-            #puts "pagename: #{pagename}"
-
             pageconfig = nil
             pageconfig = Scms.getSettings(pageFolder) if File.exists?(File.join(pageFolder, "_config.yml"))
             pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
-            views = Hash.new
+            views = Hash.new {}
             if pageconfig != nil
                 views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions, options) if pageconfig["views"] != nil
             end
@@ -124,180 +119,100 @@ module Scms
             Dir.glob(File.join(pageFolder, "*")).reject { |f| f =~ /\.yml$/ || File.directory?(f) }.each do |view|
                 viewname = File.basename(view, ".*")
                 viewpath = Pathname.new(view).relative_path_from(Pathname.new(website)).to_s
-                views[viewname] = Scms.parseView(viewname, viewpath, website, pageOptions, options)
+                viewmodel = Scms.getViewModel(viewname, viewpath, website, pageOptions, options)
+                views[viewname] = Scms.renderView(viewpath, viewmodel)
             end
-            Scms.save(settings, website, pageOptions, views, options)
+            Scms.savePage(settings, website, pageOptions, views, options)
         end
     end
 
-    def Scms.parseView(viewname, viewpath, website, pageOptions, options, viewModel = nil)
+    def Scms.getViewModel(viewname, viewpath, website, pageOptions, options, viewData = nil)
         #puts "parsing view: #{viewname}"
 
-        viewhtml = ""
+        viewmodel = Hash.new {}
         viewfullpath = File.join(website, viewpath)
 
         if File.exists?(viewfullpath)
-            begin
-                htmlsnipet = File.read(viewfullpath)
-            rescue Exception=>e
-                ScmsUtils.errLog(e.message)
-                ScmsUtils.log(e.backtrace.inspect)
-            end
-            
-            if htmlsnipet.empty?
-                ScmsUtils.log("Empty view: #{viewpath}")
-            end
-
-            hasHandler = false
-            if pageOptions.handler != nil
-                handlerpath = File.join(website, pageOptions.handler)
-                if File.exists?(handlerpath)
-                    ScmsUtils.log( "Handler found: #{pageOptions.handler}" )
-                    hasHandler = true
-                    begin
-                         require handlerpath
-                    #     #hasHandler = ScmsHandler.instance_methods(false).include? :render
-                    #     hasHandler = ScmsHandler.method_defined?(:render)
-                    #     puts "has render method: #{hasHandler}"
-                    #     if !hasHandler
-                    #         ScmsUtils.errLog( "Handler doesnt have a render method" )
-                    #     end
-                    rescue Exception => e 
-                        ScmsUtils.errLog( "Problem running: ScmsHandler: #{e.message}" )
-                    end
-                else
-                    ScmsUtils.errLog("Handler not found: #{pageOptions.handler}")
-                    ScmsUtils.writelog("::Handler not found #{pageOptions.handler}", website)
-                    ScmsUtils.writelog("type NUL > #{handlerpath}", website)
-                end
-            end
-
-            if hasHandler
-                ScmsUtils.log("Rendering with handler")
-                begin
-                    viewSnippet = ScmsHandler.render(viewpath)
-                rescue Exception=>e
-                    ScmsUtils.errLog(e.message)
-                    ScmsUtils.log(e.backtrace.inspect)
-                end
-            else
-                case File.extname(viewpath)
-                when ".xml"
-                    viewSnippet = ScmsXmlHandler.transform(htmlsnipet)
-                when ".md"
-                    begin  
-                        htmlsnipet = htmlsnipet.encode('UTF-8', :invalid => :replace, :undef => :replace)
-                        doc = Maruku.new(htmlsnipet)
-                        viewSnippet = doc.to_html
-                    rescue Exception => e  
-                        viewSnippet = htmlsnipet
-                        ScmsUtils.errLog(e.message)
-                        ScmsUtils.log(e.backtrace.inspect)
-                    end
-                else
-                  viewSnippet = htmlsnipet
-                end
-            end
-
-            viewmodel = Hash.new
             viewmodel = { 
                 :name => pageOptions.name,
                 :title => pageOptions.title,
                 :url => pageOptions.url,
                 :resource => pageOptions.resource,
-                :rootdir => website, 
+                :rootdir => website,
+                :mode =>  options[:mode],
+                :allowEdit => pageOptions.allowEdit,
                 :view => {
                     :name => viewname,
-                    :path => viewfullpath,
-                    :model => viewModel
+                    :path => viewpath,
+                    :data => viewData
                 }
             }
-            
-            if options[:mode] == "cms"
-                viewhtml = "<div class='cms' data-view='#{viewpath}' data-page='#{pageOptions.url}'>#{Scms.render(viewSnippet, viewmodel)}</div>"
-            else
-                viewhtml = Scms.render(viewSnippet, viewmodel)
-            end
         else
             ScmsUtils.errLog("View not found: #{viewname} [#{viewpath}]")
             ScmsUtils.writelog("::View not found: #{viewname} [#{viewpath}]", website)
             ScmsUtils.writelog("type NUL > #{viewpath}", website)
         end
 
-        return viewhtml
+        return viewmodel
     end
 
-    def Scms.parsetemplate(template, hash = Hash.new)
-        return Scms.render(template, hash)
-    end
+    def Scms.renderView(viewpath, hash = Hash.new)
+        #puts "** Rendering: #{viewpath} **"
 
-    def Scms.render(template, hash = Hash.new)
-        result = ""
-        if template != nil
-            begin 
-                if hash.class == OpenStruct 
-                    page = hash 
-                else
-                    page = OpenStruct.new(hash)
-                end
+        htmlsnipet = ""
+        begin
+            htmlsnipet = File.read(viewpath)
+        rescue Exception=>e
+            ScmsUtils.errLog(e.message)
+            ScmsUtils.log(e.backtrace.inspect)
+        end
+        ScmsUtils.log("Empty view: #{viewpath}") if htmlsnipet.empty?
 
-                erb = ERB.new(template)
-                result = erb.result(page.instance_eval { binding })
-            rescue StandardError => e
-                puts "page: #{page}"
-                ScmsUtils.errLog("Critical Error: Could not parse template")
-                ScmsUtils.errLog(e.message)
+        template = ""
 
-                result = "<code style='border: 1px solid #666; background-color: light-yellow;'><pre>"
-                result += e.message
-                result += "\n\n"
-                result += e.inspect
-                result += "\n\n"
-                result += "Invalid Keys in Template\n\n"
-                result += "Valid Keys are:\n"
-                hash.each do |key, value|
-                    result += "- page.#{key}\n"
-                    puts "nil value foy key: #{key}" if value == nil
-                    singleton_class.send(:define_method, key) { value }
-                end
-                result = "</code></pre>"
-
-                
-                result += "\n\n"
-                result += template
+        case File.extname(viewpath)
+        when ".xml"
+            template = ScmsXmlHandler.transform(htmlsnipet)
+        when ".md"
+            begin  
+                htmlsnipet = htmlsnipet.encode('UTF-8', :invalid => :replace, :undef => :replace)
+                doc = Maruku.new(htmlsnipet)
+                template = doc.to_html
             rescue Exception => e  
-                puts "Problem with template - check property exists"
+                template = htmlsnipet
+                ScmsUtils.errLog(e.message)
+                ScmsUtils.log(e.backtrace.inspect)
             end
         else
-            ScmsUtils.log("Error: Can not parse template.  Template is empty")
+          template = htmlsnipet
         end
-        
-        return result
+
+        parser = ScmsParser.new(template, hash)
+        return parser.parse(viewpath)
     end
 
-    def Scms.save(settings, website, pageOptions, views, options)
-
+    def Scms.savePage(settings, website, pageOptions, views, options)
         fileName = File.join(website, File.join(pageOptions.url.sub('~/',''))) 
         erb = File.join(website, pageOptions.template)
         #ScmsUtils.log("Generating: #{fileName} with #{pageOptions.template}")
 
         if File.exists?(erb)
+            bundleModel = Scms.getBundleModel(website, settings, options)# Build bundle model
+            navModel = Scms.getNavModel(website, settings, options)# Build navigation model
 
-            # Build bundle model
-            bundleModel = Scms.bundleModel(website, settings, options)
-            # Build navigation model
-            navModel = Scms.navModel(website, settings, options)
-            #puts "navModel: #{navModel}"
+            websiteroot = '/'
+            websiteroot = settings["rooturl"] if settings["rooturl"] != nil
+            websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
 
             monkeyhook = "";
-            monkeyhook = "<script src='scripts/air-monkey-hook.js'></script>" if options[:mode] == "cms"
+            monkeyhook = "<script src='~/scripts/air-monkey-hook.js'></script>".gsub("~/", websiteroot) if options[:mode] == "cms"
 
             livereload = ""
             if options[:watch]
                 livereload = "<script async='true' defer='true'>document.write('<script src=\"http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>" if options[:mode] != "cms"
             end
             
-            pagemodel = Hash.new
+            pagemodel = Hash.new {}
             pagemodel = { 
                 :name => pageOptions.name,
                 :title => pageOptions.title,
@@ -313,24 +228,13 @@ module Scms
                 :livereload => livereload
             }
 
-            #puts "pagemodel:"
-            #puts pagemodel
-
             pubsubdir = File.dirname(fileName)
             Dir.mkdir(pubsubdir, 755) unless File::directory?(pubsubdir)
 
             erbtemplate = File.read(erb)
 
-            #puts "pagemodel: #{pagemodel}"
-            #html = ""
-            html = Scms.render(erbtemplate, pagemodel)
-
-            
-            websiteroot = '/'
-            websiteroot = settings["rooturl"] if settings["rooturl"] != nil
-            #puts "On save mode: #{options[:mode]}"
-            websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
-
+            parser = ScmsParser.new(erbtemplate, pagemodel)
+            html = parser.parse()
             html = html.gsub('~/', websiteroot)
             begin
                 File.open(fileName, 'w') {|f| f.write(html) }
@@ -346,10 +250,11 @@ module Scms
         end
     end
 
-    def Scms.navModel(website, settings, options)
+    def Scms.getNavModel(website, settings, options)
         websiteroot = '/'
         websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
         websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
+        #websiteroot = "" if options[:mode] == "cms"
 
         navModel = Array.new
         if settings["pages"] != nil
@@ -374,11 +279,22 @@ module Scms
                     pagedata.each do |pageoptions|
                         pagename =  pageoptions[0]
                         pageconfig = pageoptions[1]
+
                         pageurl = "about:blank"
                         pageurl = pageconfig["url"] unless pageconfig["url"] == nil
+
+                        #pageUrlExt = File.extname(pageurl) 
+                        #puts "pageUrlExt: #{pageUrlExt}"
+                        #puts "No extension" if pageUrlExt == ""
+                        if options[:mode] == "cms"
+                            pageurl += "index.html"  if pageurl.match(/\/$/)
+                        end
+
                         navtext = pagename
                         navtext = pageconfig["text"]
+
                         navmeta = pageconfig["meta"]
+
                         navModel.push({"text" => navtext, "url" => pageurl.gsub("~/", websiteroot), "pagename" => pagename, "meta" => navmeta})
                     end
                 end
@@ -387,8 +303,8 @@ module Scms
         return navModel
     end  
 
-    def Scms.bundleModel(website, settings, options)
-        bundleModel = Hash.new
+    def Scms.getBundleModel(website, settings, options)
+        bundleModel = Hash.new {}
         bundleConfig = settings["bundles"]
         if bundleConfig != nil
             bundleConfig.each do |bundle|
