@@ -60,12 +60,12 @@ module Scms
 
     def Scms.generatePages(website, settings, options)
         # build pages defined in config file
-        Scms.generateSettingsPages(website, settings, options)
+        Scms.generatePagesFromSettings(website, settings, options)
         # build pages pased on _pages folder
-        Scms.generateFolderPages(website, settings, options)
+        Scms.generatePagesFromFolder(website, settings, options)
     end
 
-    def Scms.generateSettingsPages(website, settings, options)
+    def Scms.generatePagesFromSettings(website, settings, options)
         if settings["pages"] != nil
             ScmsUtils.log("Compiling Pages:")
             settings["pages"].each do |pagedata|
@@ -104,7 +104,7 @@ module Scms
         return views
     end
 
-    def Scms.generateFolderPages(website, settings, options)
+    def Scms.generatePagesFromFolder(website, settings, options)
         pagesFolder = File.join(website, "_pages")
         Dir.glob("#{pagesFolder}/**/*/").each do |pageFolder|
             pagename = File.basename(pageFolder, ".*")
