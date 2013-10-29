@@ -14,9 +14,14 @@ module ScmsWatcher
 				puts "***********************************"
 				puts ""
 
-				settings = Scms.getSettings(configdir)
-				Scms.bundle(settings, Folders[:website])
-				Scms.build(Folders[:website], settings, options)
+				begin
+					settings = Scms.getSettings(configdir)
+					Scms.bundle(settings, Folders[:website])
+					Scms.build(Folders[:website], settings, options)
+				rescue Exception=>e
+	                ScmsUtils.errLog(e.message)
+	                ScmsUtils.log(e.backtrace.inspect)
+				end
 			end
 	    }
 
@@ -97,9 +102,15 @@ module ScmsWatcher
 				}
 			end
 
-			Scms.sassall(Folders[:website]) if sassfile
-			Scms.bundle(settings, Folders[:website]) if bundlefile
-			Scms.build(Folders[:website], settings, options) if buildfile
+			begin
+				Scms.sassall(Folders[:website]) if sassfile
+				Scms.bundle(settings, Folders[:website]) if bundlefile
+				Scms.build(Folders[:website], settings, options) if buildfile
+			rescue Exception=>e
+                ScmsUtils.errLog(e.message)
+                ScmsUtils.log(e.backtrace.inspect)
+			end
+
 	    end
 
 	    listener.start # not blocking
