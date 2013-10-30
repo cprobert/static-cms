@@ -46,7 +46,7 @@ $(function() {
 				if ($.trim($this.html()) === "")
 					$this.html(addTextMsg);
 				$(this).css({
-						backgroundColor: 'AliceBlue',
+						backgroundColor: '#FFFFE0',
 						cursor: 'pointer'
 				});
 			})
