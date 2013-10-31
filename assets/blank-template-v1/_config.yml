@@ -1,0 +1,37 @@
+template: _layouts/skin.erb.html # The website skin (erb template)
+#rooturl: http://www.mywebsite.com/ #Whats the website root when published - All references in html  will be replaced with this
+# Define your pages here
+pages:
+- index: 
+    generate: index.html 
+    navigation: Home
+    title: My Homepage
+    description: Meta description
+    keywords: "CMS, S3, Ruby"
+    views:
+        intro: _views/home/intro.md
+        main: "_views/reuse.erb?h1=Heading 1&h2=Heading 2&h3=Heading 3"
+- about: 
+    generate: about.html
+    navigation: About
+    views:
+        intro: _views/about/intro.html
+        main: "_views/reuse.erb?h1=Reuse 1&h2=Reuse 2&h3=Reuse 3"
+- contact: #Pageless for nav only
+    navigation: contact
+    navigation_meta: contactform
+    url: about:blank
+
+# Define your bundles here (versioning is recomended if your caching assets)
+bundles:
+- script:
+    generate: js/script.bundle.min-v2.1.1.js
+    files:
+     - _source/scripts/bootstrap.js
+     - _source/scripts/script.js
+- style:
+    generate: css/style.bundle-1.0.css
+    files:
+      - _source/stylesheets/bootstrap.css
+      - _source/stylesheets/bootstrap-responsive.css
+      - _source/stylesheets/style.css
