@@ -3,6 +3,7 @@ module Scms
     require 'scms/scms-utils.rb'
     require 'scms/scms-helpers.rb'
     require 'scms/scms-pageoptions.rb'
+    require 'scms/scms-bundler.rb'
     require 'scms/scms-parser.rb'
     require 'scms/scms-xmlhandler.rb'
     require 'scms/s3deploy.rb'
@@ -326,7 +327,17 @@ module Scms
         return bundleModel
     end
 
+    def Scms.bundler(bundle = nil)
+        if bundle == nil
+            ScmsBundler.run()
+        else
+            ScmsBundler.bundle(bundle)
+        end
+    end
+
     def Scms.bundle(settings, website)
+        Scms.bundler()
+
         bundleConfig = settings["bundles"]
         if bundleConfig != nil
             ScmsUtils.boldlog("Bundeling:")
@@ -392,12 +403,12 @@ module Scms
         ScmsUtils.log("Minimising Sass Files (.scss)")
         Dir.chdir(website) do
             Dir.glob("**/*.{scss}").each do |asset|
-                Scms.sass(asset, website)
+                Scms.sass(asset)
             end
         end
     end
 
-    def Scms.sass(asset, website)
+    def Scms.sass(asset)
         if File.exists?(asset)
             begin
                 template = File.read(asset)
@@ -416,8 +427,6 @@ module Scms
             end
         else
             ScmsUtils.errLog("Sass file doesn't exists: #{asset}")
-            ScmsUtils.writelog("::Sass file doesn't exist #{asset}", website)
-            ScmsUtils.writelog("type NUL > #{asset}", website)
         end
     end
     

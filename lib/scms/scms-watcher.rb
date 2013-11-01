@@ -5,19 +5,47 @@ module ScmsWatcher
 	require 'listen'
 
     def ScmsWatcher.watch(settings, options, configdir)
+	    # File watching
 	    watcher = Thread.new {
-	    	configfile = File.join(configdir, "_config.yml")
-			FileWatcher.new([configfile]).watch do |filename|
-				puts ""
-				puts "***********************************"
-				puts " Config Modification (_config.yml) "
-				puts "***********************************"
-				puts ""
+	    	files = []
+	    	Dir.glob('**/*.scss').each do|f|
+				files << f
+			end
+			Dir.glob('**/*.bundle').each do|f|
+				files << f
+			end
+			files << "_config.yml"
+
+			FileWatcher.new(files).watch do |filename|
+				ext = File.extname(filename)  
 
 				begin
-					settings = Scms.getSettings(configdir)
-					Scms.bundle(settings, Folders[:website])
-					Scms.build(Folders[:website], settings, options)
+					case ext
+					when ".scss"
+						puts ""
+						puts "***********************************"
+						puts " Sass file changed: #{filename}"
+						puts "***********************************"
+						puts ""
+						Scms.sass(filename)
+						#Scms.sassall(Folders[:website])
+					when ".yml"
+						puts ""
+						puts "******************************************************"
+						puts " Config Modification #{filename} "
+						puts "******************************************************"
+						puts ""
+						settings = Scms.getSettings(configdir)
+						Scms.bundle(settings, Folders[:website])
+						Scms.build(Folders[:website], settings, options)
+					when ".bundle"
+						puts ""
+						puts "******************************************************"
+						puts " Bundle Modified: #{filename} "
+						puts "******************************************************"
+						puts ""
+						Scms.bundler(filename)
+					end
 				rescue Exception=>e
 	                ScmsUtils.errLog(e.message)
 	                ScmsUtils.log(e.backtrace.inspect)
@@ -25,17 +53,12 @@ module ScmsWatcher
 			end
 	    }
 
-	    #  [todo] Create this by getting all directories that start with _
-	    psst = []
-	    psst.push("_pages") if File.directory? "_pages" # .html .htm .md .xml .erb, etc
-	    psst.push("_views") if File.directory? "_views" # .html .htm .md .xml .erb, etc
-	    psst.push("_layouts") if File.directory? "_layouts" # .html .htm .erb
-	    psst.push("_templates") if File.directory? "_templates" # .html .htm .erb
-	    psst.push("_resources") if File.directory? "_resources" # .yml
-	    psst.push("_source") if File.directory? "_source" # .scss .css .js
-	    
-	    puts "Listening to #{psst}"
-	    listener = Listen.to(psst, force_polling: true) do |modified, added, removed|
+		folders = []
+	    Dir.glob('*').select { |fn| File.directory?(fn) and (fn.match(/^_/) ) }.each do|f|
+			folders.push(f) 
+		end
+	    puts "Listening to #{folders}"
+	    listener = Listen.to(folders, force_polling: true) do |modified, added, removed|
 
 			sassfile = false
 			bundlefile = false
@@ -78,7 +101,7 @@ module ScmsWatcher
 			if modified.length > 0
 				modified.each{|filename|
 					modifiedfile = Pathname.new(filename).relative_path_from(Pathname.new(Folders[:website])).to_s
-					ext = File.extname(modifiedfile)  
+					#ext = File.extname(modifiedfile)  
 
 					puts ""
 					puts "***********************************************"
@@ -91,13 +114,6 @@ module ScmsWatcher
 					if modifiedfile.start_with?('_source/')
 						bundlefile = true
 						buildfile = false
-					end
-
-					if ext == ".scss"
-						sassfile = true
-						bundlefile = false
-						buildfile = false
-						break
 					end
 				}
 			end
