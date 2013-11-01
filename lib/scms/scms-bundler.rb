@@ -1,5 +1,6 @@
 module ScmsBundler
     require 'fileutils'
+    require 'scms/scms-bundler.rb'
 
     def ScmsBundler.run()
 		Dir.glob('**/*.bundle').each do|bundle|
@@ -9,10 +10,12 @@ module ScmsBundler
 
     def ScmsBundler.bundle(bundle)
     	puts "Parsing bundle: #{bundle}"
+
+
     	content = ""
 		if File::exists?(bundle)
 			wd = File.dirname(bundle)
-            out = bundle.gsub(".bundle", "")
+            
 
 			File.readlines(bundle).each do |line|
 				bundleFile = line.strip
@@ -20,11 +23,6 @@ module ScmsBundler
 
 				next  if bundleFile == nil
 				next  if bundleFile == ""
-
-				if line.match(/^generate:/)
-					out = File.join(wd, line.gsub("generate:", "").strip)
-					next
-				end
 
 				if !line.match(/^#/)
 					b = File.join(wd, bundleFile)
@@ -37,6 +35,7 @@ module ScmsBundler
 				end
 			end
 
+			out = ScmsBundler.getGeneratedBundleName(bundle)
 			begin
                 File.open(out, 'w') {|f| f.write(content) }
                 ScmsUtils.successLog("Created: #{out}")
@@ -46,5 +45,64 @@ module ScmsBundler
                 ScmsUtils.log(e.backtrace.inspect)
 			end
 		end
+    end
+
+    def ScmsBundler.watch()
+    	# Listen to changes to files withing a bundle
+	    Dir.glob('**/*.bundle').each do|bundle|
+			ScmsBundler.watchBundle(bundle)
+		end	
+    end
+
+    def ScmsBundler.watchBundle(bundle)
+    	files = ScmsBundler.getBundleFiles(bundle)
+    	Thread.new {
+			FileWatcher.new(files).watch do |filename|
+				begin
+					ScmsBundler.bundle(bundle)
+				rescue Exception=>e
+	                ScmsUtils.errLog(e.message)
+	                ScmsUtils.log(e.backtrace.inspect)
+				end
+			end
+    	}
+    end
+
+    def ScmsBundler.getBundleFiles(bundle)
+    	files = []
+		if File::exists?(bundle)
+			wd = File.dirname(bundle)
+			File.readlines(bundle).each do |line|
+				bundleFile = line.strip
+				bundleFile = bundleFile.gsub('\n', '')
+
+				next  if bundleFile == nil
+				next  if bundleFile == ""
+				next if line.match(/^generate:/)
+
+				if !line.match(/^#/)
+					b = File.join(wd, bundleFile)
+					if File::exists?(b)
+						files << b
+					end
+				end
+			end
+		end
+		return files
+    end
+
+    def ScmsBundler.getGeneratedBundleName(bundle)
+		name = bundle.gsub(".bundle", "")
+
+		if File::exists?(bundle)
+			wd = File.dirname(bundle)
+			File.readlines(bundle).each do |line|
+				if line.match(/^generate:/)
+					name = File.join(wd, line.gsub("generate:", "").strip)
+					break
+				end
+			end
+		end
+    	return name
     end
 end

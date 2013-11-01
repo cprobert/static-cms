@@ -306,14 +306,18 @@ module Scms
 
     def Scms.getBundleModel(website, settings, options)
         bundleModel = Hash.new {}
+        websiteroot = '/'
+        websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
+        websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
+        
+        Dir.glob('**/*.bundle').each do|bundle|
+            bundleModel[bundle] = ScmsBundler.getGeneratedBundleName(bundle)
+        end 
+
         bundleConfig = settings["bundles"]
         if bundleConfig != nil
             bundleConfig.each do |bundle|
                 #ScmsUtils.log( "bundle (#{bundle.class}) = #{bundle}" )
-
-                websiteroot = '/'
-                websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
-                websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
 
                 bundle.each do |option|
                     name = option[0]
@@ -324,6 +328,9 @@ module Scms
                 end
             end
         end
+        # puts "Bundle model:"
+        # puts bundleModel
+        # puts "----------------------------"
         return bundleModel
     end
 

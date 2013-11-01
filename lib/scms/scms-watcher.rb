@@ -4,8 +4,9 @@ module ScmsWatcher
 	require 'pathname'
 	require 'listen'
 
-    def ScmsWatcher.watch(settings, options, configdir)
-	    # File watching
+    def ScmsWatcher.watch(settings, options, configdir)   
+
+	    # Listen to sass, bundle and _config.yml file changes
 	    watcher = Thread.new {
 	    	files = []
 	    	Dir.glob('**/*.scss').each do|f|
@@ -14,7 +15,8 @@ module ScmsWatcher
 			Dir.glob('**/*.bundle').each do|f|
 				files << f
 			end
-			files << "_config.yml"
+			configfile = File.join(configdir, "_config.yml")
+			files << configfile if File::exists?(configfile)
 
 			FileWatcher.new(files).watch do |filename|
 				ext = File.extname(filename)  
@@ -53,6 +55,10 @@ module ScmsWatcher
 			end
 	    }
 
+	    # Listen to changes to files withing a bundle
+		ScmsBundler.watch()
+
+		# Listen to changed to folders that start with an underscore (_)
 		folders = []
 	    Dir.glob('*').select { |fn| File.directory?(fn) and (fn.match(/^_/) ) }.each do|f|
 			folders.push(f) 
