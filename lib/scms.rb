@@ -311,7 +311,10 @@ module Scms
         websiteroot = ScmsUtils.uriEncode("file:///#{website}/") if options[:mode] == "cms"
         
         Dir.glob('**/*.bundle').each do|bundle|
-            bundleModel[bundle] = ScmsBundler.getGeneratedBundleName(bundle)
+            getGeneratedBundleName = ScmsBundler.getGeneratedBundleName(bundle)
+            stub = ScmsBundler.toStub(bundle)
+            bundleModel[bundle] = getGeneratedBundleName
+            bundleModel[stub] = getGeneratedBundleName #Access bundle model without bundle extention
         end 
 
         bundleConfig = settings["bundles"]

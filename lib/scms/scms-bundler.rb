@@ -1,5 +1,6 @@
 module ScmsBundler
     require 'fileutils'
+    require 'packr'
     require 'scms/scms-bundler.rb'
 
     def ScmsBundler.run()
@@ -10,7 +11,6 @@ module ScmsBundler
 
     def ScmsBundler.bundle(bundle)
     	puts "Parsing bundle: #{bundle}"
-
 
     	content = ""
 		if File::exists?(bundle)
@@ -23,12 +23,20 @@ module ScmsBundler
 
 				next  if bundleFile == nil
 				next  if bundleFile == ""
+				next if line.match(/^generate:/)
 
 				if !line.match(/^#/)
 					b = File.join(wd, bundleFile)
 					puts "Including: #{line}"
 					if File::exists?(b)
-						content +=  File.read(b) + "\n"
+						fileContents = File.read(b)
+
+						if File.extname(b) == ".js"
+	                        puts "Minifing: #{b}"
+	                        fileContents = Packr.pack(fileContents) unless /(-min)|(\.min)|(\-pack)|(\.pack)/.match(b)
+						end
+
+						content += fileContents + "\n"
 					else
 						puts "Can not read: #{b}"
 					end
@@ -91,8 +99,12 @@ module ScmsBundler
 		return files
     end
 
+	def ScmsBundler.toStub(bundle)
+		return bundle.gsub(".bundle", "")
+	end
+
     def ScmsBundler.getGeneratedBundleName(bundle)
-		name = bundle.gsub(".bundle", "")
+		name = ScmsBundler.toStub(bundle)
 
 		if File::exists?(bundle)
 			wd = File.dirname(bundle)
