@@ -348,61 +348,63 @@ module Scms
     def Scms.bundle(settings, website)
         Scms.bundler()
 
-        bundleConfig = settings["bundles"]
-        if bundleConfig != nil
-            ScmsUtils.boldlog("Bundeling:")
+        if settings != nil
+            bundleConfig = settings["bundles"]
+            if bundleConfig != nil
+                ScmsUtils.boldlog("Bundeling:")
 
-            bundleConfig.each do |bundle|
-                #ScmsUtils.log( "bundle (#{bundle.class}) = #{bundle}" )
-                bundle.each do |option|
-                    name = option[0]
-                    config = option[1]
+                bundleConfig.each do |bundle|
+                    #ScmsUtils.log( "bundle (#{bundle.class}) = #{bundle}" )
+                    bundle.each do |option|
+                        name = option[0]
+                        config = option[1]
 
-                    bundleName = File.join(config["generate"].gsub("~/",""))
-                    
-
-                    content = ""
-                    assetList = ""
-                    files = config["files"]
-                    if files != nil
-                        files.each do |asset|
-                            assetList += " - #{asset}\n" 
-                            assetdir = File.join(website, asset)
-                            if File::exists?(assetdir)
-                                #try catch for permisions
-                                begin
-                                    content = content + "\n\n" + File.read(assetdir)
-                                rescue Exception=>e
-                                    ScmsUtils.errLog(e.message)
-                                    ScmsUtils.log(e.backtrace.inspect)
-
-                                    ScmsUtils.log("#{assetList}")
-                                end
-                            else
-                                ScmsUtils.errLog("Asset file doesn't exists: #{asset}")
-                                ScmsUtils.writelog("::Asset file doesn't exists: #{asset}", website)
-                                ScmsUtils.writelog("type NUL > #{assetdir}", website)
-                            end
-                        end
+                        bundleName = File.join(config["generate"].gsub("~/",""))
                         
-                    else
-                        ScmsUtils.errLog("No files in bundle"); 
-                    end
 
-                    bundleFullPath = File.join(website, bundleName)
-                    bundleDir = File.dirname(File.join(website, bundleName))
-                    begin
-                        Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
-                        File.open(bundleFullPath, 'w') {|f| f.write(content) }
-                        ScmsUtils.successLog("Created: #{bundleName}")
-                    rescue Exception=>e
-                        ScmsUtils.errLog("Error creating bundle: #{bundleName}")
-                        ScmsUtils.errLog(e.message)
-                        ScmsUtils.log(e.backtrace.inspect)
-                    end
-                    if File.extname(bundleName) == ".js"
-                        #puts "Minifing: #{bundleName}"
-                        Scms.packr(bundleFullPath) unless /(-min)|(\.min)/.match(bundleName)
+                        content = ""
+                        assetList = ""
+                        files = config["files"]
+                        if files != nil
+                            files.each do |asset|
+                                assetList += " - #{asset}\n" 
+                                assetdir = File.join(website, asset)
+                                if File::exists?(assetdir)
+                                    #try catch for permisions
+                                    begin
+                                        content = content + "\n\n" + File.read(assetdir)
+                                    rescue Exception=>e
+                                        ScmsUtils.errLog(e.message)
+                                        ScmsUtils.log(e.backtrace.inspect)
+
+                                        ScmsUtils.log("#{assetList}")
+                                    end
+                                else
+                                    ScmsUtils.errLog("Asset file doesn't exists: #{asset}")
+                                    ScmsUtils.writelog("::Asset file doesn't exists: #{asset}", website)
+                                    ScmsUtils.writelog("type NUL > #{assetdir}", website)
+                                end
+                            end
+                            
+                        else
+                            ScmsUtils.errLog("No files in bundle"); 
+                        end
+
+                        bundleFullPath = File.join(website, bundleName)
+                        bundleDir = File.dirname(File.join(website, bundleName))
+                        begin
+                            Dir.mkdir(bundleDir, 755) unless File::directory?(bundleDir)
+                            File.open(bundleFullPath, 'w') {|f| f.write(content) }
+                            ScmsUtils.successLog("Created: #{bundleName}")
+                        rescue Exception=>e
+                            ScmsUtils.errLog("Error creating bundle: #{bundleName}")
+                            ScmsUtils.errLog(e.message)
+                            ScmsUtils.log(e.backtrace.inspect)
+                        end
+                        if File.extname(bundleName) == ".js"
+                            #puts "Minifing: #{bundleName}"
+                            Scms.packr(bundleFullPath) unless /(-min)|(\.min)/.match(bundleName)
+                        end
                     end
                 end
             end
