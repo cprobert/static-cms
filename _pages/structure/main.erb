@@ -1,0 +1,83 @@
+<section id="gridSystem">
+	<div class="span12">
+		<h2>Folder Structure</h2>
+		<p>Take a look in the new folder, it should look something like:</p>
+		<ul>
+			<li>_layouts\skin.erb.html</li>
+			<li>_pages\home\intro.html</li>
+			<li>_pages\home\main.html</li>
+			<li>_config.yml</li>
+		</ul>
+		<h2>Creating a Template</h2>
+		<p>Open the template &quot;_layouts/skin.html&quot;, and look at the code:</p>
+		<div class="code">
+          <pre class="prettyprint"><code class="language-html">
+	&lt;!DOCTYPE html&gt;
+	&lt;html lang=&quot;en&quot;&gt;
+	  &lt;head&gt;
+		&lt;title&gt;scms&lt;/title&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+	  &lt;/head&gt;
+	  &lt;body&gt;
+		&lt;div class=&quot;container&quot;&gt;
+			&lt;header&gt;
+			  &lt;%= page.views[&quot;intro&quot;] %&gt;
+			&lt;/header&gt;
+		  &lt;div&gt;
+		    &lt;%= page.views[&quot;main&quot;] %&gt;
+		  &lt;/div&gt;
+		  &lt;footer&gt;&lt;/footer&gt;
+		&lt;/div&gt; 
+	  &lt;/body&gt;
+	&lt;/html&gt;
+          </code></pre>
+
+		</div>
+		<p>This is standard HTML 5 mark-up for a page. What&#39;s interesting is the code: <strong>&lt;%= page.views[&quot;intro&quot;] %&gt;</strong> . This is how you inject the content from the view into the page.</p>
+      <p>Further reading for the template language <a href="http://www.stuartellis.eu/articles/erb/">http://www.stuartellis.eu/articles/erb/</a></p>
+		<h2>Creating a view</h2>
+		<p>Open the views (home-intro.html and home-main.html) in your favourite text editor and add some html, e.g</p>
+		<div class="code">
+          <pre class="prettyprint"><code class="language-html">
+    &lt;p&gt;Hello World&lt;/p&gt;
+    &lt;p&gt;This is an example view&lt;/p&gt;
+          </code></pre>
+
+		</div>
+		<h2>Editing your config.yml</h2>
+		<p>The content of your config.yml should look like:</p>
+		<div class="code">
+        
+        <pre class="prettyprint"><code class="language-yaml">
+    template: _layouts/skin.html
+        </code></pre>
+
+		</div>
+		<p>There a a few options available here but at a minimum you need to specify a theme/layout</p>
+
+		<h2>_pages AutoMagic</h2>
+		<p>Static-CMS will automatically generate a page for each subfolder in the _pages directory.  It then looks for a view with a name that matches the name for the view specified in the template.</p>
+
+		<p>For example intro.html will be injected into template here: &lt;%= page.views[&quot;intro&quot;] %&gt;, main.html will be injected into template &lt;%= page.views[&quot;main&quot;] %&gt;</p>
+		
+		<h2>Asset Bundling</h2>
+		<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. scms has a system that allows you to &#39;bundle&#39; your css and javascript files. Create a file with a .bundle extention, and list the files you want bundled:</p>
+		<div class="code">
+		<pre class="prettyprint"><code class="language-yaml">
+	_source/base.css
+	_source/bootstrap.css
+	_source/bootstrap-responsive.css
+		</code></pre>
+		</div>
+		<p>Whats going on here?</p>
+		<p>The bundler with enumerate the files in a .bundle file and concatanate them into a single file.  Javascript files will be automatically minified, unless they end with a .min extention, e.g. myfile.min.js</p>
+		<p>You then replace your script and css references in your skin file like this:</p>
+		<div class="code">
+		<pre class="prettyprint"><code class="language-rb">
+    &lt;link href=&#39;&lt;%= page.bundles[&quot;css/styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
+    &lt;script src=&#39;&lt;%= page.bundles[&quot;js/libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
+		</code></pre>
+		</div>
+	</div>
+</section>
+

@@ -1,0 +1,9 @@
+<ul class="nav">
+  <% page.navigation.each do |nav| %>
+    <li class='<%= ScmsHelpers.isActive(nav["pagename"], page.name) %>  <%= nav["meta"]%>'>
+      <a href='<%= nav["url"] %>'>
+        <%= nav["text"] %>
+      </a>
+    </li> 
+  <% end %>
+</ul>

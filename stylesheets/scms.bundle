@@ -1,0 +1,5 @@
+generate: scms-v1.1.css
+
+_source/base.css
+_source/bootstrap.css
+_source/bootstrap-responsive.css
