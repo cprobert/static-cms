@@ -32,7 +32,7 @@ module Scms
 	                page = @model 
 	                erb = ERB.new(@template)
 	                result = erb.result(page.instance_eval { binding })
-	                result = result.encode('UTF-8', :invalid => :replace, :undef => :replace)
+	                result = ScmsUtils.toUTF8(result)
 
 	                # only do cms click edit on sub views not layout templates
 	                if page.view != nil

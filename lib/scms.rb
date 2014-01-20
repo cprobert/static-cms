@@ -176,16 +176,15 @@ module Scms
             template = ScmsXmlHandler.transform(htmlsnipet)
         when ".md"
             begin  
-                htmlsnipet = htmlsnipet.encode('UTF-8', :invalid => :replace, :undef => :replace)
                 doc = Maruku.new(htmlsnipet)
-                template = doc.to_html
+                template = ScmsUtils.toUTF8(doc.to_html)
             rescue Exception => e  
                 template = htmlsnipet
                 ScmsUtils.errLog(e.message)
                 ScmsUtils.log(e.backtrace.inspect)
             end
         else
-          template = htmlsnipet
+            template = ScmsUtils.toUTF8(htmlsnipet)
         end
 
         parser = ScmsParser.new(template, hash)

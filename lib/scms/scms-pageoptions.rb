@@ -63,13 +63,13 @@ module Scms
           @keywords = pageconfig["keywords"] if pageconfig["keywords"] != nil
           @description = pageconfig["description"] if pageconfig["description"] != nil
           @handler = pageconfig["handler"]
-          @resource = getResource(website, pageconfig["resource"])
+          @resource = getResource(website, pageconfig["resource"], pageconfig)
           @allowEdit = pageconfig["allowEdit"] if pageconfig["allowEdit"] != nil
         end
       end  
 
       
-      def getResource(website, resource)
+      def getResource(website, resource, config)
           ymlresource = Hash.new
           if resource != nil
               resourcepath = File.join(website, resource)
@@ -86,6 +86,15 @@ module Scms
                   ScmsUtils.writelog("::Resource not found #{resource}", website)
                   ScmsUtils.writelog("type NUL > #{resourcepath}", website)
               end
+          else
+            ymlresource = config
+            ymlresource.delete("view")
+            ymlresource.delete("views")
+            ymlresource.delete("resource")
+            ymlresource.delete("bundles")
+            ymlresource.delete("navigation")
+            ymlresource.delete("monkeyhook")
+            ymlresource.delete("livereload")
           end
           return ymlresource
       end

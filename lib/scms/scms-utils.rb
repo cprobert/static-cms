@@ -101,7 +101,7 @@ module ScmsUtils
     
 	def ScmsUtils.txt_2_html(rawsnippet)
 		if rawsnippet != nil
-            rawsnippet = rawsnippet.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => "")
+            rawsnippet = ScmsUtils.toUTF8(rawsnippet)
 			rawsnippet.gsub!(/(http:\/\/\S+)/, '<a href="\1" target="_blank" ref="external">\1</a>')
             rawsnippet.gsub!(/(file:\/\/\/\S+)/, '<a href="\1" target="_blank" ref="external">\1</a>')
 			rawsnippet.gsub!(/\n/, "<br />")
@@ -110,6 +110,11 @@ module ScmsUtils
 		return rawsnippet
 	end
     
+    def ScmsUtils.toUTF8(txt)
+        txt.force_encoding('binary')
+        return txt.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => "?")      
+    end
+
     def ScmsUtils.uriEncode(uri)
         return uri.gsub(" ", "%20")
     end
