@@ -1,4 +1,4 @@
-generate: scms-v1.1.css
+generate: scms-v1.2.css
 
 _source/base.css
 _source/bootstrap.css
