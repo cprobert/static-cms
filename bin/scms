@@ -14,6 +14,9 @@ require "scms/version"
 require 'scms/scms-watcher.rb'
 require 'scms/scms-httpserver.rb'
 
+require 'scms/deploy-s3.rb'
+require 'scms/deploy-ftp.rb'
+
 class String
   def to_path(end_slash=false)
     "#{'/' if self[0]=='\\'}#{self.split('\\').join('/')}#{'/' if end_slash}" 
@@ -75,7 +78,11 @@ optparse = OptionParser.new do|opts|
   # This displays the help screen, all programs are assumed to have this option.
    opts.on( '-h', '--help', 'Display this help screen' ) do
      puts "Default action = build; default website directory = current working directory"
+     puts ""
      puts opts
+     puts ""
+     puts "Get the lowdown at: http://cprobert.github.io/Static-CMS"
+     puts ""
      exit
    end
 end
@@ -150,5 +157,21 @@ if options[:publish]
     puts "Deploying to S3"
     mimetypefile = File.join(Folders[:assets], "mime.types")   
     S3Deploy.sync(Folders[:website], Folders[:config], mimetypefile) 
+  end
+
+  if File.exists?(File.join(Folders[:config], "_ftpconfig.yml"))
+    puts "Deploying to FTP"
+    # define options here
+    options = {}
+    options['source'] = Folders[:website]
+
+    options['ftp_username'] = "swan"
+    options['ftp_password'] = "s4wn!l0v31"
+    options['ftp_host'] = "geminian2.2plus1host.com"
+    options['ftp_port'] = 21
+    options['ftp_passive'] = true
+    options['ftp_dir'] = "/backup"
+
+    FtpDeploy.sync(options)
   end
 end

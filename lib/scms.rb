@@ -6,7 +6,6 @@ module Scms
     require 'scms/scms-bundler.rb'
     require 'scms/scms-parser.rb'
     require 'scms/scms-xmlhandler.rb'
-    require 'scms/s3deploy.rb'
 
     require 'fileutils'
     require 'pathname'
