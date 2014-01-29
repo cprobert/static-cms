@@ -103,11 +103,11 @@ $website = Folders[:website]
 $watch = options[:watch]
 $cmsmode = options[:mode] == "cms"
 
-# ScmsUtils.log "System root folder = #{Folders[:root]}"
-# ScmsUtils.log "Website folder = #{Folders[:website]}"
-# ScmsUtils.log "Destination dir = #{Folders[:destination]}"
-# ScmsUtils.log "Config dir = #{Folders[:config]}"
-# ScmsUtils.log "Mode = #{options[:mode]}"
+ScmsUtils.log "System root folder = #{Folders[:root]}"
+ScmsUtils.log "Website folder = #{Folders[:website]}"
+ScmsUtils.log "Destination dir = #{Folders[:destination]}"
+ScmsUtils.log "Config dir = #{Folders[:config]}"
+ScmsUtils.log "Mode = #{options[:mode]}"
 
 raise "Invalid working directory! #{Folders[:website]}" if !File::directory?(Folders[:website])
 Dir.chdir Folders[:website]
@@ -170,7 +170,7 @@ if options[:publish]
     options['ftp_host'] = "geminian2.2plus1host.com"
     options['ftp_port'] = 21
     options['ftp_passive'] = true
-    options['ftp_dir'] = "/backup"
+    options['ftp_dir'] = "/httpdocs/backup"
 
     FtpDeploy.sync(options)
   end

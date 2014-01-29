@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "webrick"
   spec.add_dependency "launchy"
   spec.add_dependency "nokogiri"
+  #spec.add_dependency "ptools"
   
   #spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"

@@ -61,7 +61,7 @@ module ScmsWatcher
 		# Listen to changed to folders that start with an underscore (_)
 		folders = []
 	    Dir.glob('*').select { |fn| File.directory?(fn) and (fn.match(/^_/) ) }.each do|f|
-			folders.push(f) 
+			folders.push(f)
 		end
 	    puts "Listening to #{folders}"
 	    listener = Listen.to(folders, force_polling: true) do |modified, added, removed|

@@ -1,6 +1,11 @@
 require 'net/ftp'
+require 'fileutils'
+
+require 'scms/extentions.rb'
+require 'scms/scms-utils.rb'
 
 module FtpDeploy
+  
 
   def FtpDeploy.sync(options)
     ftp_port = (options['ftp_port'] || 21).to_i
@@ -33,20 +38,8 @@ module FtpDeploy
 
     ftp = FtpDeploy::Ftp.new(options['ftp_host'], ftp_port, {:username => username, :password => password, :passive => passive})
     puts "\r\nConnected to server. Sending site"
-    ftp.sync(options['destination'], options['ftp_dir'])
+    ftp.sync(options['source'], options['ftp_dir'])
     puts "Successfully sent site"
-  end
-
-  class File
-
-    def self.is_bin?(f)
-      file_test = %x(file #{f})
-
-      # http://stackoverflow.com/a/8873922
-      file_test = file_test.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '').encode('UTF-8', 'UTF-16')
-
-      file_test !~ /text/
-    end
   end
 
   class Ftp
@@ -67,11 +60,18 @@ module FtpDeploy
 
     private
     def connect
-      Net::FTP.open(host) do |ftp|
-        ftp.passive = @passive
-        ftp.connect(host, port)
-        ftp.login(username, password)
-        yield ftp
+      begin
+        Net::FTP.open(host) do |ftp|
+          ftp.passive = @passive
+          #ftp.debug_mode = true
+          ftp.connect(host, port)
+          ftp.login(username, password)
+          puts ftp.welcome
+          yield ftp
+        end
+      rescue Exception=>e
+        ScmsUtils.errLog(e.message)
+        ScmsUtils.log(e.backtrace.inspect)
       end
     end
 
@@ -83,8 +83,13 @@ module FtpDeploy
         # TODO : this is also risen if we don't have write access. Then, we need to raise.
       end
       Dir.foreach(local) do |file_name|
+        
         # If the file/directory is hidden (first character is a dot), we ignore it
         next if file_name =~ /^(\.|\.\.)$/
+        next if file_name =~ /^(\.)/
+        next if file_name =~ /^(_)$/
+
+        #puts file_name
 
         if ::File.stat(local + "/" + file_name).directory?
           # It is a directory, we recursively send it
@@ -97,10 +102,16 @@ module FtpDeploy
           send_dir(ftp, local + "/" + file_name, distant + "/" + file_name)
         else
            # It's a file, we just send it
-           if FtpDeploy::File.is_bin?(local + "/" + file_name)
+           if File.join(local + "/" + file_name).binary?
+             puts "#{file_name} (binary)"
              ftp.putbinaryfile(local + "/" + file_name, distant + "/" + file_name)
            else
-             ftp.puttextfile(local + "/" + file_name, distant + "/" + file_name)
+             puts "#{file_name} (text)"
+             localFilePath = local + "/" + file_name
+             remoteFilePath = distant + "/" + file_name
+             puts "localFilePath: #{localFilePath}"
+             puts "remoteFilePath: #{remoteFilePath}"
+             ftp.puttextfile(localFilePath, remoteFilePath)
            end
         end
       end

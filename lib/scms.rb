@@ -49,6 +49,7 @@ module Scms
                     ScmsUtils.writelog("type NUL > #{bootstrap}", website)
                 end
             end 
+            ScmsUtils.log("Generating pages")
             Scms.generatePages(website, settings, options)
         else
             ScmsUtils.errLog("Config is empty")
@@ -59,10 +60,32 @@ module Scms
     end
 
     def Scms.generatePages(website, settings, options)
-        # build pages defined in config file
-        Scms.generatePagesFromSettings(website, settings, options)
         # build pages pased on _pages folder
         Scms.generatePagesFromFolder(website, settings, options)
+        # build pages defined in config file
+        Scms.generatePagesFromSettings(website, settings, options)
+    end
+
+    def Scms.generatePagesFromFolder(website, settings, options)
+        pagesFolder = File.join(website, "_pages")
+        Dir.glob("#{pagesFolder}/**/*/").each do |pageFolder|
+            pagename = File.basename(pageFolder, ".*")
+            pageconfig = nil
+            pageconfig = Scms.getSettings(pageFolder) if File.exists?(File.join(pageFolder, "_config.yml"))
+            pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
+            views = Hash.new {}
+            if pageconfig != nil
+                views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions, options) if pageconfig["views"] != nil
+            end
+            
+            Dir.glob(File.join(pageFolder, "*")).reject { |f| f =~ /\.yml$/ || File.directory?(f) }.each do |view|
+                viewname = File.basename(view, ".*")
+                viewpath = Pathname.new(view).relative_path_from(Pathname.new(website)).to_s
+                viewmodel = Scms.getViewModel(viewname, viewpath, website, pageOptions, options)
+                views[viewname] = Scms.renderView(viewpath, viewmodel)
+            end
+            Scms.savePage(settings, website, pageOptions, views, options)
+        end
     end
 
     def Scms.generatePagesFromSettings(website, settings, options)
@@ -102,28 +125,6 @@ module Scms
             end
         end
         return views
-    end
-
-    def Scms.generatePagesFromFolder(website, settings, options)
-        pagesFolder = File.join(website, "_pages")
-        Dir.glob("#{pagesFolder}/**/*/").each do |pageFolder|
-            pagename = File.basename(pageFolder, ".*")
-            pageconfig = nil
-            pageconfig = Scms.getSettings(pageFolder) if File.exists?(File.join(pageFolder, "_config.yml"))
-            pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
-            views = Hash.new {}
-            if pageconfig != nil
-                views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions, options) if pageconfig["views"] != nil
-            end
-            
-            Dir.glob(File.join(pageFolder, "*")).reject { |f| f =~ /\.yml$/ || File.directory?(f) }.each do |view|
-                viewname = File.basename(view, ".*")
-                viewpath = Pathname.new(view).relative_path_from(Pathname.new(website)).to_s
-                viewmodel = Scms.getViewModel(viewname, viewpath, website, pageOptions, options)
-                views[viewname] = Scms.renderView(viewpath, viewmodel)
-            end
-            Scms.savePage(settings, website, pageOptions, views, options)
-        end
     end
 
     def Scms.getViewModel(viewname, viewpath, website, pageOptions, options, viewData = nil)
