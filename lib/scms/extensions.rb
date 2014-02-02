@@ -1,18 +1,21 @@
 class File
-  def self.binary?(name)
-    ascii = control = binary = 0
 
-    File.open(name, "rb") {|io| io.read(1024)}.each_byte do |bt|
-      case bt
-        when 0...32
-          control += 1
-        when 32...128
-          ascii += 1
-        else
-          binary += 1
+  # def self.is_bin?(f)
+  #   file_test = %x(file #{f})
+
+  #   # http://stackoverflow.com/a/8873922
+  #   file_test = file_test.encode('UTF-16', 'UTF-8', :invalid => :replace, :replace => '').encode('UTF-8', 'UTF-16')
+
+  #   file_test !~ /text/
+  # end
+
+  def File.binary? name
+    open name do |f|
+      while (b=f.read(256)) do
+        return true if b[ "\0"]
       end
     end
-
-    control.to_f / ascii > 0.1 || binary.to_f / ascii > 0.05
+    false
   end
+
 end

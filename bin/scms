@@ -161,17 +161,6 @@ if options[:publish]
 
   if File.exists?(File.join(Folders[:config], "_ftpconfig.yml"))
     puts "Deploying to FTP"
-    # define options here
-    options = {}
-    options['source'] = Folders[:website]
-
-    options['ftp_username'] = "swan"
-    options['ftp_password'] = "s4wn!l0v31"
-    options['ftp_host'] = "geminian2.2plus1host.com"
-    options['ftp_port'] = 21
-    options['ftp_passive'] = true
-    options['ftp_dir'] = "/httpdocs/backup"
-
-    FtpDeploy.sync(options)
+    FtpDeploy.sync(Folders[:website], Folders[:config])
   end
 end

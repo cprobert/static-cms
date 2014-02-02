@@ -1,33 +1,48 @@
 require 'net/ftp'
 require 'fileutils'
 
-require 'scms/extentions.rb'
+require 'scms/extensions.rb'
 require 'scms/scms-utils.rb'
 
 module FtpDeploy
   
+  # yml file example:
 
-  def FtpDeploy.sync(options)
-    ftp_port = (options['ftp_port'] || 21).to_i
-    passive  = options['ftp_passive'] || true
+  # host: localhost
+  # port: 21
+  # username: exampleuser
+  # password: seCre7Squr1al
+  # passive: true
+  # directory: /htdocs
 
-    puts "Sending site over FTP (host: #{options['ftp_host']}, port: #{ftp_port})"
+  def FtpDeploy.sync(website, config)
+
+    ftpYamlPath=File.join(config, "_ftpconfig.yml")
+    settings = YAML.load_file(ftpYamlPath)
+    throw "No gost defined in _ftpconfig.yml settings file" if settings['host'] == nil
+
+    host = settings['host']
+    port = (settings['port'] || 21).to_i
+    passive  = settings['passive'] || true
+    remote_dir = settings['directory'] || "/"
+
+    ScmsUtils.boldlog("Sending site over FTP (host: #{host}, port: #{port})")
     begin
-      if options['ftp_username'].nil?
+      if settings['username'].nil?
         print "FTP Username: "
         username = $stdin.gets.chomp
       else
-        username = options['ftp_username']
+        username = settings['username']
       end
 
-      if options['ftp_password'].nil?
+      if settings['password'].nil?
         print "FTP Password: "
         # We hide the entered characters before to ask for the password
         system "stty -echo"
         password = $stdin.gets.chomp
         system "stty echo"
       else
-        password = options['ftp_password']
+        password = settings['password']
       end
     rescue NoMethodError, Interrupt
       # When the process is exited, we display the characters again
@@ -36,9 +51,9 @@ module FtpDeploy
       exit
     end
 
-    ftp = FtpDeploy::Ftp.new(options['ftp_host'], ftp_port, {:username => username, :password => password, :passive => passive})
+    ftp = FtpDeploy::Ftp.new(host, port, {:username => username, :password => password, :passive => passive})
     puts "\r\nConnected to server. Sending site"
-    ftp.sync(options['source'], options['ftp_dir'])
+    ftp.sync(website, remote_dir)
     puts "Successfully sent site"
   end
 
@@ -87,7 +102,7 @@ module FtpDeploy
         # If the file/directory is hidden (first character is a dot), we ignore it
         next if file_name =~ /^(\.|\.\.)$/
         next if file_name =~ /^(\.)/
-        next if file_name =~ /^(_)$/
+        next if file_name =~ /^_/
 
         #puts file_name
 
@@ -102,15 +117,14 @@ module FtpDeploy
           send_dir(ftp, local + "/" + file_name, distant + "/" + file_name)
         else
            # It's a file, we just send it
-           if File.join(local + "/" + file_name).binary?
+           localFilePath = local + "/" + file_name
+           remoteFilePath = distant + "/" + file_name
+
+           if File.binary?(local + "/" + file_name)
              puts "#{file_name} (binary)"
-             ftp.putbinaryfile(local + "/" + file_name, distant + "/" + file_name)
+             ftp.putbinaryfile(localFilePath, remoteFilePath)
            else
              puts "#{file_name} (text)"
-             localFilePath = local + "/" + file_name
-             remoteFilePath = distant + "/" + file_name
-             puts "localFilePath: #{localFilePath}"
-             puts "remoteFilePath: #{remoteFilePath}"
              ftp.puttextfile(localFilePath, remoteFilePath)
            end
         end
