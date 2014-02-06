@@ -8,7 +8,7 @@ nav:
 - bundles:
     text: Assets
     url: bundles.html
-- structure:
+- deploy:
     text: Deploy
     url: deploy.html
 - editor:
