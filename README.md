@@ -17,6 +17,7 @@ Further Reading
 ---------------
 
  * Homepage: http://cprobert.github.io/Static-CMS
+ * Gem: https://rubygems.org/gems/scms
  * WYSIWYG editor: http://ipassexam.github.io/Air-Monkey/
  * ERB template language: http://www.stuartellis.eu/articles/erb/
 
