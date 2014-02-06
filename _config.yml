@@ -2,9 +2,6 @@ template: _layouts/hero.html
 port: 8091
 
 nav:
-- options:
-    text: Options
-    url: options.html
 - structure:
     text: Structure
     url: structure.html

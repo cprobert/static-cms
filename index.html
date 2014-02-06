@@ -46,12 +46,6 @@
             <ul class="nav">
   
     <li class='  '>
-      <a href='options.html'>
-        Options
-      </a>
-    </li> 
-  
-    <li class='  '>
       <a href='structure.html'>
         Structure
       </a>
@@ -82,17 +76,24 @@
 			<div class="hero-unit">
     <h1>Easyily Build Super-Fast Static Websites!</h1>
 
-    <h2>A ruby gem for creating simple static websites in minutes.</h2>
+    <h2>Static-CMS is a <a href="https://www.google.co.uk/search?q=define:+ruby+gem" target="_blank">ruby gem</a> for creating simple static websites in minutes.</h2>
+
+    <hr />
+    <p>To install, first open up a terminal/<a href="http://lifehacker.com/5989434/quickly-open-a-command-prompt-from-the-windows-explorer-address-bar" target="_blank">command prompt</a> in your working directory (requires <a href="prerequisites.html">Ruby [1.9.3]</a>).</p>
     
     <pre class="prettyprint" style="margin-top: 25px;"><code class="language-bsh">
   $ gem install scms
+    </code></pre>
+
+    <p>To create your first Static-CMS site:</p>
+
+    <pre class="prettyprint" style="margin-top: 25px;"><code class="language-bsh">
   $ scms --create mynewsite
   $ cd mynewsite
   $ scms --serve
     </code></pre>
     
     <p>Static-CMS also comes with a WYSIWYG editor called <a href="http://ipassexam.github.io/Air-Monkey/">Air-Monkey</a>, so your clients can edit their sites in point and click environment.</p>
-    <p>check the <a href="prerequisites.html">prerequisites</a></p>
 </div>
 	  </header>
 
@@ -102,16 +103,17 @@
     <h2>Built in web server</h2>
     <p>Use the --serve option to build and view your website</p>
     <div class="code">
-        <pre class="prettyprint"><code class="language-bsh">
+        <pre class="prettyprint" title="You can also use the binary 'scms-server'"><code class="language-bsh">
   $ scms&nbsp;--serve
         </code></pre>
     </div>
-    <p>To stop the built in web server use [Ctrl] + [C]</p>
+    <p>To stop the built in web server use [Ctrl] + [C]<br />
+    </p>
 </div>
 
 <div class="span4">
     <h2>Change dectection</h2>
-    <p>The --watch option to detects changes to your views and layouts:</p>
+    <p>The --watch option to detects changes to your files:</p>
     <div class="code">
         <pre class="prettyprint"><code class="language-bsh">
   $ scms&nbsp;--watch
@@ -181,6 +183,6 @@
 	<script src=''></script>
 	<script src=''></script>
     
-    
+    <script async='true' defer='true'>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
   </body>
 </html>
