@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>scms options</title>
+    <title>bundles</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -51,7 +51,7 @@
       </a>
     </li> 
   
-    <li class='  '>
+    <li class='active  '>
       <a href='bundles.html'>
         Assets
       </a>
@@ -79,59 +79,34 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
 	  <header id="overview" class="jumbotron subhead">
-			<div class="hero-unit">
-<h1>SCMS Options</h1>
-<p>The easyest way to get a full list of options is to use the built in help</p>
-<div class="code">
-		<pre class="prettyprint"><code class="language-bsh">
-   $ scms --help
-		</code></pre>
-		</div>
-</div>
-
+			
 	  </header>
 
       <!-- Example row of columns -->
       <div class="row">
-        
-
-
-
-<section id="gridSystem">
-	<div class="span12">
-		<h2>Working Directory</h2>
-		<p>By defualt scms processes files in the current working directory.  This can by changed by specifing a source</p>
+        		
+		<p>Create a file with a .bundle extention, and list the files you want bundled:</p>
 
 		<div class="code">
-		<pre class="prettyprint"><code class="language-bsh">
-  $  scms --source /pathto/www.mywebsite.com
+		<pre class="prettyprint"><code class="language-yaml">
+	_source/base.css
+	_source/bootstrap.css
+	_source/bootstrap-responsive.css
 		</code></pre>
 		</div>
+
+		<p>Whats going on here?</p>
+
+		<p>The bundler with enumerate the files in a .bundle file and concatanate them into a single file.  Javascript files will be automatically minified, unless they end with a .min extention, e.g. myfile.min.js</p>
+
+		<p>You then replace your script and css references in your skin file like this:</p>
 		
-		<h2>Output Directory</h2>
-		<p>By defualt scms compiles files in the current working directory.  This can by changed by specifing a destination</p>
-
 		<div class="code">
-		<pre class="prettyprint"><code class="language-bsh">
-  $  scms --destination /pathto/outputdir
+		<pre class="prettyprint"><code class="language-rb">
+    &lt;link href=&#39;&lt;%= page.bundles[&quot;css/styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
+    &lt;script src=&#39;&lt;%= page.bundles[&quot;js/libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
 		</code></pre>
 		</div>
-
-		<h2>Running multiple sites</h2>
-		<p>Occasionally you may want to run multiple scms sites in serve mode.  This will cause a port clash for the web servers, but you can avoid this by specifying a port yourself (default = 8002).</p>
-
-		<div class="code">
-		<pre class="prettyprint"><code class="language-bsh">
-  $  scms --serve --port 8003
-		</code></pre>
-		</div>
-
-		<h2>Live reload</h2>
-		<p>scms can be used with <a href="http://livereload.com/" target="_blank">http://livereload.com/</a>.</p>
-		<p>You can either use the browser plugins or add  &lt;%= page.livereload %&gt;  to your layout template</p>
-	</div>
-</section>
-
       </div>
 
       <hr>
@@ -140,13 +115,13 @@
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
             <ul>
-                <li>page.name: options</li>
-                <li>page.title: scms options</li>
+                <li>page.name: bundles</li>
+                <li>page.title: bundles</li>
                 <li>page.description: </li>
                 <li>page.keywords: </li>
-                <li>page.url: options.html</li>
+                <li>page.url: bundles.html</li>
                 <li>page.rootdir: C:/Users/Cookie/Documents/GitHub/Static-CMS</li>
-                <li>page.resource: {"title"=>"scms options"}</li>
+                <li>page.resource: {}</li>
                 <li>page.config: </li>
                 <li>page.bundles: {"scripts/libraries.bundle"=>"scripts/libraries-v1.1.js", "scripts/libraries"=>"scripts/libraries-v1.1.js", "stylesheets/scms.bundle"=>"stylesheets/scms-v1.2.css", "stylesheets/scms"=>"stylesheets/scms-v1.2.css"}</li>
                 <li>page.data: </li>

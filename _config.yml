@@ -5,6 +5,9 @@ nav:
 - structure:
     text: Structure
     url: structure.html
+- bundles:
+    text: Assets
+    url: bundles.html
 - structure:
     text: Deploy
     url: deploy.html

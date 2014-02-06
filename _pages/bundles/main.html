@@ -1,0 +1,23 @@
+		
+		<p>Create a file with a .bundle extention, and list the files you want bundled:</p>
+
+		<div class="code">
+		<pre class="prettyprint"><code class="language-yaml">
+	_source/base.css
+	_source/bootstrap.css
+	_source/bootstrap-responsive.css
+		</code></pre>
+		</div>
+
+		<p>Whats going on here?</p>
+
+		<p>The bundler with enumerate the files in a .bundle file and concatanate them into a single file.  Javascript files will be automatically minified, unless they end with a .min extention, e.g. myfile.min.js</p>
+
+		<p>You then replace your script and css references in your skin file like this:</p>
+		
+		<div class="code">
+		<pre class="prettyprint"><code class="language-rb">
+    &lt;link href=&#39;&lt;%= page.bundles[&quot;css/styles&quot;] %&gt;&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39;/&gt;
+    &lt;script src=&#39;&lt;%= page.bundles[&quot;js/libraries&quot;] %&gt;&#39;&gt;&lt;/script&gt;
+		</code></pre>
+		</div>
