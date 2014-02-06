@@ -66,7 +66,7 @@ optparse = OptionParser.new do|opts|
     options[:configdir] = c
   end
    
-  options[:mode] = nil
+  options[:mode] = 'Publish'
   opts.on( '-m', '--mode Mode', 'CMS or Publish (for use with Air-Monkey: http://ipassexam.github.io/Air-Monkey/)' ) do|m|
      options[:mode] = m
   end
@@ -148,7 +148,9 @@ end
 
 if options[:server]
   port = options[:port]
-  port = settings["port"] if settings["port"] != nil
+  if settings != nil
+    port = settings["port"] if settings["port"] != nil
+  end
   ScmsServer.start(Folders[:website], port)
 end
 
