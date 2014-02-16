@@ -469,6 +469,7 @@ module Scms
         end
     end
 
+    #Methods for use in views
     #public
     def Scms.getView(viewname, page = OpenStruct.new, ext = "html")
         if page.views != nil
