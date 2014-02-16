@@ -16,7 +16,7 @@ module S3Deploy
         throw "No bucket defined in _s3config.yml settings file" if settings['bucket'] == nil
         ScmsUtils.boldlog( "Syncing with Amazon S3: #{settings['bucket']}" )
 
-        exclude = "(\\.svn$)|(\\.git$)|(^_)"
+        exclude = "(\\.svn$)|(\\.git$)|(^_)|(^\\.)"
         if settings['ignore'] != nil
             exclude = "#{exclude}|(#{settings["ignore"]})"
         end

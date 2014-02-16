@@ -1,1 +1,1 @@
-About=====Learn about the history of Bootstrap, meet the core team, and check out the ever-growing community resources.
+Static-CMS==========Use Static-CMS to easyily build super-fast static websites!

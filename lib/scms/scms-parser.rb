@@ -56,7 +56,7 @@ module Scms
 	                result += e.inspect
 
 	                result += "\n\n"
-	                result += "Valid Template Keys are:\n"
+	                result += "Valid template properties are:\n"
 	                @model.marshal_dump.each do |key, value|
 	                    result += "- page.#{key}\n"
 	                    puts "nil value foy key: #{key}" if value == nil

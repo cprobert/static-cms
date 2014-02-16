@@ -1,0 +1,1 @@
+Get the full documentation at: <a href="http://cprobert.github.io/Static-CMS">Static-CMS Website</a>

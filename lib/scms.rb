@@ -18,6 +18,7 @@ module Scms
     
     include YAML
     
+    #public
     def Scms.getSettings(configdir)
         yamlpath=File.join(configdir, "_config.yml")
         settings = ScmsUtils.readyaml(yamlpath)
@@ -28,6 +29,7 @@ module Scms
         end
     end
 
+    #public
     def Scms.build(website, settings, options)
         ScmsUtils.boldlog("Compiling #{website}")
         
@@ -59,6 +61,7 @@ module Scms
         ScmsUtils.log(ScmsUtils.uriEncode("file:///#{website}"))
     end
 
+    private
     def Scms.generatePages(website, settings, options)
         # build pages pased on _pages folder
         Scms.generatePagesFromFolder(website, settings, options)
@@ -66,16 +69,32 @@ module Scms
         Scms.generatePagesFromSettings(website, settings, options)
     end
 
+    private
     def Scms.generatePagesFromFolder(website, settings, options)
         pagesFolder = File.join(website, "_pages")
         Dir.glob("#{pagesFolder}/**/*/").each do |pageFolder|
             pagename = File.basename(pageFolder, ".*")
             pageconfig = nil
-            pageconfig = Scms.getSettings(pageFolder) if File.exists?(File.join(pageFolder, "_config.yml"))
+            pageConfigPath = File.join(pageFolder, "_config.yml")
+            if File.exists?(pageConfigPath)
+                pageconfig = Scms.getSettings(pageFolder) 
+            else
+                begin
+                    ScmsUtils.log("Creating page config:")
+                    ScmsUtils.log(pageConfigPath)
+                    File.open(pageConfigPath, 'w') {|f| f.write("title: "+ pagename) }
+                rescue Exception=>e
+                    ScmsUtils.errLog(e.message)
+                    ScmsUtils.log(e.backtrace.inspect)
+                end
+            end
+
             pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
             views = Hash.new {}
             if pageconfig != nil
                 views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions, options) if pageconfig["views"] != nil
+            else
+                # Add config generation here
             end
             
             Dir.glob(File.join(pageFolder, "*")).reject { |f| f =~ /\.yml$/ || File.directory?(f) }.each do |view|
@@ -88,6 +107,7 @@ module Scms
         end
     end
 
+    private
     def Scms.generatePagesFromSettings(website, settings, options)
         if settings["pages"] != nil
             ScmsUtils.log("Compiling Pages:")
@@ -109,6 +129,7 @@ module Scms
         end
     end
 
+    private
     def Scms.getSettingsViews(settingsViews, website, pageOptions, options)
         views = Hash.new {}
         if settingsViews != nil
@@ -127,6 +148,7 @@ module Scms
         return views
     end
 
+    private
     def Scms.getViewModel(viewname, viewpath, website, pageOptions, options, viewData = nil)
         #puts "parsing view: #{viewname}"
 
@@ -157,40 +179,7 @@ module Scms
         return viewmodel
     end
 
-    def Scms.renderView(viewpath, hash = Hash.new)
-        #puts "** Rendering: #{viewpath} **"
-
-        htmlsnipet = ""
-        begin
-            htmlsnipet = File.read(viewpath)
-        rescue Exception=>e
-            ScmsUtils.errLog(e.message)
-            ScmsUtils.log(e.backtrace.inspect)
-        end
-        ScmsUtils.log("Empty view: #{viewpath}") if htmlsnipet.empty?
-
-        template = ""
-
-        case File.extname(viewpath)
-        when ".xml"
-            template = ScmsXmlHandler.transform(htmlsnipet)
-        when ".md"
-            begin  
-                doc = Maruku.new(htmlsnipet)
-                template = ScmsUtils.toUTF8(doc.to_html)
-            rescue Exception => e  
-                template = htmlsnipet
-                ScmsUtils.errLog(e.message)
-                ScmsUtils.log(e.backtrace.inspect)
-            end
-        else
-            template = ScmsUtils.toUTF8(htmlsnipet)
-        end
-
-        parser = ScmsParser.new(template, hash)
-        return parser.parse(viewpath)
-    end
-
+    private
     def Scms.savePage(settings, website, pageOptions, views, options)
         fileName = File.join(website, File.join(pageOptions.url.sub('~/',''))) 
         erb = File.join(website, pageOptions.template)
@@ -250,6 +239,7 @@ module Scms
         end
     end
 
+    private
     def Scms.getNavModel(website, settings, options)
         websiteroot = '/'
         websiteroot = settings["rooturl"] unless settings["rooturl"] == nil
@@ -303,6 +293,7 @@ module Scms
         return navModel
     end  
 
+    private
     def Scms.getBundleModel(website, settings, options)
         bundleModel = Hash.new {}
         websiteroot = '/'
@@ -336,6 +327,7 @@ module Scms
         return bundleModel
     end
 
+    private
     def Scms.bundler(bundle = nil)
         if bundle == nil
             ScmsBundler.run()
@@ -344,6 +336,7 @@ module Scms
         end
     end
 
+    #public
     def Scms.bundle(settings, website)
         Scms.bundler()
 
@@ -410,6 +403,7 @@ module Scms
         end
     end
 
+    #public
     def Scms.sassall(website)
         ScmsUtils.log("Minimising Sass Files (.scss)")
         Dir.chdir(website) do
@@ -419,6 +413,7 @@ module Scms
         end
     end
 
+    #public
     def Scms.sass(asset)
         if File.exists?(asset)
             begin
@@ -458,6 +453,7 @@ module Scms
         end
     end
 
+    #public
     def Scms.copyWebsite(website, pub)
         if pub.to_s.strip.length != 0
             FileUtils.mkdir pub unless Dir.exists? pub
@@ -471,5 +467,67 @@ module Scms
             end
             ScmsUtils.log("Output to: #{ScmsUtils.uriEncode("file:///#{pub}")}")
         end
+    end
+
+    #public
+    def Scms.getView(viewname, page = OpenStruct.new, ext = "html")
+        if page.views != nil
+            htmlSnippet = page.views[viewname]
+            if htmlSnippet != nil
+                return htmlSnippet
+            else
+                begin
+                    viewPath = File.join(page.rootdir, "_pages", page.name, viewname +"."+ ext)
+                    ScmsUtils.log("Creating view:")
+                    ScmsUtils.log(viewPath)
+                    File.open(viewPath, 'w') {|f| f.write("edit me") }
+                rescue Exception=>e
+                    ScmsUtils.errLog(e.message)
+                    ScmsUtils.log(e.backtrace.inspect)
+                end
+                return ""
+            end
+        else
+            return ""
+        end
+    end
+
+    #public #legasy
+    def Scms.renderView(viewpath, hash = Hash.new)
+        return Scms.getSnippet(viewpath, hash)
+    end
+    #public
+    def Scms.getSnippet(viewpath, hash = Hash.new)
+        #puts "** Rendering: #{viewpath} **"
+
+        htmlsnipet = ""
+        begin
+            htmlsnipet = File.read(viewpath)
+        rescue Exception=>e
+            ScmsUtils.errLog(e.message)
+            ScmsUtils.log(e.backtrace.inspect)
+        end
+        ScmsUtils.log("Empty view: #{viewpath}") if htmlsnipet.empty?
+
+        template = ""
+
+        case File.extname(viewpath)
+        when ".xml"
+            template = ScmsXmlHandler.transform(htmlsnipet)
+        when ".md"
+            begin  
+                doc = Maruku.new(htmlsnipet)
+                template = ScmsUtils.toUTF8(doc.to_html)
+            rescue Exception => e  
+                template = htmlsnipet
+                ScmsUtils.errLog(e.message)
+                ScmsUtils.log(e.backtrace.inspect)
+            end
+        else
+            template = ScmsUtils.toUTF8(htmlsnipet)
+        end
+
+        parser = ScmsParser.new(template, hash)
+        return parser.parse(viewpath)
     end
 end
