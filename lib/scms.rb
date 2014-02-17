@@ -471,7 +471,7 @@ module Scms
 
     #Methods for use in views
     #public
-    def Scms.getView(viewname, page = OpenStruct.new, ext = "html")
+    def Scms.renderView(viewname, page = OpenStruct.new, ext = "html")
         if page.views != nil
             htmlSnippet = page.views[viewname]
             if htmlSnippet != nil
@@ -493,12 +493,8 @@ module Scms
         end
     end
 
-    #public #legasy
-    def Scms.renderView(viewpath, hash = Hash.new)
-        return Scms.getSnippet(viewpath, hash)
-    end
     #public
-    def Scms.getSnippet(viewpath, hash = Hash.new)
+    def Scms.includeView(viewpath, hash = Hash.new)
         #puts "** Rendering: #{viewpath} **"
 
         htmlsnipet = ""

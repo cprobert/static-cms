@@ -39,11 +39,7 @@
               <a class="navbar-brand" href="#">Project name</a>
             </div>
             <div class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                <li class="active"><a href="~/index.html">Home</a></li>
-                <li><a href="~/getting-started.html">Getting started</a></li>
-                <li><a href="#contact">Contact</a></li>
-              </ul>
+              <%= Scms.includeView("_layouts/nav.erb", page) %>
             </div>
           </div>
         </div>
@@ -51,7 +47,7 @@
       </div>
     </div>
 
-    <%= page.views["carousel"] %>
+    <%= Scms.renderView("carousel", page, "erb") %>
 
     <!-- Marketing messaging and featurettes
     ================================================== -->
@@ -59,7 +55,7 @@
 
     <div class="container marketing">
 
-      <%= page.views["main"] %>
+      <%= Scms.renderView("main", page) %>
 
       <hr class="featurette-divider">
 
