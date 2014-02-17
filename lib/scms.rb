@@ -101,7 +101,7 @@ module Scms
                 viewname = File.basename(view, ".*")
                 viewpath = Pathname.new(view).relative_path_from(Pathname.new(website)).to_s
                 viewmodel = Scms.getViewModel(viewname, viewpath, website, pageOptions, options)
-                views[viewname] = Scms.renderView(viewpath, viewmodel)
+                views[viewname] = Scms.includeView(viewpath, viewmodel)
             end
             Scms.savePage(settings, website, pageOptions, views, options)
         end
@@ -142,7 +142,7 @@ module Scms
                 viewData = Hash[viewqs.split('&').map{ |q| q.split('=') }] if viewqs != nil
 
                 viewmodel = Scms.getViewModel(viewname, viewpath, website, pageOptions, options, viewData)
-                views[viewname] = Scms.renderView(viewpath, viewmodel)
+                views[viewname] = Scms.includeView(viewpath, viewmodel)
             end
         end
         return views
@@ -471,8 +471,8 @@ module Scms
 
     #Methods for use in views
     #public
-    def Scms.renderView(viewname, page = OpenStruct.new, ext = "html")
-        if page.send("views") != nil
+    def Scms.getView(viewname, page = OpenStruct.new, ext = "html")
+        if page.views != nil
             htmlSnippet = page.views[viewname]
             if htmlSnippet != nil
                 return htmlSnippet
@@ -526,5 +526,15 @@ module Scms
 
         parser = ScmsParser.new(template, hash)
         return parser.parse(viewpath)
+    end
+
+    #public
+    def Scms.renderView(viewpath, hash = Hash.new, ext = "html")
+        viewExt = File.extname(viewpath)
+        if viewExt.nil? || viewExt.empty?
+            return Scms.getView(viewpath, hash, ext)
+        else
+            return Scms.includeView(viewpath, hash)
+        end
     end
 end

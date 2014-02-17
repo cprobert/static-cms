@@ -30,15 +30,15 @@ module Scms
       end 
 
       def resource= resource
-          @resource = resource
+        @resource = resource
       end
 
       def handler= handler
-          @handler = handler
+        @handler = handler
       end
 
       def allowEdit= allowEdit
-          @allowEdit = allowEdit
+        @allowEdit = allowEdit
       end
 
       def initialize (name, website, pageconfig, siteConfig)  
