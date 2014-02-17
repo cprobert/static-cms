@@ -53,12 +53,12 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
 	  <header id="overview" class="jumbotron subhead">
-			<%= page.views["intro"] %>
+			<%= Scms.renderView("intro", page, "erb") %>
 	  </header>
 
       <!-- Example row of columns -->
       <div class="row">
-        <%= page.views["main"] %>
+        <%= Scms.renderView("main", page) %>
       </div>
 
       <hr>
@@ -67,16 +67,16 @@
 		<p id="view-theme-vars"><a class="btn" href="#">View theme variables</a></p>
 		<div style="diplay: none;" id="theme-vars">
             <ul>
-                <li>page.name: <%= page.name %></li>
-                <li>page.title: <%= page.title %></li>
-                <li>page.description: <%= page.description %></li>
-                <li>page.keywords: <%= page.keywords %></li>
-                <li>page.url: <%= page.url %></li>
-                <li>page.rootdir: <%= page.rootdir %></li>
-                <li>page.resource: <%= page.resource %></li>
-                <li>page.config: <%= page.config %></li>
-                <li>page.bundles: <%= page.bundles %></li>
-                <li>page.data: <%= page.data %></li>
+                <li>page.name = '<%= page.name %>'</li>
+                <li>page.title = '<%= page.title %>'</li>
+                <li>page.description = '<%= page.description %>'</li>
+                <li>page.keywords = '<%= page.keywords %>'</li>
+                <li>page.url = '<%= page.url %>'</li>
+                <li>page.rootdir = '<%= page.rootdir %>'</li>
+                <li>page.resource = '<%= page.resource %>'</li>
+                <li>page.config = <%= page.config %></li>
+                <li>page.bundles = <%= page.bundles %></li>
+                <li>page.data = <%= page.data %></li>
                 <li>Views: (access like this: page.views["viewname"])</li>
                 
             </ul>
