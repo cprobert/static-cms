@@ -472,7 +472,7 @@ module Scms
     #Methods for use in views
     #public
     def Scms.renderView(viewname, page = OpenStruct.new, ext = "html")
-        if page.views != nil
+        if page.send("views") != nil
             htmlSnippet = page.views[viewname]
             if htmlSnippet != nil
                 return htmlSnippet
