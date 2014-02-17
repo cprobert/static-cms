@@ -82,9 +82,9 @@
 			
 
 <div class="hero-unit">
-	<h1>Asset Bundling</h1>
+	<h1>Smarter Assets</h1>
 	
-	<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. Static-CMS has a system that allows you to &#39;bundle&#39; your css and javascript files.</p>
+	<p>Static-CMS has some tricks for generating smarter website assets (CSS and JS files). </p>
 </div>
 	  </header>
 
@@ -92,7 +92,18 @@
       <div class="row">
         <section id="gridSystem">
 	<div class="span12">
-		<p>Create a file with a .bundle extention, and list the files you want bundled:</p>
+
+		<h2>Sass</h2>
+
+		<p>Sass (Syntactically Awesome Stylesheets) is a stylesheet language that extends css, adding additional functionality such as varibles, nesting and mixins.  Checkout the <a href="http://sass-lang.com/" target="_blank">Sass website</a> to learn more.</p>
+
+		<p>To make life a bit easier, Static-CMS automatically parses all scss/sass files, and converts then to .css files.</p>
+
+
+		<h2>Asset Bundling</h2>
+		
+		<p>It&#39;s best practise to <a href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">minimise your download requests</a>. Static-CMS has a system that allows you to &#39;bundle&#39; your css and javascript files.</p>
+			<p>Create a file with a .bundle extention, and list the files you want bundled:</p>
 
 		<div class="code">
 		<pre class="prettyprint"><code class="language-yaml">
@@ -130,7 +141,7 @@
                 <li>page.keywords = ''</li>
                 <li>page.url = 'bundles.html'</li>
                 <li>page.rootdir = 'C:/Users/Cookie/Documents/GitHub/Static-CMS'</li>
-                <li>page.resource = '{}'</li>
+                <li>page.resource = '{"title"=>"bundles"}'</li>
                 <li>page.config = </li>
                 <li>page.bundles = {"scripts/libraries.bundle"=>"scripts/libraries-v1.1.js", "scripts/libraries"=>"scripts/libraries-v1.1.js", "stylesheets/scms.bundle"=>"stylesheets/scms-v1.2.css", "stylesheets/scms"=>"stylesheets/scms-v1.2.css"}</li>
                 <li>page.data = </li>
