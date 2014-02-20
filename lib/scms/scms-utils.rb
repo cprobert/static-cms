@@ -22,12 +22,12 @@ module ScmsUtils
     def ScmsUtils.readyaml(yamlpath)
         config = nil
         if File.exist?(yamlpath)
-            tree = File.read(yamlpath)
+            #tree = File.read(yamlpath)
             begin
-                myconfig = ERB.new(tree).result()
-                #puts "Conf = #{myconfig}"
-                config = YAML.load(myconfig)
-                #config = YAML.load_file(yamlpath)
+                # myconfig = ERB.new(tree).result()
+                # puts "Conf = #{myconfig}"
+                # config = YAML.load(myconfig)
+                config = YAML.load_file(yamlpath)
             rescue Exception => e  
                 ScmsUtils.errLog("Error Loading _config.yml (check there are no tabs in the file)")
                 ScmsUtils.log("Yaml: #{ScmsUtils.uriEncode("file:///#{yamlpath}")}")

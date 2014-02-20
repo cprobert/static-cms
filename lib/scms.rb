@@ -51,7 +51,6 @@ module Scms
                     ScmsUtils.writelog("type NUL > #{bootstrap}", website)
                 end
             end 
-            ScmsUtils.log("Generating pages")
             Scms.generatePages(website, settings, options)
         else
             ScmsUtils.errLog("Config is empty")
@@ -71,6 +70,7 @@ module Scms
 
     private
     def Scms.generatePagesFromFolder(website, settings, options)
+        ScmsUtils.log("Generating from _pages folder")
         pagesFolder = File.join(website, "_pages")
         Dir.glob("#{pagesFolder}/**/*/").each do |pageFolder|
             pagename = File.basename(pageFolder, ".*")
@@ -110,20 +110,28 @@ module Scms
     private
     def Scms.generatePagesFromSettings(website, settings, options)
         if settings["pages"] != nil
-            ScmsUtils.log("Compiling Pages:")
+            ScmsUtils.log("Generating from pages from config")
             settings["pages"].each do |pagedata|
                 if pagedata != nil
                     pagedata.each do |pageOptions|
+                        
                         pagename =  pageOptions[0]
                         pageconfig = pageOptions[1]
+                        settingsViews = pageconfig['views']
 
                         pageOptions = PageOptions.new(pagename, website, pageconfig, settings)
-                        views = Scms.getSettingsViews(pageconfig["views"], website, pageOptions, options)
-
-                        # Dont save a page if no views have been defined (so the config han have pages for nav building)
-                        break if views.length < 1
+                        
+                        views = Scms.getSettingsViews(settingsViews, website, pageOptions, options)
+                        # Dont save a page if no views have been defined (so the config can have pages for nav building)
+                        if views.length < 1
+                            #ScmsUtils.log("No views specified for: #{pagename}")
+                            #puts "#{pageconfig}"
+                            break
+                        end
                         Scms.savePage(settings, website, pageOptions, views, options)
                     end
+                else
+                    ScmsUtils.errLog("No pagedata")
                 end
             end
         end
@@ -144,6 +152,8 @@ module Scms
                 viewmodel = Scms.getViewModel(viewname, viewpath, website, pageOptions, options, viewData)
                 views[viewname] = Scms.includeView(viewpath, viewmodel)
             end
+        else
+            #puts "No settingsViews"
         end
         return views
     end
@@ -529,7 +539,7 @@ module Scms
     end
 
     #public
-    def Scms.renderView(viewpath, hash = Hash.new, ext = "html")
+    def Scms.renderView(viewpath, hash = OpenStruct.new, ext = "html")
         viewExt = File.extname(viewpath)
         if viewExt.nil? || viewExt.empty?
             return Scms.getView(viewpath, hash, ext)

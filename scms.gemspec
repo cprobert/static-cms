@@ -27,15 +27,18 @@ Gem::Specification.new do |spec|
 
   spec.executables << 'scms'
 
-  spec.add_runtime_dependency 'cprobert-s3sync', '~> 1.4', '>= 1.4.1'
-  spec.add_runtime_dependency 'maruku', '~> 0.7', '>= 0.7.1'
-  spec.add_runtime_dependency 'sass', '~> 3.2', '>= 3.2.14'
-  spec.add_runtime_dependency 'packr', '~> 3.2', '>= 3.2.1'
-  spec.add_runtime_dependency 'listen', '~> 2.5', '>= 2.5.0'
-  spec.add_runtime_dependency 'filewatcher', '~> 0.3', '>= 0.3.2'
-  spec.add_runtime_dependency 'webrick', '~> 1.3', '>= 1.3.1'
-  spec.add_runtime_dependency 'launchy', '~> 2.4', '>= 2.4.2'
-  spec.add_runtime_dependency 'nokogiri', '~> 1.6', '>= 1.6.1'
+  spec.add_dependency 'cprobert-s3sync'
+
+  spec.add_dependency 'maruku', '~> 0.7'
+  spec.add_dependency 'packr', '~> 3.2'
+  spec.add_dependency 'listen', '~> 2.5'
+  spec.add_dependency 'filewatcher', '~> 0.3'
+  spec.add_dependency 'webrick', '~> 1.3'
+  spec.add_dependency 'launchy', '~> 2.4'
+  spec.add_dependency 'nokogiri', '~> 1.6'
+
+  #spec.add_runtime_dependency 'sass', , '>= 3.2.14'
+  spec.add_dependency('sass', '~> 3.2')
   
   #spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake", '~> 10.1', '>= 10.1.1'

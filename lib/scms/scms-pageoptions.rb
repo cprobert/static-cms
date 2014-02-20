@@ -87,7 +87,7 @@ module Scms
                   ScmsUtils.writelog("type NUL > #{resourcepath}", website)
               end
           else
-            ymlresource = config
+            ymlresource = config.dup
             ymlresource.delete("view")
             ymlresource.delete("views")
             ymlresource.delete("resource")
