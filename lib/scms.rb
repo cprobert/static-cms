@@ -196,8 +196,9 @@ module Scms
         #ScmsUtils.log("Generating: #{fileName} with #{pageOptions.template}")
 
         if File.exists?(erb)
-            bundleModel = Scms.getBundleModel(website, settings, options)# Build bundle model
-            navModel = Scms.getNavModel(website, settings, options)# Build navigation model
+            bundleModel = Scms.getBundleModel(website, settings, options) # Build bundle model
+            navModel = Scms.getNavModel(website, settings, options) # Build navigation model
+            metaModel = Scms.getMetaModel(settings)
 
             websiteroot = '/'
             websiteroot = settings["rooturl"] if settings["rooturl"] != nil
@@ -221,6 +222,7 @@ module Scms
                 :resource => pageOptions.resource, 
                 :bundles => bundleModel,
                 :navigation => navModel,
+                :meta => metaModel,
                 :views => views, 
                 :rootdir => website, 
                 :monkeyhook => monkeyhook,
@@ -301,6 +303,15 @@ module Scms
             end
         end
         return navModel
+    end
+
+    private
+    def Scms.getMetaModel(settings)
+        metaModel = Hash.new
+        if settings["meta"] != nil
+            metaModel = settings["meta"]
+        end
+        return metaModel
     end  
 
     private
