@@ -1,10 +1,10 @@
 A static website CMS
 ====================
 
-If you need to build a quick html website but don't want to maintain each page independantly Static-CMS could be for you.
+If you need to build a quick html website but don't want to maintain each page independently Static-CMS could be for you.
 StaticCMS is a static website builder that creates html files from an eruby template.  This facilitates the management of the layout/skin/theme from a single file.
 It also has a few nifty features such as JavaScript and CSS bundeling and minimisation
-When your happy with your website StaticCMS will also deploy to AmazonS3 setting approperate caching settings.
+When your happy with your website StaticCMS will also deploy to AmazonS3 setting appropriate caching settings.
 
 Find it useful? Then let me know: https://twitter.com/c_probert
 
