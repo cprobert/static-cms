@@ -1,16 +1,11 @@
 *.gem
 *.sublime-project
 *.sublime-workspace
-
-# DocProject is a documentation generator add-in
-DocProject/buildhelp/
-DocProject/Help/*.HxT
-DocProject/Help/*.HxC
-DocProject/Help/*.hhc
-DocProject/Help/*.hhk
-DocProject/Help/*.hhp
-DocProject/Help/Html2
-DocProject/Help/html
+assets/blank-template/index.html
+assets/blank-template/about.html
+assets/blank-template/scripts/bootstrap.min-v2.1.1.js
+assets/blank-template/stylesheets/style-1.0.css
+assets/blank-template/getting-started.html
 
 
 ############
@@ -26,8 +21,3 @@ Desktop.ini
 
 # Mac crap
 .DS_Store
-/assets/blank-template/index.html
-/assets/blank-template/about.html
-/assets/blank-template/scripts/bootstrap.min-v2.1.1.js
-/assets/blank-template/stylesheets/style-1.0.css
-assets/blank-template/getting-started.html
