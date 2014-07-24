@@ -98,6 +98,10 @@ module ScmsUtils
             }
         end
 	end
+
+    def ScmsUtils.makeSafe(txt)
+        return txt.gsub(/\u2018/, "'")
+    end
     
 	def ScmsUtils.txt_2_html(rawsnippet)
 		if rawsnippet != nil

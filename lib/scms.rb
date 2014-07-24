@@ -496,7 +496,7 @@ module Scms
         if page.views != nil
             htmlSnippet = page.views[viewname]
             if htmlSnippet != nil
-                return htmlSnippet
+                return ScmsUtils.makeSafe(htmlSnippet)
             else
                 begin
                     viewPath = File.join(page.rootdir, "_pages", page.name, viewname +"."+ ext)

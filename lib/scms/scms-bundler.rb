@@ -32,8 +32,10 @@ module ScmsBundler
 						fileContents = File.read(b)
 
 						if File.extname(b) == ".js"
-	                        puts "Minifing: #{b}"
-	                        fileContents = Packr.pack(fileContents) unless /(-min)|(\.min)|(\-pack)|(\.pack)/.match(b)
+							if f.include? ".fat."
+	                        	puts "Minifing: #{b}"
+	                        	fileContents = Packr.pack(fileContents) unless /(-min)|(\.min)|(\-pack)|(\.pack)/.match(b)
+	                    	end
 						end
 
 						content += fileContents + "\n"
