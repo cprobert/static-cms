@@ -2,6 +2,7 @@ module ScmsBundler
     require 'fileutils'
     require 'packr'
     require 'scms/scms-bundler.rb'
+    require 'zlib'
 
     def ScmsBundler.run()
 		Dir.glob('**/*.bundle').each do|bundle|
@@ -49,6 +50,19 @@ module ScmsBundler
 			begin
                 File.open(out, 'w') {|f| f.write(content) }
                 ScmsUtils.successLog("Created: #{out}")
+
+                extn = File.extname  out        # => ".mp4"
+				name = File.basename out, extn  # => "xyz"
+				path = File.dirname  out        # => "/path/to"
+
+				gzip_out = "#{path}#{name}.gz#{extn}"
+				Zlib::GzipWriter.open("#{out}.gz") do |gz|
+					File.open(out).each do |line|
+						gz.write line
+					end
+					gz.close
+				end
+				puts "Created gzip: #{gzip_out}"
 			rescue Exception=>e
                 ScmsUtils.errLog("Error creating bundle: #{out}")
                 ScmsUtils.errLog(e.message)
