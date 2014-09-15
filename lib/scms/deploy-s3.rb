@@ -36,7 +36,7 @@ module S3Deploy
         if settings['cache'] != nil
             settings['cache'].each do |folder| 
                 ScmsUtils.log("Publishing: #{folder}(public: caching: 1 year)")
-                cacheparams = "#{params}  --public-read --cache-control='max-age=31449600' \"#{pub}/#{folder}/\" #{settings['bucket']}:#{folder}/"
+                cacheparams = "#{params}  --public-read --cache-control='public, max-age=31449600' \"#{pub}/#{folder}/\" #{settings['bucket']}:#{folder}/"
                 ScmsUtils.run(cmd, cacheparams)
             end
         end
