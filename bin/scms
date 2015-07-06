@@ -48,7 +48,7 @@ optparse = OptionParser.new do|opts|
   end
 
   options[:port] = 8002
-  opts.on( '-p', '--port Port', 'Listen on the given port (only workes with --serve)' ) do|p|
+  opts.on( '-r', '--port Port', 'Listen on the given port (only workes with --serve)' ) do|p|
      options[:port] = p
   end
 
